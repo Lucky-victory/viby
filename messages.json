@@ -1,0 +1,41 @@
+[
+  {
+    "id": "msgid1",
+    "type": "text",
+    "url": null,
+    "text": "i told you earlier about this",
+    "time_sent": 63730288949,
+    "user": {
+      "id": "userid1",
+      "username": "lucky_ben",
+      "fullname": "Lucky Ben",
+      "profile_picture": "dp.png"
+    }
+  },
+  {
+    "id": "msgid2",
+    "type": "text",
+    "url": null,
+    "text": "my brother leave please",
+    "time_sent": 63730288949,
+    "user": {
+      "id": "userid2",
+      "username": "luckyv4",
+      "fullname": "Lucky victory",
+      "profile_picture": "dp.png"
+    }
+  },
+  {
+    "id": "msgid3",
+    "type": "audio",
+    "url": "audio.mp3",
+    "text": null,
+    "time_sent": 63730288949,
+    "user": {
+      "id": "userid2",
+      "username": "luckyv4",
+      "fullname": "Lucky victory",
+      "profile_picture": "dp.png"
+    }
+  }
+]
