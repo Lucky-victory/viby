@@ -1,9 +1,10 @@
 [
   {
-    "id": "msgid1",
+    "message_id": "msgid1",
     "type": "text",
     "url": null,
-    "text": "i told you earlier about this",
+    "channel_id": 123344,
+    "content": "i told you earlier about this",
     "time_sent": 63730288949,
     "user": {
       "id": "userid1",
@@ -13,10 +14,12 @@
     }
   },
   {
-    "id": "msgid2",
+    "message_id": "msgid2",
     "type": "text",
     "url": null,
-    "text": "my brother leave please",
+    "channel_id": 123344,
+
+    "content": "my brother leave please",
     "time_sent": 63730288949,
     "user": {
       "id": "userid2",
@@ -26,10 +29,12 @@
     }
   },
   {
-    "id": "msgid3",
+    "message_id": "msgid3",
     "type": "audio",
     "url": "audio.mp3",
-    "text": null,
+    "channel_id": 123344,
+
+    "content": null,
     "time_sent": 63730288949,
     "user": {
       "id": "userid2",
