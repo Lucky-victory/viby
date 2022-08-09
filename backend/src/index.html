@@ -14,13 +14,20 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io();
+      const socket = io('/server');
+      const socket2 = io('/server/12');
+
       const form = document.getElementById("form");
       const input = document.getElementById("input");
+      socket.emit('join',123);
+      socket.on('test',(data)=>{
+          input.value=data
+        })
       form.addEventListener("submit", (evt) => {
         evt.preventDefault();
         const message = input.value;
         socket.emit("new message", message);
+        
         console.log(message);
         input.value = "";
       });

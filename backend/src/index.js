@@ -8,18 +8,29 @@ const io = new Server(server);
 
 app.get("/", (req, res) => {
   // eslint-disable-next-line no-undef
+  res.send('<h1>Hello Viby</h1>');
+});
+app.get("/server", (req, res) => {
+  // eslint-disable-next-line no-undef
   res.sendFile(__dirname + "/index.html");
 });
-
-io.on("connection", (socket) => {
-  console.log("connected");
-  if (socket.connected) {
+const manager=io.of('/server').on("connection", (socket) => {
+  socket.on('join', (roomId) => {
+    console.log(socket.id);
+    socket.join(roomId);
+    console.log("connected "+roomId);
+    
     socket.on("new message", (message) => {
       console.log(message);
     });
-  }
+  manager.to(roomId).emit('test','hi'+roomId)
+})
 });
+
+
 server.listen(PORT, () => {
   console.log("server running on http://localhost:" + PORT);
 });
-r;
+
+// how to checked if a user was already a memeber in that server
+// query the database for that user to see if they are among the prevoiusly stored server members
