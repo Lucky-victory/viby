@@ -1,9 +1,173 @@
+<ion-split-pane when="lg" contentId="main">
+
+  <ion-menu class="channel-main-menu" contentId="main" side="start" menuId="first" >
+    <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Start Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+
+    <ion-list>
+      <ion-item>Menu Item</ion-item>
+      <ion-item>Menu Item</ion-item>
+      <ion-item>Menu Item</ion-item>
+      <ion-item>Menu Item</ion-item>
+      <ion-item>Menu Item</ion-item>
+    </ion-list>
+  </ion-content>
+  
+</ion-menu>
+
+<ion-menu class="channel-users-menu" side="end" menuId="second" contentId="main">
+    <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title># fun-lounge</ion-title>
+    </ion-toolbar>
+  </ion-header>
+<ion-content>
+
+  <channel-active-users-list></channel-active-users-list>
+</ion-content>
+    
+  
+</ion-menu>
+
 <ion-header>
   <ion-toolbar>
+    <ion-menu-button menu="first" slot="start">
+      
+    </ion-menu-button>
     <ion-title>channels</ion-title>
+
+    <ion-menu-button  menu="second" slot="end">
+      <ion-icon name="people-outline"></ion-icon>
+    </ion-menu-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-<channel-active-users-list></channel-active-users-list>
+<ion-content id="main-view" slot="fixed">
+  <main class="main-container">
+      <div class="chats-container">
+        <div class="single-chat">
+          <div class="single-chat-text-wrapper">
+            <p class="single-chat-text">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Quisquam, at? Lorem ipsum dolor sit amet consectetur adipisicing
+              elit. Repudiandae eum ea veritatis amet vitae, unde, recusandae
+            </p>
+            <div class="single-chat-timestamp">
+              <time>5:55pm</time>
+            </div>
+          </div>
+          <div class="single-chat-user">
+            <div class="single-chat-user-avatar-wrapper">
+              <img
+                src=""
+                alt=""
+                class="single-chat-user-avatar"
+              />
+            </div>
+            <div class="single-chat-user-name">
+              <span>Dan holland</span>
+            </div>
+          </div>
+        </div>
+        <div class="single-chat current-user">
+          <div class="single-chat-text-wrapper">
+            <p class="single-chat-text">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Quisquam, at?
+            </p>
+            <div class="single-chat-timestamp">
+              <time>5:55pm</time>
+            </div>
+          </div>
+          <div class="single-chat-user">
+            <div class="single-chat-user-avatar-wrapper">
+              <img src="" alt="" class="single-chat-user-avatar" />
+            </div>
+          </div>
+        </div>
+        <div class="single-chat">
+          <div class="single-chat-audio">
+            <div class="single-chat-audio-controls">
+              <button class="single-chat-audio-btn play-pause-btn">
+                <ion-icon name="play" class="icon"></ion-icon>
+              </button>
+              <div class="single-chat-audio-progress-bar">
+                <div class="single-chat-audio-progress-bar-fill"></div>
+              </div>
+            </div>
+            <div class="single-chat-audio-meta">
+              <time>1:50</time>
+
+              <time>5:55pm</time>
+            </div>
+          </div>
+          <div class="single-chat-user">
+            <div class="single-chat-user-avatar-wrapper">
+              <img
+                src=""
+                alt=""
+                class="single-chat-user-avatar"
+              />
+            </div>
+            <div class="single-chat-user-name">
+              <span>Jane mike</span>
+            </div>
+          </div>
+        </div>
+        <div class="single-chat current-user">
+          <div class="single-chat-audio">
+            <div class="single-chat-audio-controls">
+              <button class="single-chat-audio-btn play-pause-btn">
+                <ion-icon name="play" class="icon"></ion-icon>
+              </button>
+              <div class="single-chat-audio-progress-bar">
+                <div class="single-chat-audio-progress-bar-fill"></div>
+              </div>
+            </div>
+            <div class="single-chat-audio-meta">
+              <time>1:50</time>
+
+              <time>5:55pm</time>
+            </div>
+          </div>
+          <div class="single-chat-user">
+            <div class="single-chat-user-avatar-wrapper">
+              <img src="" alt="" class="single-chat-user-avatar" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="message-textarea-container">
+        <div class="attachment-btn-container">
+          <button class="attachment-btn btn">
+            <ion-icon name="add" class="icon"></ion-icon>
+          </button>
+        </div>
+        <div class="message-textarea-wrapper">
+          <textarea
+            placeholder="Type a message"
+            name="message-textarea"
+            class="message-textarea"
+          ></textarea>
+          <button class="emoji-btn">
+            <ion-icon name="happy-outline" class="icon"></ion-icon>
+          </button>
+        </div>
+        <div class="message-send-btn-container">
+          <button class="message-send-btn btn">
+            <ion-icon name="send" class="icon"></ion-icon>
+            <!-- <ion-icon name="mic-outline" class="icon"></ion-icon> -->
+          </button>
+        </div>
+      </div>
+    </main>
+   
 </ion-content>
+
+  <ion-router-outlet id="main"></ion-router-outlet>
+</ion-split-pane>

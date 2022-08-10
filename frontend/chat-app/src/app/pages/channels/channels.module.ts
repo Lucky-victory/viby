@@ -7,15 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { ChannelsPageRoutingModule } from './channels-routing.module';
 
 import { ChannelsPage } from './channels.page';
-import { ChannelActiveUsersListModule } from 'src/app/components/channel-active-users-list/channel-active-users-list.module';
+
+import { ChannelActiveUsersListComponent } from 'src/app/components/channel-active-users-list/channel-active-users-list.component';
+import { ChannelActiveUsersItemComponent } from 'src/app/components/channel-active-users-item/channel-active-users-item.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ChannelsPageRoutingModule,ChannelActiveUsersListModule
+    ChannelsPageRoutingModule,
   ],
-  declarations: [ChannelsPage]
+  declarations: [ChannelsPage,ChannelActiveUsersListComponent,ChannelActiveUsersItemComponent]
 })
 export class ChannelsPageModule {}

@@ -1,0 +1,41 @@
+.channel-active-user{
+    display: flex;
+    align-items: center;
+    padding:7px 10px;
+    border-radius:50px;
+    background-color: #f4f4fd;
+    //box-shadow: 0 3px 5px #0002;
+margin-bottom: 10px;
+width: 100%;
+}
+
+.channel-active-user-image-wrapper{
+    width: 50px;
+    position: relative;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #fafafa;
+}
+.channel-active-user-image{
+    border-radius:inherit;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.channel-active-user-name{
+    font-weight: 500;
+    color:#E87A95;
+    margin-left: 13px;
+}
+
+.channel-active-user-status-indicator{
+    width: 12px;
+    height: 12px;
+    border-radius:50%;
+    background-color: #007f90;
+    z-index: 3;
+    position: absolute;
+    right: -4px;
+    bottom: 8px;
+    border: inherit
+}

@@ -5,5 +5,28 @@
 </ion-header>
 
 <ion-content>
-
+<div class="sign-in-form-container">
+  <form  class="sign-in-form" >
+    <ion-item>
+      <ion-label position="floating">Email or Username:</ion-label>
+      <ion-input required ></ion-input>
+    </ion-item>
+ <ion-item>
+      <ion-label position="floating">Password:</ion-label>
+      
+      <ion-input type="password" required></ion-input>
+      <ion-buttons slot="end">
+        <ion-button>
+          <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <div class="input-wrapper">
+      </div>
+    </ion-item>
+    <div class="form-info">
+      <p>Don't have an account yet? <a href="">Sign up</a></p>
+    </div>
+    <ion-button class="submit-btn" type="submit" size="large">Sign In</ion-button>
+  </form>
+</div>
 </ion-content>
