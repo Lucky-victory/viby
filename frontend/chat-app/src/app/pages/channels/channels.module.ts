@@ -10,6 +10,7 @@ import { ChannelsPage } from './channels.page';
 
 import { ChannelActiveUsersListComponent } from 'src/app/components/channel-active-users-list/channel-active-users-list.component';
 import { ChannelActiveUsersItemComponent } from 'src/app/components/channel-active-users-item/channel-active-users-item.component';
+import { ChatSingleChatComponent } from 'src/app/components/chat-single-chat/chat-single-chat.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { ChannelActiveUsersItemComponent } from 'src/app/components/channel-acti
     IonicModule,
     ChannelsPageRoutingModule,
   ],
-  declarations: [ChannelsPage,ChannelActiveUsersListComponent,ChannelActiveUsersItemComponent]
+  declarations: [ChannelsPage,ChannelActiveUsersListComponent,ChatSingleChatComponent, ChannelActiveUsersItemComponent]
 })
 export class ChannelsPageModule {}

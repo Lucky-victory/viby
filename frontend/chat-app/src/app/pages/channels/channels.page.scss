@@ -8,12 +8,12 @@ border-radius:0 10px 10px 0
 
 
 .main-container {
-  width: 100%;
-  max-width: 700px;
+  max-width: 100%;
+  width: 700px;
   margin: 0 auto;
-  padding-top: 30px;
+  padding-top: 50px;
   position: relative;
-  height: 100vh;
+  height: 100%;
   overflow-y: hidden;
   --message-textarea-height: 70px;
 }
@@ -26,26 +26,27 @@ border-radius:0 10px 10px 0
   display: flex;
   align-items: center;
   width: 100%;
-  background: #f98;
-  padding: 0.75rem 0;
+  background: #18c;
+  padding: 0.5rem;
   position: sticky;
   bottom: 0;
   max-height: var(--message-textarea-height, 80px);
+  z-index: 5;
 }
 .message-textarea-container > * {
-  margin: 0 10px;
+  
 }
 .message-textarea-wrapper {
   flex: 1;
   display: flex;
   align-items: center;
-  border-radius: 20px;
+  border-radius: 35px;
   padding: 5px;
   padding-right: 10px;
   background: #e4dcdc;
   font-size: 16px;
   font-family: sans-serif;
-  height: 45px;
+  height: 50px;
 }
 .message-textarea {
   resize: none;
@@ -54,24 +55,26 @@ border-radius:0 10px 10px 0
   font-family: inherit;
   border: none;
   outline: none;
-  background: transparent;
+  background: #4ed;
   padding-top: 8px;
   padding-left: 8px;
   padding-bottom: 5px;
   border-radius: inherit;
+  width: auto;
+  min-width: 0;
 }
 
 .message-textarea-container .btn {
   border-radius: 50%;
   flex-shrink: 0;
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 2rem;
+  width: 2rem;
   border: none;
   outline: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  //cursor: pointer;
 }
 .attachment-btn {
   background: #818091;
@@ -81,18 +84,13 @@ border-radius:0 10px 10px 0
   font-size: 20px;
 }
 .emoji-btn {
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  font-size: 20px;
-  color: inherit;
 }
-.message-send-btn {
+ion-button.message-send-btn::part(native) {
   position: relative;
   padding: 0.5rem;
   background: #440283;
   color: #fff;
+border-radius:50%;
 }
 
 /**
@@ -106,6 +104,7 @@ border-radius:0 10px 10px 0
   flex-direction: column;
   font-family: sans-serif;
   margin-bottom: 10px;
+  position: relative;
 }
 
 .single-chat-timestamp {
@@ -195,32 +194,4 @@ single chat audio message
   align-items: center;
   margin-bottom: 10px;
 }
-.single-chat-audio-progress-bar {
-  position: relative;
-  height: var(--slider-height);
-  border-radius: 20px;
-  background-color: #d3cbcb;
-  margin-left: 10px;
-  flex: 1;
-  --slider-height: 5px;
-  --slider-thumb-height: 12px;
-}
-.single-chat-audio-progress-bar-fill {
-  height: 100%;
-  background-color: #f0ff;
-  width: 50%;
-  border-radius: inherit;
-  position: relative;
-}
-.single-chat-audio-progress-bar-fill::before {
-  content: "";
-  width: var(--slider-thumb-height);
-  height: var(--slider-thumb-height);
-  border-radius: 50%;
-  right: 0;
-  background-color: inherit;
-  position: absolute;
-  margin-top: calc(
-    (var(--slider-height) / 2) - (var(--slider-thumb-height) / 2)
-  );
-}
+

@@ -1,0 +1,38 @@
+
+.single-chat-audio {
+  padding: 15px;
+  padding-bottom: 10px;
+  border-radius: 5px;
+  background-color: #f1e3fa;
+  max-width: 400px;
+  width: 87.5%;
+  position: relative;
+}
+.single-chat-audio-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.single-chat-audio-btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 22px;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.single-chat.current-user .single-chat-audio {
+  align-self: flex-end;
+  background-color: #4c0486;
+  color: #fff;
+}
+.single-chat-audio-controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
