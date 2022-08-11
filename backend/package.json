@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "The backend for a chat application",
   "main": "index.js",
+  "private":true,
   "scripts": {
     "dev": "nodemon ./src/index.js",
     "start": "node ./src/index.js",
