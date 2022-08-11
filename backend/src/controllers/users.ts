@@ -1,6 +1,7 @@
+import { Utils } from "./../utils/index";
 import { Request, RequestHandler, Response } from "express";
 import { redis as db } from "../db/index";
-import { UsersRepo } from "../models/users";
+import { UsersEntity, UsersRepo } from "../models/users";
 import { v4 as uuidV4 } from "uuid";
 
 export default class UsersController {
@@ -21,13 +22,24 @@ export default class UsersController {
     const id = req.query.id;
     const userRepo = await UsersRepo;
 
-    const user = await userRepo
+    let users = await userRepo
       .search()
       .where("fullname")
       .match("benson")
-      .return.allKeys();
-    res.status(200).send({
-      user,
+      .return.all();
+    users = JSON.parse(JSON.stringify(users));
+
+    users = Utils.getPropsFromObject<UsersEntity>(users, [
+      "username",
+      "password",
+      "user_id",
+      "entityId",
+      "email",
+    ]) as UsersEntity[];
+
+    res.status(200).json({
+      users,
+      result_count: users?.length,
     });
   }
   static async getUser(req: Request, res: Response) {}

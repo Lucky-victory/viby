@@ -3,36 +3,59 @@ import _ from "lodash";
 export class Utils {
   /**
    * Remove specified properties from an object
-   * @param obj - an object or array of objects where properties will be removed
+   * @param Obj - an object or array of objects where properties will be removed
    * @param propsToRemove - the properties to remove from `obj`
    * @returns
    */
-  static removePropsFromObject<T extends { [key: string]: any },R extends { [key: string]: any }>(
+  static removePropsFromObject<T extends { [key: string]: any }>(
     obj: T | T[],
     propsToRemove: string[]
   ) {
-    if (!Utils.isObject(obj) || !_.isArray(obj)) {
+    const Obj = JSON.parse(JSON.stringify(obj));
+
+    if (!(Utils.isObject(Obj) || _.isArray(Obj))) {
       return obj;
     }
-    if (Array.isArray(obj)) {
-      const remainingProps = [];
-      for (const prop of obj) {
-        for (const propToRemove of propsToRemove) {
-          const { [propToRemove]: removed, ...rest } = prop;
-          remainingProps.push(rest);
-          return remainingProps as unknown as R[];
+    const propsToRemoveObj: { [key: string]: any } = {};
+    for (const propToRemove of propsToRemove) {
+      propsToRemoveObj[propToRemove] = true;
+    }
+    const remainingProps = [];
+    if (Array.isArray(Obj)) {
+      const newObj: { [key: string]: any } = {};
+
+      for (const item of Obj) {
+        if (Utils.isObject(item)) {
+          for (const prop in item) {
+            if (
+              propsToRemoveObj[prop] ||
+              !Object.prototype.hasOwnProperty.call(item, prop)
+            ) {
+              continue;
+            }
+            newObj[prop] = item[prop];
+          }
+          remainingProps.push(newObj);
         }
       }
-    } else {
-      for (const propToRemove of propsToRemove) {
-        const { [propToRemove]: removed, ...rest } = obj as T;
-        return rest as unknown as R;
-      }
+      return remainingProps as T[];
     }
+    const newSingleObj: { [key: string]: any } = {};
+
+    for (const prop in Obj) {
+      if (
+        propsToRemoveObj[prop] ||
+        !Object.prototype.hasOwnProperty.call(Obj, prop)
+      ) {
+        continue;
+      }
+      newSingleObj[prop] = Obj[prop];
+    }
+    return newSingleObj as T;
   }
   /**
    * Gets specified properties from an object
-   * @param obj - an object or array of objects where properties will be returned
+   * @param Obj - an object or array of objects where properties will be returned
    * @param propsToReturn - the properties to return from `obj`
    * @returns
    */
@@ -40,24 +63,47 @@ export class Utils {
     obj: T | T[],
     propsToReturn: string[]
   ) {
-    if (!Utils.isObject(obj) || !_.isArray(obj)) {
+    const Obj: T | T[] = JSON.parse(JSON.stringify(obj));
+    if (!(Utils.isObject(Obj) || _.isArray(Obj))) {
       return obj;
     }
-    if (Array.isArray(obj)) {
+    const propsToReturnObj: { [key: string]: any } = {};
+    for (const propToReturn of propsToReturn) {
+      propsToReturnObj[propToReturn] = true;
+    }
+    /**
+     * If `Obj` an array use this
+     */
+    if (Array.isArray(Obj)) {
       const propsToGet = [];
-      for (const prop of obj) {
-        for (const propToReturn of propsToReturn) {
-          const { [propToReturn]: removed, ...rest } = prop;
-          propsToGet.push({ [propToReturn]: removed });
-          return propsToGet ;
+      const newSingleObj: { [key: string]: any } = {};
+      for (const item of Obj) {
+        for (const prop in item) {
+          if (
+            !propsToReturnObj[prop] ||
+            !Object.prototype.hasOwnProperty.call(Obj, prop)
+          ) {
+            newSingleObj[prop] = item[prop];
+            propsToGet.push(newSingleObj);
+            continue;
+          }
         }
       }
-    } else {
-      for (const propToReturn of propsToReturn) {
-        const { [propToReturn]: removed, ...rest } = obj as T;
-        return { [propToReturn]: removed };
+      return propsToGet as T[];
+    }
+
+    //  otherwise use this
+    const newSingleObj: { [key: string]: any } = {};
+    for (const prop in Obj) {
+      if (
+        propsToReturnObj[prop] ||
+        !Object.prototype.hasOwnProperty.call(Obj, prop)
+      ) {
+        newSingleObj[prop] = Obj[prop];
+        continue;
       }
     }
+    return newSingleObj as T;
   }
   static isObject(val: unknown) {
     return Object.prototype.toString.call(val) === "[object Object]";

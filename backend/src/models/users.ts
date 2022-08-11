@@ -2,7 +2,7 @@ import { Entity, Schema, Repository, Client } from "redis-om";
 
 import { redis } from "../db";
 
-interface UsersEntity {
+export interface UsersEntity {
   username: string;
   user_id: string;
   fullname: string;
@@ -16,7 +16,7 @@ interface UsersEntity {
   created_at: string;
 }
 
-class UsersEntity extends Entity {
+export class UsersEntity extends Entity {
   get userName() {
     return this.username;
   }
