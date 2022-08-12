@@ -1,0 +1,27 @@
+.channel-item-container{
+    // width: 4rem;
+    // height: 4rem;
+    flex-shrink: 0;
+    position: relative;
+    padding: 0.25rem;
+}
+.channel-item-image-wrapper{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+position: relative;
+}
+.channel-item-image-wrapper.active{
+border: 2px solid currentColor;
+}
+ion-img.channel-item-image{
+    border-radius: inherit;
+     width: 100%;
+    height: 100%;
+}
+ion-img.channel-item-image::part(image){
+   
+    object-fit: cover;
+    border-radius:inherit;
+
+}

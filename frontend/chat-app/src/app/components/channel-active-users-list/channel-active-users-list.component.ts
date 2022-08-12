@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'channel-active-users-list',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./channel-active-users-list.component.scss'],
 })
 export class ChannelActiveUsersListComponent implements OnInit {
-
+  @Input() user;
   constructor() { }
 
   ngOnInit() {}

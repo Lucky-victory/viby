@@ -24,3 +24,17 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+:root{
+    --primary-bg:#fefefe;
+    --primary-color:#7204da;
+    --accent-color:#03c483;
+    --secondary-bg:#f3f3f3;
+}
+@media(prefers-color-scheme: dark) {
+    :root {
+        --primary-bg:#201920;
+        --secondary-bg:#424446;
+        
+    }
+}

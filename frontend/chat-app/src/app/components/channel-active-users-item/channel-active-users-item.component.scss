@@ -3,16 +3,15 @@
     align-items: center;
     padding:7px 10px;
     border-radius:50px;
-    background-color: #f4f4fd;
-    //box-shadow: 0 3px 5px #0002;
+    background-color:var(--secondary-bg);
 margin-bottom: 10px;
 width: 100%;
 }
 
 .channel-active-user-image-wrapper{
-    width: 50px;
+    width: 45px;
     position: relative;
-    height: 50px;
+    height: 45px;
     border-radius: 50%;
     border: 2px solid #fafafa;
 }

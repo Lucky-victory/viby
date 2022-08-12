@@ -1,15 +1,33 @@
 ion-menu.channel-users-menu::part(container){
 border-radius:10px 0 0 10px
 }
-
-ion-menu.channel-main-menu::part(container){
-border-radius:0 10px 10px 0
+ion-menu.channel-main-menu{
+  --side-min-width:380px;
+  
 }
 
+  ion-menu.channel-main-menu::part(container){
+  --width:350px;
+  border-radius:0 10px 10px 0;
+  margin-right: 10px;
+      
+  
+}
+ion-content.channel-main-menu-content{
+width: 100%; 
+  --background:var(--primary-bg);
+  // --width:100%
+}
+ion-content.channel-main-menu-content::part(scroll){
+display: flex;
+width: 100%;
+
+}
 
 .main-container {
-  max-width: 100%;
-  width: 700px;
+  width: 100%;
+  max-width: 1000px;
+  min-width: 600px;
   margin: 0 auto;
   padding-top: 50px;
   position: relative;
@@ -33,9 +51,7 @@ border-radius:0 10px 10px 0
   max-height: var(--message-textarea-height, 80px);
   z-index: 5;
 }
-.message-textarea-container > * {
-  
-}
+
 .message-textarea-wrapper {
   flex: 1;
   display: flex;

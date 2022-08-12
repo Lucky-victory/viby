@@ -1,20 +1,11 @@
-<ion-split-pane when="lg" contentId="main-view">
+<ion-split-pane when="xl" contentId="main-view">
 
   <ion-menu class="channel-main-menu" contentId="main-view" side="start" menuId="first" >
-    <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>Start Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
+   
+  <ion-content class="channel-main-menu-content">
 
-    <ion-list>
-      <ion-item>Menu Item</ion-item>
-      <ion-item>Menu Item</ion-item>
-      <ion-item>Menu Item</ion-item>
-      <ion-item>Menu Item</ion-item>
-      <ion-item>Menu Item</ion-item>
-    </ion-list>
+<channel-list></channel-list>
+    <room-list></room-list>
   </ion-content>
   
 </ion-menu>
@@ -25,7 +16,7 @@
       <ion-title># fun-lounge</ion-title>
     </ion-toolbar>
   </ion-header>
-<ion-content>
+<ion-content class="ion-no-padding">
 
   <channel-active-users-list></channel-active-users-list>
 </ion-content>
@@ -48,78 +39,7 @@
 </ion-header>
 
   <main class="main-container">
-      <div class="chats-container">
-        <div class="single-chat">
-          <div class="single-chat-text-wrapper">
-            <p class="single-chat-text">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Quisquam, at? Lorem ipsum dolor sit amet consectetur adipisicing
-              elit. Repudiandae eum ea veritatis amet vitae, unde, recusandae
-            </p>
-            <div class="single-chat-timestamp">
-              <time>5:55pm</time>
-            </div>
-          </div>
-          <div class="single-chat-user">
-            <div class="single-chat-user-avatar-wrapper">
-              <img
-                src=""
-                alt=""
-                class="single-chat-user-avatar"
-              />
-            </div>
-            <div class="single-chat-user-name">
-              <span>Dan holland</span>
-            </div>
-          </div>
-        </div>
-        <div class="single-chat current-user">
-          <div class="single-chat-text-wrapper">
-            <p class="single-chat-text">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Quisquam, at?
-            </p>
-            <div class="single-chat-timestamp">
-              <time>5:55pm</time>
-            </div>
-          </div>
-          <div class="single-chat-user">
-            <div class="single-chat-user-avatar-wrapper">
-              <img src="" alt="" class="single-chat-user-avatar" />
-            </div>
-          </div>
-        </div>
-        <div class="single-chat">
-          <div class="single-chat-audio">
-            <div class="single-chat-audio-controls">
-              <button class="single-chat-audio-btn play-pause-btn">
-                <ion-icon name="play" class="icon"></ion-icon>
-              </button>
-              <div class="single-chat-audio-progress-bar">
-                <div class="single-chat-audio-progress-bar-fill"></div>
-              </div>
-            </div>
-            <div class="single-chat-audio-meta">
-              <time>1:50</time>
-
-              <time>5:55pm</time>
-            </div>
-          </div>
-          <div class="single-chat-user">
-            <div class="single-chat-user-avatar-wrapper">
-              <img
-                src=""
-                alt=""
-                class="single-chat-user-avatar"
-              />
-            </div>
-            <div class="single-chat-user-name">
-              <span>Jane mike</span>
-            </div>
-          </div>
-        </div>
-        <chat-single-chat></chat-single-chat>
-      </div>
+    <chat-list></chat-list>
     </main>
     
       
@@ -157,5 +77,4 @@
     </ion-content>
    
 
-  <!--<ion-router-outlet id="main"></ion-router-outlet>-->
 </ion-split-pane>
