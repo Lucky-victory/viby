@@ -1,24 +1,27 @@
- <div class="single-chat">
+ <div class="single-chat {{isCurrentUser ? 'current-user':''}} ion-activatable">
+  <ion-ripple-effect>
+    
+  </ion-ripple-effect>
           <div class="single-chat-text-wrapper">
-            <p class="single-chat-text">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Quisquam, at? Lorem ipsum dolor sit amet consectetur adipisicing
-              elit. Repudiandae eum ea veritatis amet vitae, unde, recusandae
-            </p>
+            <span  class="single-chat-text">
+
+              {{chat?.content}}
+            </span>
+            
             <div class="single-chat-timestamp">
-              <time>5:55pm</time>
+              <time>{{chat?.created_at|dateFormatter}}</time>
             </div>
           </div>
-          <div class="single-chat-user">
+          <div class="single-chat-user" *ngIf="!isCurrentUser">
             <div class="single-chat-user-avatar-wrapper">
               <img
-                src=""
+                src="{{chat?.user?.profile_picture}}"
                 alt=""
                 class="single-chat-user-avatar"
               />
             </div>
             <div class="single-chat-user-name">
-              <span>Dan holland</span>
+              <span>{{chat?.user?.fullname}}</span>
             </div>
           </div>
         </div>

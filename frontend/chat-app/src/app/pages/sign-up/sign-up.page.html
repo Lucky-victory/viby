@@ -1,23 +1,23 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>sign-up</ion-title>
+    <ion-title>Create an Account</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-<div class="sign-in-form-container">
-  <form  class="sign-in-form" >
+<div class="sign-up-form-container">
+  <form  class="sign-up-form">
 
     <ion-item>
       <ion-label position="floating">Your name:</ion-label>
       <ion-input required="" ></ion-input>
     </ion-item>
- <ion-item>
+ 
    <ion-item>
       <ion-label position="floating">Username:</ion-label>
       <ion-input required="" ></ion-input>
     </ion-item>
- <ion-item>
+ 
     <ion-item>
       <ion-label position="floating">Email</ion-label>
       <ion-input required="" type="email" ></ion-input>
@@ -25,9 +25,9 @@
  <ion-item>
       <ion-label position="floating">Password:</ion-label>
       
-      <ion-input type="password" required></ion-input>
+      <ion-input type="password" #passwordInput required></ion-input>
       <ion-buttons slot="end">
-        <ion-button>
+        <ion-button (click)="toggleInputType(passwordInput.type)">
           <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -36,9 +36,9 @@
     <ion-item>
       <ion-label position="floating">Confirm Password:</ion-label>
       
-      <ion-input type="password" required></ion-input>
+      <ion-input type="password" #confirmPasswordInput required></ion-input>
       <ion-buttons slot="end">
-        <ion-button>
+        <ion-button (click)="toggleInputType(confirmPasswordInput.type)">
           <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -47,7 +47,7 @@
     <div class="form-info">
       <p>Already have an account? <a href="">Sign in</a></p>
     </div>
-    <ion-button class="submit-btn" type="submit" size="large">Sign Up</ion-button>
+    <ion-button class="submit-btn" type="submit" size="large" expand="block">Sign Up</ion-button>
   </form>
 </div>
 

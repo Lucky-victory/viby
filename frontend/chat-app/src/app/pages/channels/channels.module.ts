@@ -18,14 +18,18 @@ import { ChannelListComponent } from 'src/app/components/channel-list/channel-li
 import { ChannelItemComponent } from 'src/app/components/channel-item/channel-item.component';
 import { RoomListComponent } from 'src/app/components/room-list/room-list.component';
 import { RoomItemComponent } from 'src/app/components/room-item/room-item.component';
+import { NewChannelAddComponent } from 'src/app/components/new-channel-add/new-channel-add.component';
+import { MomentModule } from 'ngx-moment';
+import { DateFormatterModule } from 'src/app/pipes/date-formatter/date-formatter.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ChannelsPageRoutingModule,
+    ChannelsPageRoutingModule, MomentModule,
+    DateFormatterModule
   ],
-  declarations: [ChannelsPage,ChannelActiveUsersListComponent,ChatSingleChatComponent, ChannelActiveUsersItemComponent,ChatListComponent,ChatSingleChatAudioComponent,ChatSingleChatTextComponent,ChannelListComponent,ChannelItemComponent,RoomListComponent,RoomItemComponent]
+  declarations: [ChannelsPage,ChannelActiveUsersListComponent,ChatSingleChatComponent, ChannelActiveUsersItemComponent,ChatListComponent,ChatSingleChatAudioComponent,ChatSingleChatTextComponent,ChannelListComponent,ChannelItemComponent,RoomListComponent,RoomItemComponent,NewChannelAddComponent]
 })
 export class ChannelsPageModule {}

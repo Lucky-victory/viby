@@ -27,6 +27,7 @@
 
 :root{
     --primary-bg:#fefefe;
+    --primary-bg-light:#fefefeaa;
     --primary-color:#7204da;
     --accent-color:#03c483;
     --secondary-bg:#f3f3f3;
@@ -34,7 +35,8 @@
 @media(prefers-color-scheme: dark) {
     :root {
         --primary-bg:#201920;
-        --secondary-bg:#424446;
+        --primary-bg-light:#201920aa;
+        --secondary-bg:#8b3a3a;
         
     }
 }

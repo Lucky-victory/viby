@@ -1,0 +1,14 @@
+.new-channel-add-btn-wrapper{
+    position: relative;
+}
+ion-button.new-channel-add-btn{
+    --border-radius:50%;
+    
+}
+ion-button.new-channel-add-btn::part(native){
+    width: 3rem;
+    padding: 0;
+    height: 3rem;
+    overflow: visible;
+}
+

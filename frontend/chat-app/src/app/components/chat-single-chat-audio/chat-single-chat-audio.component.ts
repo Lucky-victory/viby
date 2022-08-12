@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'chat-single-chat-audio',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat-single-chat-audio.component.scss'],
 })
 export class ChatSingleChatAudioComponent implements OnInit {
+  @Input() chat;
 
   constructor() { }
 

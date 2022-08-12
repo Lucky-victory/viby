@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-sign-up',
@@ -6,10 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sign-up.page.scss'],
 })
 export class SignUpPage implements OnInit {
-
+  @ViewChild('passwordInput') passwordInput:HTMLIonInputElement;
+  @ViewChild('confirmPasswordInput') confirmPasswordInput:HTMLIonInputElement;
+  
   constructor() { }
 
   ngOnInit() {
   }
 
+  toggleInputType(prevType: string) {
+    const type = prevType === "password" ? "text" : "password";
+    this.confirmPasswordInput.type=type
+   this.passwordInput.type = type;
+  }
 }

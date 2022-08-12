@@ -1,9 +1,17 @@
+.single-chat {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  font-family: sans-serif;
+  margin-bottom: 10px;
+  position: relative;
+}
 
 .single-chat-audio {
   padding: 15px;
   padding-bottom: 10px;
   border-radius: 5px;
-  background-color: #f1e3fa;
+  background-color: #f1f3f3;
   max-width: 400px;
   width: 87.5%;
   position: relative;
@@ -15,33 +23,23 @@
   font-size: 13px;
 }
 .single-chat-audio-btn {
-  border: none;
-  outline: none;
-  cursor: pointer;
-  background-color: transparent;
-  font-size: 22px;
-  color: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
 .single-chat.current-user .single-chat-audio {
   align-self: flex-end;
-  background-color: #4c0486;
+  background-color: var(--accent-color);
   color: #fff;
 }
 .single-chat-audio-controls {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+  //display: flex;
+  //align-items: center;
+  //margin-bottom: 10px;
 }
 .single-chat-user {
   display: flex;
   align-items: center;
+  gap:1rem;
 }
 .single-chat-user .single-chat-user-name {
-  margin-left: 10px;
   font-weight: 600;
   font-family: inherit;
 }
@@ -53,6 +51,7 @@
 }
 .single-chat.current-user .single-chat-user {
   align-self: flex-end;
+  flex-direction: row-reverse;
 }
 .single-chat-user {
   margin-top: 10px;
@@ -62,4 +61,10 @@
   height: 100%;
   width: 100%;
   border-radius: inherit;
+}
+
+ion-range.single-chat-audio-range{
+  --height:4px;
+   padding:0;
+   
 }

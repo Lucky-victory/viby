@@ -3,26 +3,41 @@
     width: 270px;
     background-color:var(--secondary-bg);
     flex:1;
-
 position: relative;
+overflow-y: hidden;
+height: 100%;
 }
-
 .room-list-header{
-    position: sticky;
-    top: 0;
+    position:relative;
 width: 100%;
 flex:1;
 z-index: 3;
+border-radius: 10px 10px 0 0;
+    overflow: hidden;
+border: 3px solid var(--accent-color);
+
+}
+.room-list-header-inner{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-bg-light);
+    justify-content: space-between;
+    color:var(--primary)
+}
+.room-list-header-inner-title{
+    font-size: 22px;
 }
 .room-list-channel-cover-image-wrapper{
     width: 100%;
     height: 10rem;
-    border-radius: 10px 10px 0 0;
-border: 6px solid currentColor;
-
-}
+    }
 ion-img.room-list-channel-cover-image{
-    border-radius:inherit;
+    
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -30,15 +45,14 @@ ion-img.room-list-channel-cover-image{
 }
 ion-img.room-list-channel-cover-image::part(image){
     object-fit: cover;
-    
-    border-radius:inherit;
+   
 }
 .room-list-channel-image-wrapper{
 position: absolute;
 width: 4rem;
 height: 4rem;
 border-radius:50% 50% 50% 0;
-border: 4px solid currentColor;
+border:3px solid var(--accent-color) ;
 bottom: 0;
 left: 0;
 z-index: 2;
@@ -55,5 +69,6 @@ ion-img.room-list-channel-image::part(image){
 }
 
 ion-list.room-list{
-    overflow-y: auto!important;
+  height: 100%;
+    overflow-y: auto;
 }
