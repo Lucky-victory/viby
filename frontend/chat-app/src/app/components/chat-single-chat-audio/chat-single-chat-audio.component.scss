@@ -3,17 +3,26 @@
   padding: 10px;
   flex-direction: column;
   font-family: sans-serif;
-  margin-bottom: 10px;
-  position: relative;
+  // position: relative;
+  &.current-user{
+.single-chat-audio {
+  align-self: flex-end;
+  background-color: var(--accent-color);
+  color: #fff;
+} 
+ion-icon.icon{
+  color:#fff;
+  }  
+}
 }
 
 .single-chat-audio {
   padding: 15px;
   padding-bottom: 10px;
   border-radius: 5px;
-  background-color: #f1f3f3;
+  background-color:var(--secondary-bg);
   max-width: 400px;
-  width: 87.5%;
+  width: 90%;
   position: relative;
 }
 .single-chat-audio-meta {
@@ -21,18 +30,25 @@
   align-items: center;
   justify-content: space-between;
   font-size: 13px;
+  .single-chat-audio-meta-timestamp{
+    color:var(--secondary-color)
+  }
 }
-.single-chat-audio-btn {
-}
-.single-chat.current-user .single-chat-audio {
-  align-self: flex-end;
-  background-color: var(--accent-color);
-  color: #fff;
-}
+
 .single-chat-audio-controls {
-  //display: flex;
-  //align-items: center;
-  //margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  ion-button.single-chat-audio-btn{
+
+&::part(native){
+  padding: 0;
+  margin: 0;
+  --background:transparent;
+  box-shadow: none;
+
+}
+  }
 }
 .single-chat-user {
   display: flex;
@@ -64,7 +80,12 @@
 }
 
 ion-range.single-chat-audio-range{
-  --height:4px;
+  --height:8px;
    padding:0;
-   
+   flex:1;
+   z-index: inherit;
+ 
 }
+ion-icon.icon{
+  color:var(--accent-color);
+  }

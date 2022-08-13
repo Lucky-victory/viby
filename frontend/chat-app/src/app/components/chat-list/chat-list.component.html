@@ -2,10 +2,10 @@
 <ng-container *ngFor="let chat of messages">
     
 
-        <chat-single-chat-audio *ngIf="chat.type=='audio'" [chat]="chat"></chat-single-chat-audio>
+        <chat-single-chat-audio *ngIf="chat.type==='audio'" [chat]="chat"></chat-single-chat-audio>
         
     
-    <chat-single-chat-text *ngIf="chat.type=='text'" [chat]="chat"></chat-single-chat-text>
+    <chat-single-chat-text *ngIf="chat.type==='text'" [chat]="chat"></chat-single-chat-text>
 
 </ng-container>
 </div>

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'chat-single-chat-text',
@@ -11,7 +12,10 @@ export class ChatSingleChatTextComponent implements OnInit {
     user_id:1
   }
   isCurrentUser!: boolean;
-
+isMobile!: boolean;
+  constructor(private platform: Platform) {
+    this.isMobile = !this.platform.is('desktop');
+   }
   ngOnInit(chat = this.chat) {
     this.isCurrentUser = chat?.user?.user_id === this.currentUser?.user_id;
   }
