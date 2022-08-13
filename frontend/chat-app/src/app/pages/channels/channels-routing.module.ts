@@ -7,7 +7,15 @@ const routes: Routes = [
   {
     path: '',
     component: ChannelsPage
-  }
+  },
+  {
+    path: ':channel_id',
+    component: ChannelsPage
+  },
+  {
+    path: ':channel_id/:room_id',
+    component: ChannelsPage
+  },
 ];
 
 @NgModule({

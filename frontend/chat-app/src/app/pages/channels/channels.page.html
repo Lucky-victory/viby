@@ -3,17 +3,18 @@
   <ion-menu class="channel-main-menu" contentId="main-view" side="start" menuId="first" >
    
   <ion-content class="channel-main-menu-content">
+    <channel-list [channels]="servers" [activeChannel]="activeChannel"></channel-list>
 
-<channel-list></channel-list>
-    <room-list></room-list>
-  </ion-content>
+  <room-list [channel]="activeChannel" ></room-list>
+
+</ion-content>
   
-</ion-menu>
+</ion-menu> 
 
 <ion-menu class="channel-users-menu" side="end" menuId="second" contentId="main-view">
     <ion-header class="channel-users-menu-header">
     <ion-toolbar >
-      <ion-title># fun-lounge</ion-title>
+      <ion-title># announcements</ion-title>
     </ion-toolbar>
   </ion-header>
 <ion-content class="ion-no-padding">

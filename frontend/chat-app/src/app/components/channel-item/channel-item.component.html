@@ -1,7 +1,7 @@
 <div class="channel-item-container ion-activatable" [ngClass]="{active:isActive}">
   <ion-ripple-effect></ion-ripple-effect>
   <div class="channel-item-image-wrapper" >
-    <ion-img class="channel-item-image" src="https://images.pexels.com/photos/1990241/pexels-photo-1990241.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load">
+    <ion-img class="channel-item-image" [src]="channel?.channel_picture">
 
     </ion-img>
   </div>

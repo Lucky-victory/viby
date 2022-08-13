@@ -2,8 +2,7 @@
   {
     "message_id": "msgid1",
     "type": "text",
-    "urls": null,
-    "channel_id": 123344,
+    "attachments": null,
     "content": "i told you earlier about this",
     "created_at": 63730288949,
 "room_id":121212,
@@ -18,8 +17,7 @@
   {
     "message_id": "msgid2",
     "type": "text",
-    "urls": null,
-    "channel_id": 123344,
+    "attachments": null,
 "room_id":121212,
 
     "content": "my brother leave please",
@@ -34,10 +32,9 @@
   {
     "message_id": "msgid3",
     "type": "audio",
-    "urls": ["audio.mp3"],
-    "channel_id": 123344,
+    "attachments": ["audio.mp3"],
 "room_id":121212,
-    "content": null,
+    "content":"audio.mp3",
     "created_at": 63730288949,
     "user": {
       "user_id": "userid2",

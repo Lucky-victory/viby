@@ -1,17 +1,12 @@
 {
-  "user": {
-    "uuser_id": "userid2",
-    "username": "luckyv4",
-    "fullname": "Lucky Victory",
-    "profile_picture": "dp.png",
-    "status": "online"
-  },
+
   "servers": [
     {
-      "channel_id": 1234567,
-      "channel_cover": "cover.png",
-      "channel_picture": "pp.png",
-      "name": "Home for all",
+      "channel_id": "1",
+      "channel_cover": "https://images.pexels.com/photos/6489667/pexels-photo-6489667.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+      "channel_picture": "https://images.pexels.com/photos/3357026/pexels-photo-3357026.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+      "title": "Home for all",
+      "description":"A home for all channel",
       "members": ["userid1", "userid2"],
       "isPublic":true,
       "permission": {
@@ -22,28 +17,28 @@
       "rooms": [
         {
           "room_id": "room1",
-          "name": "introduction",
+          "title": "introduction",
           "message_allowed": false
         
         },
         {
           "room_id": "room2",
-          "name": "general",
+          "title": "general",
           "message_allowed": true
         
         },
         {
           "room_id": "room3",
-          "name": "get-help",
+          "title": "get-help",
           "message_allowed": true
         
         }
       ]
   }, {
-      "channel_id": "12345678890",
-      "channel_cover": "cover.png",
-      "channel_picture": "pp.png",
-      "name": "Just a server",
+      "channel_id": "12",
+      "channel_cover": "https://images.pexels.com/photos/11071498/pexels-photo-11071498.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+      "channel_picture": "https://images.pexels.com/photos/13095218/pexels-photo-13095218.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+      "title": "Just a server",
       "members": ["userid1", "userid2"],
       "isPublic":true,
       "permission": {
@@ -54,19 +49,19 @@
       "rooms": [
         {
           "room_id": "room1",
-          "name": "introduction",
+          "title": "introduction",
           "message_allowed": false
         
         },
         {
           "room_id": "room2",
-          "name": "general",
+          "title": "another room",
           "message_allowed": true
         
         },
         {
           "room_id": "room3",
-          "name": "get-help",
+          "title": "help needed",
           "message_allowed": true
         
         }

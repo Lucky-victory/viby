@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -19,17 +20,19 @@ import { ChannelItemComponent } from 'src/app/components/channel-item/channel-it
 import { RoomListComponent } from 'src/app/components/room-list/room-list.component';
 import { RoomItemComponent } from 'src/app/components/room-item/room-item.component';
 import { NewChannelAddComponent } from 'src/app/components/new-channel-add/new-channel-add.component';
-import { MomentModule } from 'ngx-moment';
+
 import { DateFormatterModule } from 'src/app/pipes/date-formatter/date-formatter.module';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ChannelsPageRoutingModule, MomentModule,
-    DateFormatterModule
+    ChannelsPageRoutingModule, 
+    DateFormatterModule,HttpClientModule
   ],
-  declarations: [ChannelsPage,ChannelActiveUsersListComponent,ChatSingleChatComponent, ChannelActiveUsersItemComponent,ChatListComponent,ChatSingleChatAudioComponent,ChatSingleChatTextComponent,ChannelListComponent,ChannelItemComponent,RoomListComponent,RoomItemComponent,NewChannelAddComponent]
+  declarations: [ChannelsPage, ChannelActiveUsersListComponent, ChatSingleChatComponent, ChannelActiveUsersItemComponent, ChatListComponent, ChatSingleChatAudioComponent, ChatSingleChatTextComponent, ChannelListComponent, ChannelItemComponent, RoomListComponent, RoomItemComponent, NewChannelAddComponent],
+  providers:[ApiService]
 })
 export class ChannelsPageModule {}

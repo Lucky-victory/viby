@@ -4,7 +4,7 @@
       <div class="room-list-header">
         <div class="room-list-header-inner">
           <strong class="room-list-header-inner-title">
-            Fun land
+            {{channel?.title}}
           </strong>
           <ion-buttons>
             <ion-button slot="icon-only">
@@ -13,12 +13,12 @@
           </ion-buttons>
         </div>
     <div class="room-list-channel-cover-image-wrapper">
-      <ion-img class="room-list-channel-cover-image" src="https://images.pexels.com/photos/13146110/pexels-photo-13146110.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load">
+      <ion-img class="room-list-channel-cover-image" [src]="channel?.channel_cover">
         
       </ion-img>
     </div>
     <div class="room-list-channel-image-wrapper">
-      <ion-img class="room-list-channel-image" src="https://images.pexels.com/photos/1990241/pexels-photo-1990241.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load">
+      <ion-img class="room-list-channel-image" [src]="channel?.channel_picture">
         
       </ion-img>
     </div>
@@ -26,12 +26,7 @@
   
   
   <ion-list class="room-list" lines="none" >
-  <room-item></room-item>
-    
-    
-    <room-item></room-item>
-    <room-item></room-item>
-    <room-item></room-item>
+  <room-item *ngFor="let room of channel?.rooms" [room]="room"></room-item>
     
   </ion-list>
 </div>

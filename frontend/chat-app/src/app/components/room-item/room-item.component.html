@@ -1,6 +1,6 @@
-<ion-item class="room-item" button>
+<ion-item class="room-item" button (click)="selectRoom(room?.room_id)">
   <span class="room-item-title">
 
-    # announcements
+  # {{room?.title}}
   </span>
     </ion-item>

@@ -28,9 +28,11 @@
     "linkify-html": "^3.0.5",
     "linkifyjs": "^3.0.5",
     "moment": "^2.29.4",
-    "ngx-moment": "^6.0.2",
+    "nanoid": "^4.0.0",
     "rxjs": "~6.6.0",
+    "socket.io-client": "^4.5.1",
     "tslib": "^2.2.0",
+    "uuid": "^8.3.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

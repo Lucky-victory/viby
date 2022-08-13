@@ -1,7 +1,5 @@
 <div class="channel-list-container">
-  <channel-item isActive="true"></channel-item>
-  <channel-item></channel-item>
-  <channel-item></channel-item>
-
+  <channel-item *ngFor="let channel of channels" [channel]="channel" [isActive]="channel?.channel_id===channelId"></channel-item>
+  
   <new-channel-add></new-channel-add>
 </div>
