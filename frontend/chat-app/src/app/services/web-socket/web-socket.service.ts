@@ -17,7 +17,10 @@ export class WebSocketService {
   leaveChannel(channelId:string) {
     
   }
-  sendMessage(roomId: string,message:object) {
+  onNewMessage(roomId: string,message:object) {
+  
+}
+  onUserJoin(userId:string) {
   
 }
 }

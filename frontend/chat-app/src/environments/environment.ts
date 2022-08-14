@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl:'frontend/chat-app/src/assets/'
+  apiBaseUrl: 'frontend/chat-app/src/assets/',
+  socketUrl:''
 };
 
 /*
