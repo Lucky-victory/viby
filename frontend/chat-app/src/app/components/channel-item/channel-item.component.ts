@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'channel-item',
@@ -6,10 +7,20 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./channel-item.component.scss'],
 })
 export class ChannelItemComponent implements OnInit {
-  @Input() isActive: boolean;
-  @Input() channel:any
-  constructor() { }
+  isActive: boolean;
+  @Input() channel: any;
+  channelId: string;
+  constructor(private activeRoute:ActivatedRoute,private router:Router) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.activeRoute.paramMap.subscribe((params) => {
+      this.channelId = params.get('channel_id');
+       this.isActive = this.channel?.channel_id === this.channelId; 
+    });
+  }
 
+  selectChannel(channelId: string) {
+    this.router.navigate(['channels/' + channelId], );
+    this.isActive = this.channel?.channel_id === channelId;
+}
 }

@@ -3,9 +3,9 @@
   <ion-menu class="channel-main-menu" contentId="main-view" side="start" menuId="first" >
    
   <ion-content class="channel-main-menu-content">
-    <channel-list [channels]="servers" [activeChannel]="activeChannel"></channel-list>
+    <channel-list [channels]="servers" ></channel-list>
 
-  <room-list [channel]="activeChannel" ></room-list>
+  <room-list ></room-list>
 
 </ion-content>
   
@@ -17,7 +17,7 @@
       <ion-title># announcements</ion-title>
     </ion-toolbar>
   </ion-header>
-<ion-content class="ion-no-padding">
+<ion-content class="ion-no-padding channel-users-menu-content">
 
   <channel-active-users-list></channel-active-users-list>
 </ion-content>

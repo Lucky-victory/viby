@@ -8,17 +8,25 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 })
 export class RoomItemComponent implements OnInit {
   @Input() room: any;
+  roomId: string;
+  channelId: string;
   constructor(private router:Router,private activeRoute:ActivatedRoute) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.activeRoute.paramMap.subscribe((params) => {
+      this.channelId = params.get('channel_id');
+        
+      })
+    this.activeRoute.queryParamMap.subscribe((params) => {
+      this.roomId = params.get('room');
+        
+      })
+  }
   selectRoom(roomId) {
-    console.log(roomId);
- 
-    this.activeRoute.paramMap.subscribe((params : ParamMap)=> {  
-       
-    
-      
-  });
+    this.router.navigate([], {
+      relativeTo:this.activeRoute,
+   queryParams:{room:roomId}
+ })
   
 }
 }

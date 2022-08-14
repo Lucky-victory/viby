@@ -1,4 +1,4 @@
-<ion-item class="room-item" button (click)="selectRoom(room?.room_id)">
+<ion-item  class="room-item {{room?.room_id===roomId?'active':''}}" button (click)="selectRoom(room?.room_id)">
   <span class="room-item-title">
 
   # {{room?.title}}

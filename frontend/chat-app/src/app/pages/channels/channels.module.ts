@@ -30,9 +30,8 @@ import { ApiService } from 'src/app/services/api/api.service';
     FormsModule,
     IonicModule,
     ChannelsPageRoutingModule, 
-    DateFormatterModule,HttpClientModule
+    DateFormatterModule,
   ],
   declarations: [ChannelsPage, ChannelActiveUsersListComponent, ChatSingleChatComponent, ChannelActiveUsersItemComponent, ChatListComponent, ChatSingleChatAudioComponent, ChatSingleChatTextComponent, ChannelListComponent, ChannelItemComponent, RoomListComponent, RoomItemComponent, NewChannelAddComponent],
-  providers:[ApiService]
 })
 export class ChannelsPageModule {}

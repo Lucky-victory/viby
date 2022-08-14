@@ -1,8 +1,8 @@
-.channel-active-users-container{
+ion-list.channel-active-users-container{
     
-    // width:300px;
     max-width: 100%;
     display: flex;
     flex-direction: column;
     height: 100%;
+    background-color:var(--secondary-bg);
 }
