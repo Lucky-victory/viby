@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'room-list',
@@ -8,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class RoomListComponent implements OnInit {
   channel: any;
+  @Output() roomTitleEv: EventEmitter<string> = new EventEmitter<string>();
+
   rooms: any[]=[];
   channelId: string;
   roomId: string;
@@ -80,7 +83,7 @@ export class RoomListComponent implements OnInit {
   } ]
 
 
-   constructor(private router:Router,private activeRoute:ActivatedRoute) { }
+   constructor(private router:Router,private activeRoute:ActivatedRoute,private apiServcie:ApiService) { }
 
   ngOnInit() {
     this.activeRoute.paramMap.subscribe((params) => {
@@ -90,7 +93,8 @@ export class RoomListComponent implements OnInit {
       if (this.rooms?.length) {
         this.router.navigate([], {
           queryParams:{room:this.rooms[0].room_id}
-        })
+        });
+        this.roomTitleEv.emit(this.rooms[0]?.title)
       }
       })
     this.activeRoute.queryParamMap.subscribe((params) => {
@@ -99,5 +103,8 @@ export class RoomListComponent implements OnInit {
       })
   }
   
-
+  getRoomTitle(title:string) {
+    this.roomTitleEv.emit(title)
+  
+}
 }

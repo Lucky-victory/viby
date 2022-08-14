@@ -26,7 +26,7 @@
   
   
   <ion-list class="room-list" lines="none" >
-  <room-item *ngFor="let room of rooms" [room]="room"></room-item>
+  <room-item (roomTitleEv)="getRoomTitle($event)" *ngFor="let room of rooms" [room]="room"></room-item>
     
   </ion-list>
 </div>

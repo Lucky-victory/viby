@@ -5,7 +5,7 @@
   <ion-content class="channel-main-menu-content">
     <channel-list [channels]="servers" ></channel-list>
 
-  <room-list ></room-list>
+  <room-list (roomTitleEv)="getRoomTitle($event)" ></room-list>
 
 </ion-content>
   
@@ -14,7 +14,7 @@
 <ion-menu class="channel-users-menu" side="end" menuId="second" contentId="main-view">
     <ion-header class="channel-users-menu-header">
     <ion-toolbar >
-      <ion-title># announcements</ion-title>
+      <ion-title >MEMBERS</ion-title>
     </ion-toolbar>
   </ion-header>
 <ion-content class="ion-no-padding channel-users-menu-content">
@@ -31,7 +31,7 @@
     <ion-menu-button menu="first" slot="start">
       
     </ion-menu-button>
-    <ion-title># announcements</ion-title>
+    <ion-title># {{roomTitle}}</ion-title>
 
     <ion-menu-button  menu="second" slot="end">
       <ion-icon name="people-outline"></ion-icon>
@@ -39,43 +39,14 @@
   </ion-toolbar>
 </ion-header>
 
-  <main class="main-container">
-    <chat-list></chat-list>
-    </main>
+<chat-list></chat-list>
+  
     
-      
-      <div class="message-textarea-container">
-          <!--<div class="attachment-btn-container">
-          </div>-->
-            <ion-buttons >
-
-              <ion-button slot="icon-only">
-                <ion-icon name="add" class="icon"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-        <div class="message-textarea-wrapper">
-          <textarea
-            placeholder="Type a message"
-            name="message-textarea"
-            class="message-textarea"
-          ></textarea>
-          <ion-buttons>
-
-            <ion-button class="emoji-btn">
-              <ion-icon name="happy-outline" class="icon"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </div>
-        <div class="message-send-btn-container">
-          <ion-button class="message-send-btn" hidden>
-            <ion-icon name="send" class="icon"></ion-icon>
-            <!-- <ion-icon name="mic-outline" class="icon"></ion-icon> -->
-          </ion-button>
-        </div>
-      </div>
-      
-    
+      <chat-message-input></chat-message-input>
     </ion-content>
-   
-
-</ion-split-pane>
+    
+    
+  </ion-split-pane>
+  <ng-template #notAllowed>
+    you can't send message in this room
+  </ng-template>

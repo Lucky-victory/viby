@@ -1,4 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ApiService } from 'src/app/services/api/api.service';
+import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
   selector: 'chat-list',
@@ -6,10 +9,12 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./chat-list.component.scss'],
 })
 export class ChatListComponent implements OnInit {
- @Input() messages = [
+  messages: any[] = [];
+  
+ roomMessages = [
     {
       message_id: 1,
-      room_id: 1,
+      room_id: '2',
       content: "Hi there",
       attachments: null,
       type: "text",
@@ -23,7 +28,7 @@ export class ChatListComponent implements OnInit {
     }, 
     {
       message_id: 1,
-      room_id: 1,
+      room_id: '1',
       content: 'https://raw.githubusercontent.com/Lucky-victory/zplayer/master/songs/angels-like-you.mp3',
       attachments: null,
       type: "audio",
@@ -37,7 +42,7 @@ export class ChatListComponent implements OnInit {
     }, {
       
       message_id: 2,
-      room_id: 1,
+      room_id: '1',
       content: "Hi over there",
       attachments: null,
       type: "text",
@@ -50,8 +55,17 @@ username:'paul_give'
       }
     }
   ];
-  constructor() { }
+  roomId: string;
+  constructor(private activeRoute: ActivatedRoute,private apiService:ApiService,private webSocketService:WebSocketService) {
+    
+   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.activeRoute.queryParamMap.subscribe((params)=> {
+      this.roomId = params.get('room');
+      
+      this.messages = this.roomMessages.filter((roomMessage) => roomMessage.room_id===this.roomId)
+    })
+  }
 
 }

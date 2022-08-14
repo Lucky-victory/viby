@@ -22,7 +22,8 @@ import { RoomItemComponent } from 'src/app/components/room-item/room-item.compon
 import { NewChannelAddComponent } from 'src/app/components/new-channel-add/new-channel-add.component';
 
 import { DateFormatterModule } from 'src/app/pipes/date-formatter/date-formatter.module';
-import { ApiService } from 'src/app/services/api/api.service';
+import { ChatMessageInputComponent } from 'src/app/components/chat-message-input/chat-message-input.component';
+
 
 @NgModule({
   imports: [
@@ -32,6 +33,6 @@ import { ApiService } from 'src/app/services/api/api.service';
     ChannelsPageRoutingModule, 
     DateFormatterModule,
   ],
-  declarations: [ChannelsPage, ChannelActiveUsersListComponent, ChatSingleChatComponent, ChannelActiveUsersItemComponent, ChatListComponent, ChatSingleChatAudioComponent, ChatSingleChatTextComponent, ChannelListComponent, ChannelItemComponent, RoomListComponent, RoomItemComponent, NewChannelAddComponent],
+  declarations: [ChannelsPage, ChannelActiveUsersListComponent, ChatSingleChatComponent, ChannelActiveUsersItemComponent, ChatListComponent, ChatSingleChatAudioComponent, ChatSingleChatTextComponent, ChannelListComponent, ChannelItemComponent, RoomListComponent, RoomItemComponent, NewChannelAddComponent,ChatMessageInputComponent],
 })
 export class ChannelsPageModule {}
