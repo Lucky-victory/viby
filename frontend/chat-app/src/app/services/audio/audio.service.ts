@@ -1,23 +1,18 @@
 
-import { v4 as uuidv4 } from 'uuid';
-
 export class AudioPlayer {
   private _audio:HTMLAudioElement;
-  private audioElem: HTMLAudioElement;
+  
 
   constructor() { 
     this.create()
   }
   create(src?: string) {
-    const id = uuidv4();
-    this.audioElem= new Audio(src);
-    this.audioElem.id = id;
-    this._audio = this.audioElem;
+    this._audio = new Audio(src);
     return this._audio
   }
   set src(src: string){
     this._audio.src = src;
-    
+    this._audio.load();
   }
   play():Promise<void> {
     return this._audio.play()

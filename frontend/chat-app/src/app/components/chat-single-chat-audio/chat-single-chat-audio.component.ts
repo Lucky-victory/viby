@@ -50,9 +50,11 @@ export class ChatSingleChatAudioComponent implements OnInit {
      this.isPaused = true;
   }
   private loadEventHandlers() {
+    this.audioPlayer.on('load', () => {
+      console.log(this.audioPlayer.duration,'in load');
+    })
     this.audioPlayer.on('loadedmetadata', () => {
-   this.duration = this.audioPlayer.duration;
- this.formattedTimePlayed = this.audioPlayer.secondsToTime(this.duration);
+      this.loadMetaData();
     });
     this.audioPlayer.on('timeupdate', () => {
       this.updateTimePlayed();
@@ -74,5 +76,12 @@ export class ChatSingleChatAudioComponent implements OnInit {
   private audioEnd() {
     this.pause()
   
+  }
+  private loadMetaData() {
+     console.log(this.audioPlayer.duration);
+      
+   this.duration = this.audioPlayer.duration;
+ this.formattedTimePlayed = this.audioPlayer.secondsToTime(this.duration);
+    
   }
 }

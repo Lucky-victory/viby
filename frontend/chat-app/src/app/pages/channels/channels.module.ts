@@ -11,7 +11,7 @@ import { ChannelsPage } from './channels.page';
 
 import { ChannelActiveUsersListComponent } from 'src/app/components/channel-active-users-list/channel-active-users-list.component';
 import { ChannelActiveUsersItemComponent } from 'src/app/components/channel-active-users-item/channel-active-users-item.component';
-import { ChatSingleChatComponent } from 'src/app/components/chat-single-chat/chat-single-chat.component';
+
 import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
 import { ChatSingleChatAudioComponent } from 'src/app/components/chat-single-chat-audio/chat-single-chat-audio.component';
 import { ChatSingleChatTextComponent } from 'src/app/components/chat-single-chat-text/chat-single-chat-text.component';
@@ -33,6 +33,6 @@ import { ChatMessageInputComponent } from 'src/app/components/chat-message-input
     ChannelsPageRoutingModule, 
     DateFormatterModule,
   ],
-  declarations: [ChannelsPage, ChannelActiveUsersListComponent, ChatSingleChatComponent, ChannelActiveUsersItemComponent, ChatListComponent, ChatSingleChatAudioComponent, ChatSingleChatTextComponent, ChannelListComponent, ChannelItemComponent, RoomListComponent, RoomItemComponent, NewChannelAddComponent,ChatMessageInputComponent],
+  declarations: [ChannelsPage, ChannelActiveUsersListComponent, ChannelActiveUsersItemComponent, ChatListComponent, ChatSingleChatAudioComponent, ChatSingleChatTextComponent, ChannelListComponent, ChannelItemComponent, RoomListComponent, RoomItemComponent, NewChannelAddComponent,ChatMessageInputComponent],
 })
 export class ChannelsPageModule {}

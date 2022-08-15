@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AudioPlayer } from 'src/app/services/audio/audio.service';
 import { AudioRecorderService } from 'src/app/services/recorder/recorder.service';
 import { v4 as uuidV4 } from 'uuid';
+import * as mm from 'music-metadata-browser';
+
 @Component({
   selector: 'chat-message-input',
   templateUrl: './chat-message-input.component.html',
@@ -10,10 +12,12 @@ import { v4 as uuidV4 } from 'uuid';
 })
 export class ChatMessageInputComponent implements OnInit {
   textMessage: string = '';
+  audioMessage:string|Blob|ArrayBuffer=''
   isEmpty: boolean = true;
   isRecording: boolean = false;
   roomId: string;
   message: any;
+  messageType: 'audio' | 'text' = 'text';
   private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
   @Output() onNewMessage = new EventEmitter<any>();
   private channelId: string;
@@ -34,21 +38,37 @@ export class ChatMessageInputComponent implements OnInit {
     this.checkInput();
   }
   checkInput() {
-    this.isEmpty = this.textMessage === '';
+    this.isEmpty = this.textMessage === '' && !this.isRecording;
     
   }
   clearInput() {
     this.textMessage = '';
+    this.messageType = 'text';
   }
   createMessageObj() {
-
+    if (this.messageType === 'audio') {
+  
+    this.message = {
+      message_id: uuidV4(),
+      content: this.audioMessage,
+      room_id: this.roomId,
+      attachments:null,
+      channel_id:this.channelId,
+      created_at: new Date().getTime(),
+      type:this.messageType
+    }
+      console.log(this.message);
+    this.onNewMessage.emit(this.message);
+      return
+}
     this.message = {
       message_id: uuidV4(),
       content: this.textMessage,
       room_id: this.roomId,
+      attachments:null,
       channel_id:this.channelId,
       created_at: new Date().getTime(),
-      type:'text'
+      type:this.messageType
     }
     console.log(this.message);
     this.onNewMessage.emit(this.message);
@@ -64,18 +84,24 @@ export class ChatMessageInputComponent implements OnInit {
     }
   }
   sendMessage() {
-    if (this.isEmpty) return;
+    this.isRecording = false;
+    // if (this.isEmpty) return;
     this.createMessageObj();
-    this.clearInput()
+    this.clearInput();
+  
   }
   startRecorder() {
     this.isRecording = true;
+    this.messageType = 'audio';
     this.recorderService.start();
     setTimeout(async () => {
       await this.recorderService.stop();
-      this.recorderService.getBlobOrBase64((data) => {
-        console.log(data, 'from input');
-        this.audioPlayer.create(data as string);
+      this.recorderService.getBlobOrBase64(async (data) => {
+        const src=(data as string)
+        console.log(src, 'from src');
+        this.audioPlayer.create(src);
+        
+        this.audioMessage = data;
       })
     },4000)
 

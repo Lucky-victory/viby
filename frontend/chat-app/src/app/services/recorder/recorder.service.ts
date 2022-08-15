@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as mm from 'music-metadata-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +32,6 @@ export class AudioRecorderService {
       let mimeType = this.recorder?.mimeType;
       this.recorder?.addEventListener("stop", () => {
         this.audioBlob = new Blob(this.audioBlobs, { type: mimeType });
-        console.log(this.audioBlob);
-      
         resolve(this.audioBlob);
       });
       this.cancel();
@@ -74,6 +73,7 @@ export class AudioRecorderService {
   private beginStream (stream:MediaStream){
     this.recorder = new MediaRecorder(stream);
     this.streamBeingCaptured = stream;
+    console.log(this.streamBeingCaptured, 'stream');
 
     this.recorder?.start();
     this.recorder.addEventListener("dataavailable", (event) => {
