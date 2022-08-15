@@ -10,6 +10,8 @@
             </ion-buttons>
         <div class="message-textarea-wrapper">
           <textarea
+          [(ngModel)]="textMessage"
+          (keyup)="handleKeyUp($event)"
             placeholder="Type a message"
             name="message-textarea"
             class="message-textarea"
@@ -21,10 +23,20 @@
             </ion-button>
           </ion-buttons>
         </div>
-        <div class="message-send-btn-container">
-          <ion-button class="message-send-btn" hidden>
+        <div class="message-btns-container">
+          <ion-button class="message-send-btn" *ngIf="!isEmpty" (click)="sendMessage()">
             <ion-icon name="send" class="icon"></ion-icon>
-            <!-- <ion-icon name="mic-outline" class="icon"></ion-icon> -->
+            
+          </ion-button>
+          <ion-button class="message-send-btn" *ngIf="isEmpty" (click)="startRecorder()">
+            
+            <ion-icon name="mic" class="icon"></ion-icon>
+          </ion-button>
+        
+        </div>
+        <div class="record-area-container" *ngIf="isRecording">
+          <ion-button (click)="playAndPause()">
+            <ion-icon slot="icon-only" name="play"></ion-icon>
           </ion-button>
         </div>
       </div>

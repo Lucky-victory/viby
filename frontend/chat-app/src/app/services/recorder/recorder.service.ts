@@ -4,36 +4,36 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AudioRecorderService {
-  recorder: MediaRecorder | null;
- streamBeingCaptured:MediaStream| null;
-  audioBlobs: Blob[];
-  private fileReader = new FileReader();
+ private recorder: MediaRecorder | null;
+ private streamBeingCaptured:MediaStream| null;
+  private audioBlobs: Blob[] = [];
+  private audioBlob: Blob;
+  private readonly fileReader = new FileReader();
   constructor() { }
 
-  private hasSupport() {
+  private async hasSupport() {
     if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
       return Promise.reject(
-        new Error("Your browser lacks support for the mediaDevices API")
+        new Error("Your browser lacks support for recorder API")
       );
     }
     return Promise.resolve(true);
   }
    start() {
-    // return new Promise(()=>{});
+    
     return this.hasSupport()
-      .then((value) => this.handleSuccess(value))
+      .then((isSupported) => this.handleSuccess(isSupported))
       .catch(this.handleError);
   }
-  /**
-   * @returns {Promise<Blob>}
-   */
-  stop() {
+  
+  stop():Promise<Blob> {
     return new Promise((resolve) => {
       let mimeType = this.recorder?.mimeType;
       this.recorder?.addEventListener("stop", () => {
-        const audioBlob = new Blob(this.audioBlobs, { type: mimeType });
-        console.log(audioBlob);
-        resolve(audioBlob);
+        this.audioBlob = new Blob(this.audioBlobs, { type: mimeType });
+        console.log(this.audioBlob);
+      
+        resolve(this.audioBlob);
       });
       this.cancel();
     });
@@ -43,8 +43,7 @@ export class AudioRecorderService {
   }
   cancel() {
   
-    this.recorder.stop();
-
+    this.recorder?.stop();
     this.stopStream();
   }
   stopStream() {
@@ -55,7 +54,7 @@ export class AudioRecorderService {
     this.streamBeingCaptured = null;
   }
 
-  handleSuccess = (isSupported:boolean) => {
+  private handleSuccess (isSupported:boolean) {
     if (isSupported) {
       navigator.mediaDevices
         .getUserMedia({
@@ -66,20 +65,34 @@ export class AudioRecorderService {
           this.beginStream(stream);
         });
     }
-    return;
+
   };
-  handleError = (error) => {
+ private handleError = (error) => {
     console.log(error);
   };
 
-  beginStream = (stream:MediaStream) => {
+  private beginStream (stream:MediaStream){
     this.recorder = new MediaRecorder(stream);
     this.streamBeingCaptured = stream;
 
+    this.recorder?.start();
     this.recorder.addEventListener("dataavailable", (event) => {
       this.audioBlobs.push(event.data);
+      console.log(this.audioBlobs);
+      
     });
-    this.recorder?.start();
     console.log(stream);
   };
+  getBlobOrBase64(cb:(data: Blob | (string | ArrayBuffer)) => void, base64: boolean = true):void {
+  
+    if (!base64) return cb(this.audioBlob);
+
+    this.fileReader.readAsDataURL(this.audioBlob);
+   this.fileReader.onload = (event:ProgressEvent<FileReader>) => {
+     cb(event.target?.result)
+      
+   }
+   
+  }
+
 }

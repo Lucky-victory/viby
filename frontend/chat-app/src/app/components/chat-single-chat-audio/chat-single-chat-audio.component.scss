@@ -13,6 +13,9 @@
 ion-icon.icon{
   color:#fff;
   }  
+  ion-range.single-chat-audio-range{
+    --bar-background-active: currentColor
+  }
 }
 }
 
@@ -56,8 +59,9 @@ ion-icon.icon{
   gap:1rem;
 }
 .single-chat-user .single-chat-user-name {
-  font-weight: 600;
+  font-weight: 500;
   font-family: inherit;
+  font-size: 16px;
 }
 .single-chat-user-avatar-wrapper {
   width: 40px;
@@ -84,6 +88,7 @@ ion-range.single-chat-audio-range{
    padding:0;
    flex:1;
    z-index: inherit;
+   --bar-background-active:var(--accent-color)
  
 }
 ion-icon.icon{

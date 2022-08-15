@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AudioRecorderService } from './recorder.service';
+import { UtilsService } from './utils.service';
 
-describe('AudioRecorderService', () => {
-  let service: AudioRecorderService;
+describe('UtilsService', () => {
+  let service: UtilsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AudioRecorderService);
+    service = TestBed.inject(UtilsService);
   });
 
   it('should be created', () => {

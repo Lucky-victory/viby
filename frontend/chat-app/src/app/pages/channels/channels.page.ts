@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
 import { ApiService } from 'src/app/services/api/api.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-channels',
@@ -11,26 +13,42 @@ export class ChannelsPage implements OnInit {
   storeUrl: string = '../../../assets/store.json'
   servers: any;
   roomTitle: string;
-  constructor(private apiService :ApiService,private activeRoute:ActivatedRoute) { }
+  roomId:string;
+  channelId: string;
+  newMessage: any = {};
+  @ViewChild(ChatListComponent) ChatListComponent: ChatListComponent;
+
+  constructor(private apiService :ApiService,private activeRoute:ActivatedRoute,private authservice:AuthService) { }
 
   ngOnInit() {
-    this.apiService.get(this.storeUrl).subscribe((result:any) => {
+    this.apiService.get(this.storeUrl).subscribe((result: any) => {
       this.servers = result.servers;
-    
+      
       this.activeRoute.paramMap.subscribe((params) => {
-     const channelId=   params.get('channel_id')
-        const roomId = params.get('room_id');
-        console.log(channelId);
-        console.log(roomId);
-        
+        this.channelId = params.get('channel_id')
+    
+      });
+      this.activeRoute.queryParamMap.subscribe((params) => {
+        this.roomId = params.get('room');
+    
       })
-    })
-    console.log(this.roomTitle,'onint');
-  }
+      
+    });
+    }
   getRoomTitle(title: string){
     this.roomTitle = title;
-    console.log(this.roomTitle);
-    
   }
-
+  acceptNewMessage(message: any) {
+    this.newMessage = message;
+    this.saveMessage(message);
+    this.ChatListComponent.addNewMessage(message);
+  }
+  saveMessage(message: any={}) {
+    const user_id = this.authservice.currentUser?.user_id;
+    const messageToSave = {
+      ...message,user_id
+    }
+   
+  console.log(messageToSave,' to save')
+}
 }

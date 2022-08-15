@@ -1,15 +1,21 @@
-import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AudioService {
-  private _audio= new Audio();
-  
+import { v4 as uuidv4 } from 'uuid';
+
+export class AudioPlayer {
+  private _audio:HTMLAudioElement;
+  private audioElem: HTMLAudioElement;
+
   constructor() { 
-
+    this.create()
   }
-  setSrc(src: string): void{
+  create(src?: string) {
+    const id = uuidv4();
+    this.audioElem= new Audio(src);
+    this.audioElem.id = id;
+    this._audio = this.audioElem;
+    return this._audio
+  }
+  set src(src: string){
     this._audio.src = src;
     
   }

@@ -4,14 +4,17 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { ApiService } from './services/api/api.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ApiService } from './services/api/api.service';
+import { AuthService } from './services/auth/auth.service';
+import { ChatService } from './services/chat/chat.service';
 import { HttpAuthInterceptorService } from './services/http-auth-interceptor/http-auth-interceptor.service';
 import { HttpErrorInterceptorService } from './services/http-error-interceptor/http-error-interceptor.service';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-import { environment } from 'src/environments/environment';
+import { UtilsService } from './services/utils/utils.service';
 
 const config: SocketIoConfig = {
 	url: environment.socketUrl, // socket server url;
@@ -22,7 +25,7 @@ const config: SocketIoConfig = {
 @NgModule({
   declarations: [AppComponent,],
   imports: [BrowserModule, IonicModule.forRoot(),		SocketIoModule.forRoot(config),  AppRoutingModule,HttpClientModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, ApiService, {
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },UtilsService, ChatService, ApiService,AuthService, {
     provide: HTTP_INTERCEPTORS, useClass: HttpAuthInterceptorService,
     multi: true
   },{
