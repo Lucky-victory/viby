@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as mm from 'music-metadata-browser';
+import { Buffer } from 'buffer';
 
 @Injectable({
   providedIn: 'root'
@@ -27,26 +28,32 @@ export class AudioRecorderService {
       .catch(this.handleError);
   }
   
-  stop():Promise<Blob> {
-    return new Promise((resolve) => {
-      let mimeType = this.recorder?.mimeType;
-      this.recorder?.addEventListener("stop", () => {
-        this.audioBlob = new Blob(this.audioBlobs, { type: mimeType });
-        resolve(this.audioBlob);
+  stop():Promise<File|Blob>  {
+    return new Promise(async (resolve) => {
+      const mimeType = this.recorder?.mimeType;
+      
+      this.recorder?.addEventListener("stop",() => {
+        const arr = new Blob(this.audioBlobs, { type: mimeType }).slice(0,-1,);
+    const f = new File(this.audioBlobs, 'record.webm', { type: mimeType
+        });
+        console.log(f);
+        
+       resolve(f);
       });
-      this.cancel();
+     this.cancel();
+      
     });
   }
   resume() {
     this.start();
   }
-  cancel() {
+ async cancel() {
   
-    this.recorder?.stop();
     this.stopStream();
+    this.recorder?.stop();
   }
   stopStream() {
-    this.streamBeingCaptured.getTracks().forEach((track) => track?.stop());
+    this.streamBeingCaptured.getTracks().forEach((track) => track.stop());
   }
   reset() {
     this.recorder = null;
@@ -73,21 +80,19 @@ export class AudioRecorderService {
   private beginStream (stream:MediaStream){
     this.recorder = new MediaRecorder(stream);
     this.streamBeingCaptured = stream;
-    console.log(this.streamBeingCaptured, 'stream');
 
     this.recorder?.start();
     this.recorder.addEventListener("dataavailable", (event) => {
       this.audioBlobs.push(event.data);
-      console.log(this.audioBlobs);
       
     });
-    console.log(stream);
-  };
-  getBlobOrBase64(cb:(data: Blob | (string | ArrayBuffer)) => void, base64: boolean = true):void {
   
-    if (!base64) return cb(this.audioBlob);
+  };
+  getBlobOrBase64(blob:Blob|File,cb:(data: Blob | (string | ArrayBuffer)) => void, base64: boolean = true):void {
+  
+    if (!base64) return cb(blob);
 
-    this.fileReader.readAsDataURL(this.audioBlob);
+    this.fileReader.readAsDataURL(blob)
    this.fileReader.onload = (event:ProgressEvent<FileReader>) => {
      cb(event.target?.result)
       

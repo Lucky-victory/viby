@@ -7,7 +7,7 @@
   padding: 0.5rem;
   position: absolute;
   bottom: 0;
-  min-height: var(--message-textarea-height, 80px);
+  min-height: var(--message-textarea-height, 60px);
   z-index: 5;
 }
 
@@ -21,7 +21,7 @@
   background: var(--background);
   font-size: 16px;
   font-family: sans-serif;
-  min-height: 50px;
+  height: 50px;
 }
 .message-textarea {
   resize: none;
@@ -43,8 +43,8 @@
 .message-textarea-container .btn {
   border-radius: 50%;
   flex-shrink: 0;
-  height: 2rem;
-  width: 2rem;
+  height: 2.5rem;
+  width: 2.5rem;
   border: none;
   outline: none;
   display: flex;
