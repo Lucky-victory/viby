@@ -22,7 +22,7 @@ export class RoomListComponent implements OnInit {
       "title": "Home for all",
       "description":"A home for all channel",
       "members": ["userid1", "userid2"],
-      "isPublic":true,
+      "is_public":true,
       "permission": {
         "owner": true,
         "moderator": true
@@ -54,7 +54,7 @@ export class RoomListComponent implements OnInit {
       "channel_picture": "https://images.pexels.com/photos/13095218/pexels-photo-13095218.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
       "title": "Just a server",
       "members": ["userid1", "userid2"],
-      "isPublic":true,
+      "is_public":true,
       "permission": {
         "owner": true,
         "moderator": true

@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
+import { IChannel } from 'src/app/interfaces/channel.interface';
+import { IMessage } from 'src/app/interfaces/message.interface';
+import { IResponse } from 'src/app/interfaces/response.interface';
+import { IRoom } from 'src/app/interfaces/room.interface';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -10,19 +14,20 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./channels.page.scss'],
 })
 export class ChannelsPage implements OnInit {
-  storeUrl: string = '../../../assets/store.json'
-  servers: any;
+  private storeUrl: string = '../../../assets/store.json'
+  channels: IChannel[];
   roomTitle: string;
-  roomId:string;
+  roomId: string;
+  rooms: IRoom[];
   channelId: string;
-  newMessage: any = {};
+  newMessage: IMessage;
   @ViewChild(ChatListComponent) ChatListComponent: ChatListComponent;
 
   constructor(private apiService :ApiService,private activeRoute:ActivatedRoute,private authservice:AuthService) { }
 
   ngOnInit() {
-    this.apiService.get(this.storeUrl).subscribe((result: any) => {
-      this.servers = result.servers;
+    this.apiService.get(this.storeUrl).subscribe((result: IResponse) => {
+      this.channels = result.channels;
       
       this.activeRoute.paramMap.subscribe((params) => {
         this.channelId = params.get('channel_id')
@@ -38,17 +43,17 @@ export class ChannelsPage implements OnInit {
   getRoomTitle(title: string){
     this.roomTitle = title;
   }
-  acceptNewMessage(message: any) {
+  acceptNewMessage(message: IMessage) {
     this.newMessage = message;
     this.saveMessage(message);
     this.ChatListComponent.addNewMessage(message);
   }
-  saveMessage(message: any={}) {
+  saveMessage(message: IMessage) {
     const user_id = this.authservice.currentUser?.user_id;
     const messageToSave = {
       ...message,user_id
     }
    
-  console.log(messageToSave,' to save')
+  
 }
 }

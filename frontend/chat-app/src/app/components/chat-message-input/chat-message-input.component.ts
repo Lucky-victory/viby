@@ -17,10 +17,10 @@ export class ChatMessageInputComponent implements OnInit {
   isEmpty: boolean = true;
   // isRecording: boolean = false;
   roomId: string;
-  message: IMessage;
+  message: Partial<IMessage>;
   messageType:MessageType;
   // private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
-  @Output() onNewMessage = new EventEmitter<IMessage>();
+  @Output() onNewMessage = new EventEmitter<Partial<IMessage>>();
   private channelId: string;
   constructor(private activeRoute:ActivatedRoute) { }
 

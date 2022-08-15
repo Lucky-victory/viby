@@ -1,6 +1,6 @@
 {
 
-  "servers": [
+  "channels": [
     {
       "channel_id": "1",
       "channel_cover": "https://images.pexels.com/photos/6489667/pexels-photo-6489667.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
@@ -8,12 +8,8 @@
       "title": "Home for all",
       "description":"A home for all channel",
       "members": ["userid1", "userid2"],
-      "isPublic":true,
-      "permission": {
-        "owner": true,
-        "moderator": true
-      },
-      "moderators": ["userid1","userid2"],
+      "is_public":true,
+      
       "rooms": [
         {
           "room_id": "1",
@@ -40,12 +36,8 @@
       "channel_picture": "https://images.pexels.com/photos/13095218/pexels-photo-13095218.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
       "title": "Just a server",
       "members": ["userid1", "userid2"],
-      "isPublic":true,
-      "permission": {
-        "owner": true,
-        "moderator": true
-      },
-      "moderators": ["userid1","userid2"],
+      "is_public":true,
+      
       "rooms": [
         {
           "room_id": "1",

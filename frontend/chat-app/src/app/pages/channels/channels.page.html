@@ -3,7 +3,7 @@
   <ion-menu class="channel-main-menu" contentId="main-view" side="start" menuId="first" >
    
   <ion-content class="channel-main-menu-content">
-    <channel-list [channels]="servers" ></channel-list>
+    <channel-list [channels]="channels" ></channel-list>
 
   <room-list (roomTitleEv)="getRoomTitle($event)" ></room-list>
 
@@ -19,7 +19,7 @@
   </ion-header>
 <ion-content class="ion-no-padding channel-users-menu-content">
 
-  <channel-active-users-list></channel-active-users-list>
+  <channel-active-users-list [members]="members"></channel-active-users-list>
 </ion-content>
     
   

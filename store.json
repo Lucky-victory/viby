@@ -13,7 +13,7 @@
       "channel_picture": "pp.png",
       "name": "Home for all",
       "members": ["userid1", "userid2"],
-      "isPublic":true,
+      "is_public":true,
       "permission": {
         "owner": true,
         "moderator": true
@@ -45,7 +45,7 @@
       "channel_picture": "pp.png",
       "name": "Just a server",
       "members": ["userid1", "userid2"],
-      "isPublic":true,
+      "is_public":true,
       "permission": {
         "owner": true,
         "moderator": true
