@@ -16,3 +16,4 @@ export type IMessageToView = Omit<IMessage, 'user_id'>;
 export type IMessageToDB = Omit<IMessage, 'user'>;
 export type INewMessage = Omit<IMessage, 'user'|'user_id'>;
 export type MessageType = 'text' | 'audio';
+export type MessageInputStatus = 'create' | 'edit';

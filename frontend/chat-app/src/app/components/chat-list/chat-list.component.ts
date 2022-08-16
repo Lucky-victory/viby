@@ -82,21 +82,24 @@ export class ChatListComponent implements OnInit {
       
       this.messages = this.roomMessages.filter((roomMessage) => roomMessage.room_id === this.roomId);
     })
+       this.webSocketService.onReceiveMessage((message) => {
+      this.messages.push(message);
       
+    })
     })
   }
   addNewMessage(message:INewMessage){
-    const msg = message;
-    if (msg) {
-      this.newMessage = {
-        ...msg,user:
-        this.authService?.currentUser
-      }
-      console.log(this.newMessage,'new');
+    // const msg = message;
+    // if (msg) {
+    //   // this.newMessage = {
+    //   //   ...msg,user:
+    //   //   this.authService?.currentUser
+    //   // }
+    //   // console.log(this.newMessage,'new');
       
-      this.messages.push(this.newMessage);
-
-    }
+      
+    // }
+   
 
 }
 }

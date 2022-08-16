@@ -8,6 +8,7 @@ import { IRoom } from 'src/app/interfaces/room.interface';
 import { IUser } from 'src/app/interfaces/user.interface';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
   selector: 'app-channels',
@@ -22,9 +23,9 @@ export class ChannelsPage implements OnInit {
   rooms: IRoom[];
   channelId: string;
   newMessage: INewMessage;
-  @ViewChild(ChatListComponent) ChatListComponent: ChatListComponent;
 
-  constructor(private apiService :ApiService,private activeRoute:ActivatedRoute,private authservice:AuthService) { }
+
+  constructor(private apiService :ApiService,private activeRoute:ActivatedRoute,private authservice:AuthService,private readonly webSocketService:WebSocketService) { }
 
   ngOnInit() {
     this.apiService.get(this.storeUrl).subscribe((result: IResponse) => {
@@ -47,14 +48,15 @@ export class ChannelsPage implements OnInit {
   acceptNewMessage(message: INewMessage) {
     this.newMessage = message;
     this.saveMessage(message);
-    this.ChatListComponent.addNewMessage(message);
+    
   }
   saveMessage(message: INewMessage) {
-    const user_id = this.authservice.currentUser?.user_id;
+    const user = this.authservice.currentUser;
+    const user_id =user?.user_id;
     const messageToSave = {
       ...message,user_id
     }
-   
+   this.webSocketService.onNewMessage(this.roomId,messageToSave,user)
   
   }
  

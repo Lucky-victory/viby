@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 // import { AudioRecorderService } from 'src/app/services/recorder/recorder.service';
 import { v4 as uuidV4 } from 'uuid';
 
-import { IMessage, INewMessage, MessageType } from 'src/app/interfaces/message.interface';
+import { IMessage, INewMessage, MessageInputStatus, MessageType } from 'src/app/interfaces/message.interface';
 
 @Component({
   selector: 'chat-message-input',
@@ -18,7 +18,8 @@ export class ChatMessageInputComponent implements OnInit {
   // isRecording: boolean = false;
   private roomId: string;
  private message: INewMessage;
-  private messageType:MessageType='text';
+  private messageType: MessageType = 'text';
+  private textMessageInputStatus: MessageInputStatus = 'create';
   // private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
   @Output() onNewMessage = new EventEmitter<INewMessage>();
   private channelId: string;
@@ -46,6 +47,7 @@ export class ChatMessageInputComponent implements OnInit {
   clearInput() {
     this.textMessage = '';
     this.messageType = 'text';
+    this.textMessageInputStatus='create'
   }
   createMessageObj() {
 //     if (this.messageType === 'audio') {
@@ -73,6 +75,7 @@ export class ChatMessageInputComponent implements OnInit {
       type:this.messageType,
       
     }
+    console.log(this.message,'here at input');
     
     this.onNewMessage.emit(this.message);
     
@@ -83,7 +86,7 @@ export class ChatMessageInputComponent implements OnInit {
     }
     if ( event.key === 'Enter') {
       event.preventDefault();
-    this.sendMessage()
+      this.sendMessage();
     }
   }
   sendMessage() {
