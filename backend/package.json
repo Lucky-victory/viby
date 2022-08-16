@@ -2,6 +2,8 @@
   "name": "chat-backend",
   "version": "1.0.0",
   "description": "The backend for a chat application",
+
+  "private":true,
   "main": "server.js",
   "scripts": {
     "dev": "nodemon src/server.ts",

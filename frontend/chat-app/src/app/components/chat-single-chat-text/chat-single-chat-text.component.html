@@ -1,0 +1,28 @@
+ <div class="single-chat {{isCurrentUser ? 'current-user':''}} ion-activatable">
+  <ion-ripple-effect *ngIf="isMobile">
+    
+  </ion-ripple-effect>
+          <div class="single-chat-text-wrapper">
+            <span  class="single-chat-text">
+
+              {{chat?.content}}
+            </span>
+            
+            <div class="single-chat-timestamp">
+              <time>{{chat?.created_at|dateFormatter}}</time>
+            </div>
+          </div>
+          <div class="single-chat-user" *ngIf="!isCurrentUser">
+            <div class="single-chat-user-avatar-wrapper">
+              <img
+                src="{{chat?.user?.profile_picture}}"
+                alt=""
+                class="single-chat-user-avatar"
+              />
+            </div>
+            <div class="single-chat-user-name">
+              <span>{{chat?.user?.fullname}}</span>
+            </div>
+          </div>
+        </div>
+       

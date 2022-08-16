@@ -3,7 +3,7 @@ export class AudioRecorder {
     /**
      * @type {MediaRecorder|null}
      */
-    this.recoder = null;
+    this.recorder = null;
     this.streamBeingCaptured = null;
     this.audioBlobs = [];
   }
@@ -21,8 +21,8 @@ export class AudioRecorder {
    */
   stop() {
     return new Promise((resolve) => {
-      let mimeType = this.recoder?.mimeType;
-      this.recoder?.addEventListener("stop", () => {
+      let mimeType = this.recorder?.mimeType;
+      this.recorder?.addEventListener("stop", () => {
         const audioBlob = new Blob(this.audioBlobs, { type: mimeType });
         console.log(audioBlob);
         resolve(audioBlob);
@@ -35,7 +35,7 @@ export class AudioRecorder {
   }
   cancel() {
     // @ts-ignore
-    this.recoder.stop();
+    this.recorder.stop();
 
     this.stopStream();
   }
@@ -43,7 +43,7 @@ export class AudioRecorder {
     this.streamBeingCaptured.getTracks().forEach((track) => track?.stop());
   }
   reset() {
-    this.recoder = null;
+    this.recorder = null;
     this.streamBeingCaptured = null;
   }
   /**
@@ -81,13 +81,13 @@ export class AudioRecorder {
   };
 
   beginStream = (stream) => {
-    this.recoder = new MediaRecorder(stream);
+    this.recorder = new MediaRecorder(stream);
     this.streamBeingCaptured = stream;
 
-    this.recoder.addEventListener("dataavailable", (event) => {
+    this.recorder.addEventListener("dataavailable", (event) => {
       this.audioBlobs.push(event.data);
     });
-    this.recoder?.start();
+    this.recorder?.start();
     console.log(stream);
   };
 }
@@ -113,11 +113,12 @@ const stopBtn = document.createElement("button");
 stopBtn.textContent = "stop rec";
 stopBtn.addEventListener("click", () => {
   rec.stop().then((blob) => {
+    console.log(blob);
     fileReader.readAsDataURL(blob);
     fileReader.onload = (event) => {
       const result = event.target?.result;
       console.log(result);
-      // @ts-ignore
+      
       player.src = result;
     };
   });

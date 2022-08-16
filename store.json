@@ -8,69 +8,69 @@
   },
   "servers": [
     {
-      "server_id": 1234567,
-      "cover_image": "cover.png",
-      "server_picture": "pp.png",
+      "channel_id": 1234567,
+      "channel_cover": "cover.png",
+      "channel_picture": "pp.png",
       "name": "Home for all",
       "members": ["userid1", "userid2"],
+      "is_public":true,
       "permission": {
         "owner": true,
         "moderator": true
       },
-      "moderators": [],
-      "channels": [
+      "moderators": ["userid1","userid2"],
+      "rooms": [
         {
-          "channel_id": "ch1",
+          "room_id": "room1",
           "name": "introduction",
-          "message_allowed": false,
-          "messages": []
+          "message_allowed": false
+        
         },
         {
-          "channel_id": "ch2",
+          "room_id": "room2",
           "name": "general",
-          "message_allowed": true,
-          "messages": []
+          "message_allowed": true
+        
         },
         {
-          "channel_id": "ch3",
+          "room_id": "room3",
           "name": "get-help",
-          "message_allowed": true,
-          "messages": []
+          "message_allowed": true
+        
         }
       ]
-    },
-    {
-      "server_id": 2345678,
-      "cover_image": "cover.png",
-      "server_picture": "pp.png",
-      "name": "Another server",
+  }, {
+      "channel_id": "12345678890",
+      "channel_cover": "cover.png",
+      "channel_picture": "pp.png",
+      "name": "Just a server",
       "members": ["userid1", "userid2"],
+      "is_public":true,
       "permission": {
-        "owner": false,
+        "owner": true,
         "moderator": true
       },
-      "moderators": [],
-
-      "channels": [
+      "moderators": ["userid1","userid2"],
+      "rooms": [
         {
-          "channel_id": "ch1",
+          "room_id": "room1",
           "name": "introduction",
-          "message_allowed": false,
-          "messages": []
+          "message_allowed": false
+        
         },
         {
-          "channel_id": "ch2",
+          "room_id": "room2",
           "name": "general",
-          "message_allowed": true,
-          "messages": []
+          "message_allowed": true
+        
         },
         {
-          "channel_id": "ch3",
+          "room_id": "room3",
           "name": "get-help",
-          "message_allowed": true,
-          "messages": []
+          "message_allowed": true
+        
         }
       ]
-    }
-  ]
-}
+  } ]
+
+  }

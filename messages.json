@@ -2,12 +2,13 @@
   {
     "message_id": "msgid1",
     "type": "text",
-    "url": null,
-    "channel_id": 123344,
+    "attachments": null,
     "content": "i told you earlier about this",
-    "time_sent": 63730288949,
+    "created_at": 63730288949,
+"room_id":121212,
+
     "user": {
-      "id": "userid1",
+      "user_id": "userid1",
       "username": "lucky_ben",
       "fullname": "Lucky Ben",
       "profile_picture": "dp.png"
@@ -16,13 +17,13 @@
   {
     "message_id": "msgid2",
     "type": "text",
-    "url": null,
-    "channel_id": 123344,
+    "attachments": null,
+"room_id":121212,
 
     "content": "my brother leave please",
-    "time_sent": 63730288949,
+    "created_at": 63730288949,
     "user": {
-      "id": "userid2",
+      "user_id": "userid2",
       "username": "luckyv4",
       "fullname": "Lucky victory",
       "profile_picture": "dp.png"
@@ -31,13 +32,12 @@
   {
     "message_id": "msgid3",
     "type": "audio",
-    "url": "audio.mp3",
-    "channel_id": 123344,
-
-    "content": null,
-    "time_sent": 63730288949,
+    "attachments": ["audio.mp3"],
+"room_id":121212,
+    "content":"audio.mp3",
+    "created_at": 63730288949,
     "user": {
-      "id": "userid2",
+      "user_id": "userid2",
       "username": "luckyv4",
       "fullname": "Lucky victory",
       "profile_picture": "dp.png"

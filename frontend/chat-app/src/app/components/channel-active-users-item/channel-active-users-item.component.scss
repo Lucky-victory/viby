@@ -1,0 +1,41 @@
+
+.channel-active-user{
+    display: flex;
+    align-items: center;
+    padding:7px 10px;
+    border-radius:10px;
+    background-color:var(--secondary-bg);
+margin-bottom: 10px;
+width: 100%;
+}
+
+.channel-active-user-image-wrapper{
+    width: 45px;
+    position: relative;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+}
+.channel-active-user-image{
+    border-radius:inherit;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.channel-active-user-name{
+    font-weight: 500;
+    color:currentColor;
+    margin-left: 13px;
+}
+
+.channel-active-user-status-indicator{
+    width: 12px;
+    height: 12px;
+    border-radius:50%;
+    background-color: #007f90;
+    z-index: 3;
+    position: absolute;
+    right: -4px;
+    bottom: 8px;
+    border: inherit
+}

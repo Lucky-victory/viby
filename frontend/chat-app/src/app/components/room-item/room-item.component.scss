@@ -1,0 +1,18 @@
+ion-item.room-item{
+    
+    &.active::part(native){
+        background-color: var(--secondary-bg);
+        pointer-events: none;
+        
+    }
+   
+}
+
+.room-item-title{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    display: block;
+    font-weight: 500;
+    text-transform: lowercase;
+}

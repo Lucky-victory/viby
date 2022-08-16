@@ -24,3 +24,25 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+:root{
+    --primary-bg:#fefefe;
+    --primary-bg-light:#fefefeaa;
+    --primary-color:#7204da;
+    --accent-color:#024591;
+    --secondary-bg:#e9ecec;
+    --secondary-color:#b3b5b8;
+    --active-room-bg:#6f636f;
+    --chat-area-bg:#a3a3a3;
+    --message-textarea-height:60px;
+}
+@media(prefers-color-scheme: dark) {
+    :root {
+        --secondary-color:#c2bfbf;
+        --primary-bg:#201920;
+        --primary-bg-light:#201920aa;
+        --secondary-bg:#505152;
+        --chat-area-bg:transparent;
+        
+    }
+}

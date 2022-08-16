@@ -1,0 +1,11 @@
+.chat-list-container{
+    padding: 60px 12px;
+    padding-bottom: var(--message-textarea-height,80px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+  background:var(--chat-area-bg);
+
+}
