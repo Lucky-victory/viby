@@ -18,15 +18,15 @@
 
       const form = document.getElementById("form");
       const input = document.getElementById("input");
-      socket.emit("joinChannel", 123);
+      socket.emit("join_channel", 123);
       socket.on("test", (data) => {
         input.value = data;
       });
-      socket.emit("joinRoom", 23);
+      socket.emit("join_room", 23);
       form.addEventListener("submit", (evt) => {
         evt.preventDefault();
         const message = input.value;
-        socket.emit("new message", message);
+        socket.emit("new_message", message);
 
         console.log(message);
         input.value = "";
