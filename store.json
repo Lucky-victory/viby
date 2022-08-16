@@ -1,0 +1,76 @@
+{
+  "user": {
+    "uuser_id": "userid2",
+    "username": "luckyv4",
+    "fullname": "Lucky Victory",
+    "profile_picture": "dp.png",
+    "status": "online"
+  },
+  "servers": [
+    {
+      "server_id": 1234567,
+      "cover_image": "cover.png",
+      "server_picture": "pp.png",
+      "name": "Home for all",
+      "members": ["userid1", "userid2"],
+      "permission": {
+        "owner": true,
+        "moderator": true
+      },
+      "moderators": [],
+      "channels": [
+        {
+          "channel_id": "ch1",
+          "name": "introduction",
+          "message_allowed": false,
+          "messages": []
+        },
+        {
+          "channel_id": "ch2",
+          "name": "general",
+          "message_allowed": true,
+          "messages": []
+        },
+        {
+          "channel_id": "ch3",
+          "name": "get-help",
+          "message_allowed": true,
+          "messages": []
+        }
+      ]
+    },
+    {
+      "server_id": 2345678,
+      "cover_image": "cover.png",
+      "server_picture": "pp.png",
+      "name": "Another server",
+      "members": ["userid1", "userid2"],
+      "permission": {
+        "owner": false,
+        "moderator": true
+      },
+      "moderators": [],
+
+      "channels": [
+        {
+          "channel_id": "ch1",
+          "name": "introduction",
+          "message_allowed": false,
+          "messages": []
+        },
+        {
+          "channel_id": "ch2",
+          "name": "general",
+          "message_allowed": true,
+          "messages": []
+        },
+        {
+          "channel_id": "ch3",
+          "name": "get-help",
+          "message_allowed": true,
+          "messages": []
+        }
+      ]
+    }
+  ]
+}
