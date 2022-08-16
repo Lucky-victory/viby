@@ -1,6 +1,7 @@
-<ion-item  class="room-item {{room?.room_id===roomId?'active':''}}" button (click)="selectRoom(room?.room_id)">
+<ion-item routerDirection="root" [routerLink]="['/channels',channelId]" [queryParams]="{room:room?.room_id}"  class="room-item {{room?.room_id===roomId?'active':''}}" button>
   <span class="room-item-title">
 
   # {{room?.title}}
   </span>
     </ion-item>
+

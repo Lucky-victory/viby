@@ -9,7 +9,7 @@ import { ApiService } from '../api/api.service';
 })
 export class AuthService {
   private readonly apiBaseUrl = environment.apiBaseUrl;
-  
+  private readonly sampleUser: IUser = { user_id: '1', profile_picture: 'https://images.pexels.com/photos/13095218/pexels-photo-13095218.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', username: 'luckyj', fullname: 'Lucky victory', cover_picture: '' };
   constructor(private apiService:ApiService) { }
 
   setSession(result:IUserCredentials) {
@@ -45,7 +45,7 @@ export class AuthService {
     localStorage.setItem('viby_user', JSON.stringify(user));
   }
   get currentUser(): IUser {
-    return JSON.parse(localStorage.getItem('viby_user')) as IUser;
+    return JSON.parse(localStorage.getItem('viby_user')) as IUser || this.sampleUser;
 
   }
   logout() {

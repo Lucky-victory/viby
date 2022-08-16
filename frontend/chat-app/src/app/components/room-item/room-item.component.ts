@@ -14,11 +14,13 @@ export class RoomItemComponent implements OnInit {
   constructor(private router:Router,private activeRoute:ActivatedRoute) { }
 
   ngOnInit() {
+    this.channelId = this.activeRoute.snapshot.paramMap.get('channel_id');
+    
+    
   this.activeRoute.queryParamMap.subscribe((params) => {
       this.roomId = params.get('room');
         
       })
-    
     
   }
   selectRoom(roomId) {

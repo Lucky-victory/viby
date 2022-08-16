@@ -12,7 +12,19 @@ export interface IChannel{
     channel_picture: string;
     channel_cover?: string;
     members:IUser[],
-    rooms: IRoom[];
+    channel_id: string;
+}
+export interface IChannelToDB{
+    created_at:string;
+    owner_id: string;
+    is_owner?: boolean;
+    title:string;
+    description?: string;
+    is_public: boolean;
+    channel_picture: string;
+    channel_cover?: string;
+    members: string[];
+    rooms: [];
     channel_id: string;
 }
 export type INewChannel = Partial<IChannel>;

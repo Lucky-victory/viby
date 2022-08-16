@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { IUser } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'channel-active-users-list',
@@ -6,9 +8,19 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./channel-active-users-list.component.scss'],
 })
 export class ChannelActiveUsersListComponent implements OnInit {
-  @Input() user;
-  constructor() { }
+  @Input() currentUser:IUser;
+  @Input() members: IUser[];
+  channelId: string;
+  constructor(private activeRoute: ActivatedRoute) {
+    
+   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // use the current active channelId to fetch members
+    this.activeRoute.paramMap.subscribe((params) => {
+      this.channelId = params.get('channel_id');
+      // fetch members with channelId  
+    })
+  }
 
 }

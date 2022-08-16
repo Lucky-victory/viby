@@ -1,9 +1,11 @@
 <div class="room-list-container">
   
-  
+  <!-- only show this if the current user is the channel owner -->
+<ion-item button lines="none"><ion-icon name="add" slot="start"></ion-icon> add new room</ion-item>
+
       <div class="room-list-header">
         <div class="room-list-header-inner">
-          <strong class="room-list-header-inner-title">
+          <!-- <strong class="room-list-header-inner-title">
             {{channel?.title}}
           </strong>
           <ion-buttons>
@@ -21,7 +23,8 @@
       <ion-img class="room-list-channel-image" [src]="channel?.channel_picture">
         
       </ion-img>
-    </div>
+    -->
+    </div> 
   </div>
   
   

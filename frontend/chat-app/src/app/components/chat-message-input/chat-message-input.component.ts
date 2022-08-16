@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 // import { AudioRecorderService } from 'src/app/services/recorder/recorder.service';
 import { v4 as uuidV4 } from 'uuid';
 
-import { IMessage, MessageType } from 'src/app/interfaces/message.interface';
+import { IMessage, INewMessage, MessageType } from 'src/app/interfaces/message.interface';
 
 @Component({
   selector: 'chat-message-input',
@@ -16,11 +16,11 @@ export class ChatMessageInputComponent implements OnInit {
   // audioMessage:string|Blob|ArrayBuffer=''
   isEmpty: boolean = true;
   // isRecording: boolean = false;
-  roomId: string;
-  message: Partial<IMessage>;
-  messageType:MessageType;
+  private roomId: string;
+ private message: INewMessage;
+  private messageType:MessageType='text';
   // private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
-  @Output() onNewMessage = new EventEmitter<Partial<IMessage>>();
+  @Output() onNewMessage = new EventEmitter<INewMessage>();
   private channelId: string;
   constructor(private activeRoute:ActivatedRoute) { }
 
@@ -70,7 +70,8 @@ export class ChatMessageInputComponent implements OnInit {
       attachments:null,
       channel_id:this.channelId,
       created_at: new Date().getTime(),
-      type:this.messageType
+      type:this.messageType,
+      
     }
     
     this.onNewMessage.emit(this.message);

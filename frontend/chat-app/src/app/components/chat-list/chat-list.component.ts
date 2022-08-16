@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IMessage, IMessageToView, INewMessage } from 'src/app/interfaces/message.interface';
+import { IUser } from 'src/app/interfaces/user.interface';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
@@ -10,13 +12,14 @@ import { WebSocketService } from 'src/app/services/web-socket/web-socket.service
   styleUrls: ['./chat-list.component.scss'],
 })
 export class ChatListComponent implements OnInit {
-  messages: any[] ;
-  newMessage:any;
-  
- roomMessages = [
+  messages: IMessageToView[] ;
+  private newMessage: IMessageToView;
+  @Input() currentUser: IUser;
+ roomMessages:IMessageToView[] = [
     {
       message_id: '1',
       room_id: '2',
+      channel_id:'2',
       content: "Hi there",
       attachments: null,
       type: "text",
@@ -25,12 +28,14 @@ export class ChatListComponent implements OnInit {
         user_id: '1',
         profile_picture: 'https://images.pexels.com/photos/3992656/pexels-photo-3992656.png?auto=compress&cs=tinysrgb&w=300',
         fullname: 'Jane mark',
-     username:'jane_mark'
+        username: 'jane_mark',
+     cover_picture:''
       }
     }, 
     {
       message_id: '1',
       room_id: '1',
+      channel_id:'2',
       content: 'https://raw.githubusercontent.com/Lucky-victory/zplayer/master/songs/angels-like-you.mp3',
       attachments: null,
       type: "audio",
@@ -39,12 +44,15 @@ export class ChatListComponent implements OnInit {
         user_id: '2',
         profile_picture: 'https://images.pexels.com/photos/3992656/pexels-photo-3992656.png?auto=compress&cs=tinysrgb&w=300',
         fullname: 'Jane mark',
-     username:'jane_mark'
+        username: 'jane_mark',
+     cover_picture:''
+     
       }
     }, {
       
       message_id:'2',
       room_id: '1',
+      channel_id:'1',
       content: "Hi over there",
       attachments: null,
       type: "text",
@@ -53,7 +61,9 @@ export class ChatListComponent implements OnInit {
         user_id: '2',
         profile_picture: 'https://images.pexels.com/photos/1212984/pexels-photo-1212984.jpeg?auto=compress&cs=tinysrgb&w=600',
         fullname: 'Paul Give',
-username:'paul_give'
+     username: 'paul_give',
+     cover_picture:''
+
       }
     }
   ];
@@ -75,10 +85,13 @@ username:'paul_give'
       
     })
   }
-  addNewMessage(message:any){
-    this.newMessage = message;
-    if (this.newMessage) {
-      this.newMessage.user = this.authService?.currentUser;
+  addNewMessage(message:INewMessage){
+    const msg = message;
+    if (msg) {
+      this.newMessage = {
+        ...msg,user:
+        this.authService?.currentUser
+      }
       console.log(this.newMessage,'new');
       
       this.messages.push(this.newMessage);

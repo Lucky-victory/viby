@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
 import { IChannel } from 'src/app/interfaces/channel.interface';
-import { IMessage } from 'src/app/interfaces/message.interface';
+import { IMessage, IMessageToDB, INewMessage } from 'src/app/interfaces/message.interface';
 import { IResponse } from 'src/app/interfaces/response.interface';
 import { IRoom } from 'src/app/interfaces/room.interface';
+import { IUser } from 'src/app/interfaces/user.interface';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -20,7 +21,7 @@ export class ChannelsPage implements OnInit {
   roomId: string;
   rooms: IRoom[];
   channelId: string;
-  newMessage: IMessage;
+  newMessage: INewMessage;
   @ViewChild(ChatListComponent) ChatListComponent: ChatListComponent;
 
   constructor(private apiService :ApiService,private activeRoute:ActivatedRoute,private authservice:AuthService) { }
@@ -31,7 +32,7 @@ export class ChannelsPage implements OnInit {
       
       this.activeRoute.paramMap.subscribe((params) => {
         this.channelId = params.get('channel_id')
-    
+        
       });
       this.activeRoute.queryParamMap.subscribe((params) => {
         this.roomId = params.get('room');
@@ -43,17 +44,18 @@ export class ChannelsPage implements OnInit {
   getRoomTitle(title: string){
     this.roomTitle = title;
   }
-  acceptNewMessage(message: IMessage) {
+  acceptNewMessage(message: INewMessage) {
     this.newMessage = message;
     this.saveMessage(message);
     this.ChatListComponent.addNewMessage(message);
   }
-  saveMessage(message: IMessage) {
+  saveMessage(message: INewMessage) {
     const user_id = this.authservice.currentUser?.user_id;
     const messageToSave = {
       ...message,user_id
     }
    
   
-}
+  }
+ 
 }

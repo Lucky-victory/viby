@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IUser } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'channel-active-users-item',
@@ -6,7 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./channel-active-users-item.component.scss'],
 })
 export class ChannelActiveUsersItemComponent implements OnInit {
-  @Input() user;
+  @Input() currentUser: IUser;
+  @Input() member: IUser;
   constructor() { }
 
   ngOnInit() {}

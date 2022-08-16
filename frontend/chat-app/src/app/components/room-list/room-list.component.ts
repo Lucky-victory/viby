@@ -1,5 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IChannel } from 'src/app/interfaces/channel.interface';
+import { IRoom } from 'src/app/interfaces/room.interface';
 import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
@@ -10,10 +12,63 @@ import { ApiService } from 'src/app/services/api/api.service';
 export class RoomListComponent implements OnInit {
   channel: any;
   @Output() roomTitleEv: EventEmitter<string> = new EventEmitter<string>();
-
+  @Input() activeChannel: IChannel;
   rooms: any[]=[];
   channelId: string;
   roomId: string;
+  roomsSample:IRoom[]= [
+     
+        {
+          "room_id": "1",
+          channel_id:'2',
+          "title": "introduction",
+         created_at:new Date().getTime()
+        
+        
+        },
+        {
+          "room_id": "2",
+          channel_id:'2',
+
+          "title": "another room",
+    
+        created_at:new Date().getTime()
+        
+        },
+        {
+          "room_id": "3",
+          channel_id:'2',
+
+          "title": "help needed",
+        created_at:new Date().getTime()
+        
+        },  {
+          "room_id": "1",
+          channel_id:'1',
+          "title": "introduction",
+        created_at:new Date().getTime()
+      
+        
+        },
+        {
+          "room_id": "2",
+          channel_id:'1',
+
+          "title": "general",
+      
+        created_at:new Date().getTime()
+        
+        },
+        {
+          "room_id": "3",
+          "title": "get-help",
+          channel_id:'1',
+        created_at:new Date().getTime()
+        
+        
+        }
+      
+  ]
   channels=[
     {
       "channel_id": "1",
@@ -21,65 +76,18 @@ export class RoomListComponent implements OnInit {
       "channel_picture": "https://images.pexels.com/photos/3357026/pexels-photo-3357026.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
       "title": "Home for all",
       "description":"A home for all channel",
-      "members": ["userid1", "userid2"],
       "is_public":true,
-      "permission": {
-        "owner": true,
-        "moderator": true
-      },
-      "moderators": ["userid1","userid2"],
-      "rooms": [
-        {
-          "room_id": "1",
-          "title": "introduction",
-          "message_allowed": false
-        
-        },
-        {
-          "room_id": "2",
-          "title": "general",
-          "message_allowed": true
-        
-        },
-        {
-          "room_id": "3",
-          "title": "get-help",
-          "message_allowed": true
-        
-        }
-      ]
+
+    
   }, {
       "channel_id": "2",
       "channel_cover": "https://images.pexels.com/photos/11071498/pexels-photo-11071498.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
       "channel_picture": "https://images.pexels.com/photos/13095218/pexels-photo-13095218.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
       "title": "Just a server",
-      "members": ["userid1", "userid2"],
+  
       "is_public":true,
-      "permission": {
-        "owner": true,
-        "moderator": true
-      },
-      "moderators": ["userid1","userid2"],
-      "rooms": [
-        {
-          "room_id": "1",
-          "title": "introduction",
-          "message_allowed": false
-        
-        },
-        {
-          "room_id": "2",
-          "title": "another room",
-          "message_allowed": true
-        
-        },
-        {
-          "room_id": "3",
-          "title": "help needed",
-          "message_allowed": true
-        
-        }
-      ]
+  
+     
   } ]
 
 
@@ -88,15 +96,15 @@ export class RoomListComponent implements OnInit {
   ngOnInit() {
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
-      this.channel = this.channels.find((channel) => channel.channel_id === this.channelId);
-      this.rooms = this.channel?.rooms;
+    })
+    // this.channel
+    this.rooms =this.roomsSample.filter((room) => room.channel_id === this.channelId);
       if (this.rooms?.length) {
         this.router.navigate([], {
-          queryParams:{room:this.rooms[0].room_id}
+          queryParams:{room:this.rooms[0]?.room_id}
         });
         this.roomTitleEv.emit(this.rooms[0]?.title)
       }
-      })
     this.activeRoute.queryParamMap.subscribe((params) => {
       this.roomId = params.get('room');
         

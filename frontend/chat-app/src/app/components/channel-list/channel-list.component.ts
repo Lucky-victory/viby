@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IChannel } from 'src/app/interfaces/channel.interface';
+import { IUser } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'channel-list',
@@ -12,11 +14,13 @@ export class ChannelListComponent implements OnInit {
   constructor(private activeRoute:ActivatedRoute) { }
 
   ngOnInit() {
-      this.activeRoute.paramMap.subscribe((params) => {
-     this.channelId=   params.get('channel_id')
-        
-        
-      })
+
+    // use the active channelId to fetch rooms
+    this.activeRoute.paramMap.subscribe((params) => {
+   this.channelId=   params.get('channel_id')
+// now use the channeelID
+      
+    })
   }
 
 }
