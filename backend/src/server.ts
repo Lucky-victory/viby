@@ -3,16 +3,30 @@ const app = express();
 import { Server } from "socket.io";
 import http from "http";
 const server = http.createServer(app);
-
+import cors from 'cors';
 const PORT = process.env.PORT || 3300;
-// import { redis as db } from "./db/index.js";
+
 const io = new Server(server);
 import socket from './sockets/channels';
 socket(io);
 
 import signUpRouter from "./routes/sign-up";
+import messagesRouter from './routes/messages';
 import { AuthMiddleware } from "./middlewares/auth";
 
+const whitelist:string[]=[]
+app.use(cors({
+  origin:(origin,callback)=>{
+if(whitelist.indexOf(origin as string)!== -1){
+callback(null,true)
+}
+else{
+  callback(new Error('Not allowed by CORS'))
+}
+  }
+}));
+
+app.use('/messages',messagesRouter)
 app.use("/", signUpRouter);
 
 // authentication middleware

@@ -3,11 +3,12 @@ import { Request, RequestHandler, Response } from "express";
 import { redis as db } from "../db/index";
 import { UsersEntity, UsersRepo } from "../models/users";
 import { v4 as uuidV4 } from "uuid";
+import pick from 'just-pick';
 
 export default class UsersController {
   static async createNewUser(req: Request, res: Response) {
     const userRepo = await UsersRepo;
-    const user = userRepo.createEntity({
+    const user = await userRepo.createAndSave({
       user_id: uuidV4(),
       fullname: "benson blessing",
       username: "bensonblizzy",
@@ -15,8 +16,7 @@ export default class UsersController {
     });
     await userRepo.createIndex();
 
-    const s = await userRepo.save(user);
-    res.status(200).json({ s, v: user.userName });
+    res.status(200).json({ s: user.userName });
   }
   static async getUsername(req: Request, res: Response) {
     const id = req.query.id;
@@ -29,13 +29,13 @@ export default class UsersController {
       .return.all();
     users = JSON.parse(JSON.stringify(users));
 
-    users = Utils.getPropsFromObject<UsersEntity>(users, [
-      "username",
-      "password",
-      "user_id",
-      "entityId",
-      "email",
-    ]) as UsersEntity[];
+    // users = pick<UsersEntity,<'username'>(users, [
+    //   "username",
+    //   "password",
+    //   "user_id",
+    //   "entityId",
+    //   "email",
+    // ]);
 
     res.status(200).json({
       users,
