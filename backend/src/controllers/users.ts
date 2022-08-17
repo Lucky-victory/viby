@@ -1,41 +1,47 @@
 import { Utils } from "./../utils/index";
-import { Request, RequestHandler, Response } from "express";
-import { redis as db } from "../db/index";
-import { UsersEntity, UsersRepo } from "../models/users";
+import { Request, Response } from "express";
+import {  UsersRepo } from "../models/users";
 import { v4 as uuidV4 } from "uuid";
-import pick from 'just-pick';
 import ms from 'ms';
 import config from "../config";
 import bcrypt from 'bcrypt';
-
+import { IUser, IUserForToken, IUserToView } from "../interfaces/user.interface";
+import { EntityData } from "redis-om";
 export default class UsersController {
   static async createNewUser(req: Request, res: Response) {
     try {
       
-      const userRepo = await UsersRepo;
+      const currentTime = new Date().getTime();
       const {fullname,username,email,password } = req.body;
-      
-    const hashedPassword = await bcrypt.hash(String(password), 10);
+      const hashedPassword = await bcrypt.hash(String(password), 10);
 
-    const user = await userRepo.createAndSave({
-      user_id: uuidV4(),
+      const newUser:IUser = {
+       user_id: uuidV4(),
       fullname,
       email,
       username,
       password:hashedPassword,
-      created_at: await db.time(),
-    });
-      await userRepo.createIndex();
+        created_at: currentTime,
+      friends:[]
+    }
 
-      //pick()
-    Utils.generateToken(user, (err, encoded) => {
-      if (err) throw err;
-      res.status(201).json({
-        message: 'account created successfully',
-        token: encoded,
-        expires_at:ms(config.jwt_expiration as string),user
-      })
-    })
+    const user = await (await UsersRepo).createAndSave(newUser as unknown as EntityData);
+      await (await UsersRepo).createIndex();
+
+      const userToView = Utils.omit(user, ['password', 'email', 'entityId', 'friends']) as IUserToView;
+      const userInfoForToken = Utils.pick(user, ['fullname', 'username', 'user_id']) as IUserForToken;
+      Utils.generateToken(userInfoForToken, (err, encoded) => {
+        if (err) throw err;
+        res.status(201).json({
+          message: 'account created successfully',
+          data: {
+            
+            token: encoded,
+            expires_at: ms(config.jwt_expiration as string),
+            user: userToView,
+          }
+        });
+      });
   }
     catch (error) {
       
@@ -59,15 +65,20 @@ export default class UsersController {
         res.status(400).json({ message: 'Invalid credentials', user: null });
         return
       }
-      //pick()
-    Utils.generateToken(user, (err, encoded) => {
-      if (err) throw err;
-      res.status(201).json({
-        message: 'login successfully',
-        token: encoded,
-        expires_at:ms(config.jwt_expiration as string),user
-      })
-    })
+    
+      const userToView = Utils.omit(user, ['password', 'email', 'entityId', 'friends']) as IUserToView;
+   const userInfoForToken = Utils.pick(user, ['fullname', 'username', 'user_id']) as IUserForToken;
+      Utils.generateToken(userInfoForToken, (err, encoded) => {
+        if (err) throw err;
+        res.status(201).json({
+          message: 'account created successfully',
+          data: {
+            token: encoded,
+            expires_at: ms(config.jwt_expiration as string),
+            user: userToView,
+          }
+        });
+      });
   }
     catch (error) {
       
@@ -75,28 +86,7 @@ export default class UsersController {
     }
   }
   static async getUsername(req: Request, res: Response) {
-    const id = req.query.id;
-    const userRepo = await UsersRepo;
-
-    let users = await userRepo
-      .search()
-      .where("fullname")
-      .match("benson")
-      .return.all();
-    users = JSON.parse(JSON.stringify(users));
-
-    // users = pick<UsersEntity,<'username'>(users, [
-    //   "username",
-    //   "password",
-    //   "user_id",
-    //   "entityId",
-    //   "email",
-    // ]);
-
-    res.status(200).json({
-      users,
-      result_count: users?.length,
-    });
+   
   }
   static async getUsersById(userId:string) {
 const userRepo = await UsersRepo;

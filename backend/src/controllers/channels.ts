@@ -2,12 +2,13 @@ import { Request,Response } from "express";
 import { ChannelsRepo,ChannelsEntity } from "../models/channels";
 import RoomsController from "./rooms";
 import { v4 as uuidv4 } from 'uuid';
-import { IUser } from "../interfaces/user.interface";
+import { IUser, IUserToView } from "../interfaces/user.interface";
 import { IRoom } from "../interfaces/rooms.interface";
 
 import { IChannel, IChannelToView } from "../interfaces/channels.interface";
 import { EntityData } from "redis-om";
-import omit from 'just-omit';
+import { UsersEntity, UsersRepo } from "../models/users";
+import { Utils } from "../utils";
 
 export default class ChannelsController{
     static async createChannel(req:Request,res:Response) {
@@ -16,7 +17,7 @@ export default class ChannelsController{
             const channelId = uuidv4().split('-').join('');
             const ownerId = req?.auth?.user_id;
             const currentTime = new Date().getTime();
-            const { title, description, channel_cover, channel_picture,is_public=false } = req.body; 
+            const { title, description, channel_cover, channel_picture,is_public=true } = req.body; 
            
             
             // create a welcome room when the channel is created
@@ -44,7 +45,7 @@ export default class ChannelsController{
             (await ChannelsRepo).createAndSave(newChannel as unknown as EntityData);
 
             // the channel to be sent out to the frontend
-            const channelToBeSent = omit(newChannel, ['rooms', 'members']) as IChannelToView;
+            const channelToBeSent = Utils.omit(newChannel, ['rooms', 'members']) as IChannelToView;
 
             res.status(201).json({
                 message: "channel created successfully",
@@ -62,6 +63,8 @@ export default class ChannelsController{
     }
     static async updateChannel(req:Request,res:Response) {
         try {
+            //@todo implement channel picture/cover update
+
             const {title,description } = req.body;
 
             const user= req?.auth;
@@ -81,6 +84,8 @@ export default class ChannelsController{
                 });
              return
             }
+            channel['description'] = description;
+            channel['title'] = title;
             await (await ChannelsRepo).save(channel);
             
             res.status(200).json({
@@ -128,11 +133,42 @@ export default class ChannelsController{
     }
     static async addMember(req:Request,res:Response) {
         try {
-    
+            const { channel_id } = req.params;
+            const user = req?.auth;
+            const channel = await ChannelsController.channelExist(channel_id);
+            if (!channel) {
+                res.status(404).json({
+                    message: `channel with id '${channel_id}' was not found`
+                });
+                return
+            }
+            // check if the user was already a member
+            const alreadyMember = await (await ChannelsRepo).search().where('members').contains(user?.user_id).returnFirst();
+            if (alreadyMember) {
+                res.status(200).json({
+                    message: 'already a member',
+                    data: null,
+                    
+                });
+                return 
+            }
+// otherwise add to members
+            channel.members?.push(user?.user_id);
+            await (await ChannelsRepo).save(channel);
+// get the user info and return it
+            const newMember = await (await UsersRepo).search().where('user_id').equal(user?.user_id).returnFirst();
+        
+            // remove confidential properties
+            const member = Utils.omit(newMember as UsersEntity, ['password', 'email', 'entityId','friends']) as IUserToView;
+
+            res.status(200).json({
+                message: 'successfully added',
+                data:member
+            })
         }
         catch (error) {
             res.status(500).json({
-                message:"An error occurred, couldn't create channel"
+                message:"An error occurred, couldn't add member to channel"
             })
         }
 
@@ -141,16 +177,67 @@ export default class ChannelsController{
         try {
             const { channel_id } = req.params;
             const channel = await ChannelsController.channelExist(channel_id);
-            if (channel) {
-                const { members } = channel;
+            if (!channel) {
+                res.status(404).json({
+                    message: `channel with id '${channel_id}' was not found`
+                });
+                return
             }
+            const { members } = channel;
+            const users = await Promise.all(members.map(async (memberId) => {
+                const user = await (await UsersRepo).search().where('user_id').equal(memberId).returnFirst();
+                // omit some properties before sending out to client;
+              const userToView= Utils.omit(user as UsersEntity,['password','email','entityId','friends'])
+                return userToView;
+            }));
+
+            res.status(200).json({
+                message: 'members retrieved successfully',
+                data:users
+            })
         }
         catch (error) {
             res.status(500).json({
-                message:"An error occurred, couldn't create channel"
-            })
+                message: "An error occurred, couldn't fetch members"
+            });
         }
 
+    }
+    /**
+     * Get public channels
+     */
+    static async getPublicChannels(req:Request,res:Response) {
+        try {
+            let { limit = 100,page=1 } = req.query;
+            limit = +limit;
+            page = +page;
+            const offset = (limit * page) - 1;
+            const channels = await (await ChannelsRepo).search().where('is_public').is.true().page(offset,limit);
+          const  channelsToView = Utils.omit(channels, ['rooms', 'members', 'entityId']) as IChannelToView[];
+            res.status(200).json({
+                message: 'channels retrieved successfully',
+                data:channelsToView
+            })
+        }
+        catch (error) {
+     res.status(500).json({
+                message: "An error occurred, couldn't fetch channels"
+            });       
+        }
+    }
+    static async searchChannels(req: Request, res: Response) {
+        try {
+            const { term } = req.query;
+            const channels = await (await ChannelsRepo).search().where('title').matches(term as string).or('description').matches(term as string).returnAll();
+             const  channelsToView = Utils.omit(channels, ['rooms', 'members', 'entityId']) as IChannelToView[];
+            res.status(200).json({
+                message: 'channels retrieved successfully',
+                data:channelsToView
+            })
+        }
+        catch (error) {
+            
+        }
     }
     /**
  * Check if a channel exist
@@ -169,6 +256,13 @@ export default class ChannelsController{
  static hasAccess(channel: ChannelsEntity | null, user: IUser): boolean {
         
         return channel?.owner_id === user?.user_id;
-    }
-
+ }
+    /**
+     * Converts the entity into a JSON
+     * @param channels 
+     */
+    private static entityToJSON(channels: ChannelsEntity[]) {
+       return channels.map((channel) => channel.toJSON()) as IChannel[];
+        
+}
 }

@@ -11,6 +11,7 @@ export interface IMessage {
   type: MessageType;
   user_id: string;
   user: IUser;
+  status?: string;
 }
 export type IMessageToView = Omit<IMessage, "user_id">;
 export type IMessageToDB = Omit<IMessage, "user">;

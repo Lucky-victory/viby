@@ -2,7 +2,7 @@ import { Entity, Schema, Repository, Client } from "redis-om";
 
 import { redis } from "../db";
 
-interface MessagesEntity {
+export interface MessagesEntity {
   user_id: string;
   content: string;
   attachments: string[];
@@ -14,7 +14,7 @@ interface MessagesEntity {
   created_at: string;
 }
 
-class MessagesEntity extends Entity {
+export class MessagesEntity extends Entity {
   get messageOwner() {
     return this.user_id;
   }

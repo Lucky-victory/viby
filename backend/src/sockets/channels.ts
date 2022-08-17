@@ -1,7 +1,6 @@
 import { Server } from "socket.io";
-import { IUser } from "../interfaces/user.interface";
-import merge from "just-merge";
 import MessagesController from "../controllers/messages";
+import { IUser } from "../interfaces/user.interface";
 
 export default (io: Server) => {
   const channelsNamespace = io.of("/channels");
@@ -16,7 +15,7 @@ export default (io: Server) => {
     });
 
     socket.on("new_message", async (message, roomId, user) => {
-      await MessagesController.createNewMessage(message);
+      await MessagesController.createMessage(message);
       const messageWithUser = {
         ...message,
         user,
