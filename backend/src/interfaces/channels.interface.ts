@@ -1,4 +1,4 @@
-import { DateType } from "./common.interface";
+import { DateType } from "./common";
 
 
 
@@ -12,7 +12,7 @@ export interface IChannel{
     channel_cover?: string;
     channel_id: string;
     members: string[];
-    rooms: [];
+    rooms: string[];
 }
 export type IChannelToView=Omit<IChannel,'members'|'rooms'>
-export type INewChannel = Omit<IChannel,'owner_id'|'rooms'|'members'|'channel_id'|'created_at'>;
+

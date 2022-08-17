@@ -1,7 +1,7 @@
 import { expressjwt } from "express-jwt";
 import config from "../config";
 
-export class AuthMiddleware {
+export default class AuthMiddleware {
   /**
    * Retrieves and validate a JWT token
    * @returns

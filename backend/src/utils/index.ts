@@ -1,13 +1,13 @@
 import { IUser } from "./../interfaces/user.interface";
-import jwt from "jsonwebtoken";
+import jwt,{SignCallback} from "jsonwebtoken";
 import config from "../config";
 
 export class Utils {
-  generateToken(user: IUser) {
+  static generateToken(user: IUser,cb:SignCallback) {
     jwt.sign(
       user,
       config.jwt_secret as string,
-      (error: unknown, encoded: string) => {}
+      cb
     );
   }
 
