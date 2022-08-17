@@ -1,9 +1,12 @@
 
 import { Server } from 'socket.io';
+import {IUser} from '../interfaces/user.interface';
+import merge from 'just-merge';
+import MessagesController from '../controllers/messages';
 
 export default (io:Server) => {
 const channelsNamespace = io.of("/channels");
-    
+    const typingUsers:IUser[]=[];
     const channelsManager = channelsNamespace.on("connection", (socket) => {
       socket.on("join_channel", (channelId) => {
         console.log('socket id', socket.id);
@@ -14,13 +17,20 @@ const channelsNamespace = io.of("/channels");
     });
   
 
-      socket.on("new_message", (message, roomId, user) => {
+      socket.on("new_message",async (message, roomId, user) => {
+       await MessagesController.createNewMessage(message)
         const messageWithUser = {
         ...message,user
         }
-        
+        socket.on('typing',(user,roomId)=>{
+          typingUsers.push(user);
+
+          console.log(typingUsers);
+          
+          socket.to(roomId).emit('typing',typingUsers);
+        })
         console.log(messageWithUser);
-        socket.to(roomId).emit('receive_message',messageWithUser);
+        channelsManager.to(roomId).emit('receive_message',messageWithUser);
     });
 });
    

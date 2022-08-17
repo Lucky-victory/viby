@@ -35,6 +35,22 @@ onReceiveMessage(cb:(msg:IMessageToView) => void) {
   onMessageEdit(message:IMessageToView) {
      this.socket.emit('edit_message',message)
   }
+  typing(user:IUser,roomId:string){
+this.socket.emit('typing',user,roomId);
+  }
+onTyping(cb:(users:IUser[])=>void){
+  this.socket.on('typing',(users:IUser[])=>{
+cb(users);
+  })
+}
+  stoppedTyping(user:IUser,roomId:string){
+this.socket.emit('stop_typing',user,roomId);
+  }
+onStoppedTyping(cb:(users:IUser[])=>void){
+  this.socket.on('stop_typing',(users:IUser[])=>{
+cb(users);
+  })
+}
   onUserJoin(userId:string) {
 }
 }

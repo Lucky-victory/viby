@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Platform } from '@ionic/angular';
+import { IMessageToView } from 'src/app/interfaces/message.interface';
 
 @Component({
   selector: 'chat-single-chat-text',
@@ -7,9 +8,9 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['./chat-single-chat-text.component.scss'],
 })
 export class ChatSingleChatTextComponent implements OnInit {
-  @Input() chat;
+  @Input() chat:IMessageToView;
   @Input() currentUser = {
-    user_id:1
+    user_id:'1'
   }
   isCurrentUser!: boolean;
 isMobile!: boolean;

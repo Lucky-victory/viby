@@ -1,6 +1,6 @@
 .chat-list-container{
     padding: 60px 12px;
-    padding-bottom: var(--message-textarea-height,80px);
+    padding-bottom: calc(var(--message-textarea-height,80px) + 15px);
     display: flex;
     flex-direction: column;
     overflow-y: auto;

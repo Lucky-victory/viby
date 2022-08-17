@@ -15,13 +15,13 @@
   flex: 1;
   display: flex;
   align-items: center;
-  border-radius: 35px;
+  border-radius: 5px;
   padding: 5px;
   padding-right: 10px;
   background: var(--background);
   font-size: 16px;
   font-family: sans-serif;
-  height: 50px;
+  min-height: 50px;
 }
 .message-textarea {
   resize: none;
@@ -41,16 +41,14 @@
 }
 
 .message-textarea-container .btn {
-  border-radius: 50%;
+  border-radius: 10px;
   flex-shrink: 0;
-  height: 2.5rem;
-  width: 2.5rem;
-  border: none;
-  outline: none;
+  height: 3rem;
+  width: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  //cursor: pointer;
+  
 }
 .attachment-btn {
   background: #818091;
@@ -59,13 +57,19 @@
 .btn .icon {
   font-size: 20px;
 }
-
-ion-button.message-send-btn::part(native) {
-  position: relative;
-  padding: 0.5rem;
-  background: #440283;
-  color: #fff;
-border-radius:50%;
+ion-button.message-send-btn{
+height:auto;
+  &::part(native) {
+    position: relative;
+    padding: 0.5rem;
+    background: var(--accent-color);
+    color: #fff;
+    height: 3rem!important;
+    width: 3rem;
+    margin:0;
+    border-radius:10px;
+  }
+ 
 }
 
 .message-btns-container{
@@ -81,5 +85,5 @@ border-radius:50%;
   left: 0;
   bottom: 0;
   z-index: 10;
-  background-color: #440283;
+  background-color: var(--accent-color);
 }

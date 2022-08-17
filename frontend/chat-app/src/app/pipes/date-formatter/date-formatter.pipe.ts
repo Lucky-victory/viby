@@ -13,10 +13,10 @@ export class DateFormatterPipe implements PipeTransform {
     
     let transformedDate = '';
     if (dateDiff < 1) {
-      transformedDate = 'Today at '+time;
+      transformedDate = time;
     }
     else if (dateDiff >= 1 && dateDiff < 2) {
-      transformedDate = 'Yesterday at ' + '' + time
+      transformedDate = 'Yesterday '+ time
     }
     else {
       transformedDate=dateVal.format(`${dateFormat} ${timeFormat}`)

@@ -29,11 +29,13 @@
     --primary-bg:#fefefe;
     --primary-bg-light:#fefefeaa;
     --primary-color:#7204da;
-    --accent-color:#024591;
-    --secondary-bg:#e9ecec;
-    --secondary-color:#b3b5b8;
+    --accent-color:#00a693;
+    --secondary-bg: #e9ecec;
+    --secondary-color: #b3b5b8;
     --active-room-bg:#6f636f;
-    --chat-area-bg:#a3a3a3;
+    --chat-area-bg:#d9dce4;
+    --chat-bg: #fefefe;
+    --current-user-chat-bg:var(--accent-color);
     --message-textarea-height:60px;
 }
 @media(prefers-color-scheme: dark) {
@@ -43,6 +45,10 @@
         --primary-bg-light:#201920aa;
         --secondary-bg:#505152;
         --chat-area-bg:transparent;
+        --chat-bg:#2b3537
         
     }
+}
+.ios{
+    --color:inherit
 }

@@ -5,13 +5,13 @@ import { redis } from "../db";
 interface MessagesEntity {
   user_id: string;
   content: string;
-  urls: string[];
-  type:string,
-  message_id:string;
-  room_id:string;
-  channel_id:string;
-  status:string;
-  created_at:string
+  attachments: string[];
+  type: string;
+  message_id: string;
+  room_id: string;
+  channel_id: string;
+  status: string;
+  created_at: string;
 }
 
 class MessagesEntity extends Entity {
@@ -23,7 +23,7 @@ class MessagesEntity extends Entity {
 const MessagesSchema = new Schema(MessagesEntity, {
   user_id: { type: "string" },
   content: { type: "text", sortable: true },
-  urls: { type: "string[]" },
+  attachments: { type: "string[]" },
   type: { type: "string" },
   message_id: { type: "string" },
   room_id: { type: "string" },

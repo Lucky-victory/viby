@@ -56,7 +56,7 @@ export class ChatListComponent implements OnInit {
       content: "Hi over there",
       attachments: null,
       type: "text",
-      created_at: new Date().getTime(),
+      created_at: new Date('2022-08-15T04:45').getTime(),
    user:{
         user_id: '2',
         profile_picture: 'https://images.pexels.com/photos/1212984/pexels-photo-1212984.jpeg?auto=compress&cs=tinysrgb&w=600',

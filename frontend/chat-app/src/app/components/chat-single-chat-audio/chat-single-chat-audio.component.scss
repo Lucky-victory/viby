@@ -7,7 +7,7 @@
   &.current-user{
 .single-chat-audio {
   align-self: flex-end;
-  background-color: var(--accent-color);
+  background-color: var(--current-user-chat-bg);
   color: #fff;
 } 
 ion-icon.icon{
@@ -23,7 +23,7 @@ ion-icon.icon{
   padding: 15px;
   padding-bottom: 10px;
   border-radius: 5px;
-  background-color:var(--secondary-bg);
+  background-color:var(--chat-bg);
   max-width: 400px;
   width: 90%;
   position: relative;

@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 // import { AudioPlayer } from 'src/app/services/audio/audio.service';
 // import { AudioRecorderService } from 'src/app/services/recorder/recorder.service';
 import { v4 as uuidV4 } from 'uuid';
+import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { IUser } from 'src/app/interfaces/user.interface';
 
 import { IMessage, INewMessage, MessageInputStatus, MessageType } from 'src/app/interfaces/message.interface';
 
@@ -23,7 +26,8 @@ export class ChatMessageInputComponent implements OnInit {
   // private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
   @Output() onNewMessage = new EventEmitter<INewMessage>();
   private channelId: string;
-  constructor(private activeRoute:ActivatedRoute) { }
+  typingUsers:IUser[];
+  constructor(private activeRoute:ActivatedRoute,private webSocketService:WebSocketService,private authService:AuthService) { }
 
   ngOnInit() { 
     this.activeRoute.queryParamMap.subscribe((params)=>{
@@ -38,6 +42,14 @@ export class ChatMessageInputComponent implements OnInit {
   
     this.handleEnterKey(event)
     this.checkInput();
+    this.handleTyping();
+  }
+  handleTyping(){
+    const user=this.authService.currentUser;
+    this.webSocketService.typing(user,this.roomId);
+    this.webSocketService.onTyping((users)=>{
+this.typingUsers=users;
+    })
   }
   checkInput() {
     // this.isEmpty = this.textMessage === '' && !this.isRecording;
@@ -94,6 +106,7 @@ export class ChatMessageInputComponent implements OnInit {
     if (this.isEmpty) return;
     this.createMessageObj();
     this.clearInput();
+    this.checkInput();
   
   }
   // startRecorder() {

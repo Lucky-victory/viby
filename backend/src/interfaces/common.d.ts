@@ -1,12 +1,11 @@
+import { IUser } from "./user.interface";
 
-declare global{
-    declare namespace Express{
-        auth:AuthUser
+declare global {
+  declare namespace Express {
+    interface Request {
+      auth: IUser;
     }
+  }
 }
 
-export interface AuthUser{
-    user_id:string;
-    username:string;
-    fullname:string;
-}
+export type DateType = string | number;
