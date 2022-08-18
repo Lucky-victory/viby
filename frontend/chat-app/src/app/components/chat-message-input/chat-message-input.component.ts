@@ -7,7 +7,12 @@ import { WebSocketService } from 'src/app/services/web-socket/web-socket.service
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { IUser } from 'src/app/interfaces/user.interface';
 
-import { IMessage, INewMessage, MessageInputStatus, MessageType } from 'src/app/interfaces/message.interface';
+import {
+  IMessage,
+  INewMessage,
+  MessageInputStatus,
+  IMessageType,
+} from 'src/app/interfaces/message.interface';
 
 @Component({
   selector: 'chat-message-input',
@@ -20,83 +25,83 @@ export class ChatMessageInputComponent implements OnInit {
   isEmpty: boolean = true;
   // isRecording: boolean = false;
   private roomId: string;
- private message: INewMessage;
-  private messageType: MessageType = 'text';
+  private message: INewMessage;
+  private messageType: IMessageType = 'text';
   private textMessageInputStatus: MessageInputStatus = 'create';
   // private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
   @Output() onNewMessage = new EventEmitter<INewMessage>();
   private channelId: string;
-  typingUsers:IUser[];
-  constructor(private activeRoute:ActivatedRoute,private webSocketService:WebSocketService,private authService:AuthService) { }
+  typingUsers: IUser[];
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private webSocketService: WebSocketService,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit() { 
-    this.activeRoute.queryParamMap.subscribe((params)=>{
+  ngOnInit() {
+    this.activeRoute.queryParamMap.subscribe((params) => {
       this.roomId = params.get('room');
-    })
+    });
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
     });
   }
-  
-  handleKeyUp(event:KeyboardEvent) {
-  
-    this.handleEnterKey(event)
+
+  handleKeyUp(event: KeyboardEvent) {
+    this.handleEnterKey(event);
     this.checkInput();
     this.handleTyping();
   }
-  handleTyping(){
-    const user=this.authService.currentUser;
-    this.webSocketService.typing(user,this.roomId);
-    this.webSocketService.onTyping((users)=>{
-this.typingUsers=users;
-    })
+  handleTyping() {
+    const user = this.authService.currentUser;
+    this.webSocketService.typing(user, this.roomId);
+    this.webSocketService.onTyping((users) => {
+      this.typingUsers = users;
+    });
   }
   checkInput() {
     // this.isEmpty = this.textMessage === '' && !this.isRecording;
     this.isEmpty = this.textMessage === '';
-    
   }
   clearInput() {
     this.textMessage = '';
     this.messageType = 'text';
-    this.textMessageInputStatus='create'
+    this.textMessageInputStatus = 'create';
   }
   createMessageObj() {
-//     if (this.messageType === 'audio') {
-  
-//     this.message = {
-//       message_id: uuidV4(),
-//       content: this.audioMessage,
-//       room_id: this.roomId,
-//       attachments:null,
-//       channel_id:this.channelId,
-//       created_at: new Date().getTime(),
-//       type:this.messageType
-//     }
+    //     if (this.messageType === 'audio') {
 
-//     this.onNewMessage.emit(this.message);
-//       return
-// }
+    //     this.message = {
+    //       message_id: uuidV4(),
+    //       content: this.audioMessage,
+    //       room_id: this.roomId,
+    //       attachments:null,
+    //       channel_id:this.channelId,
+    //       created_at: new Date().getTime(),
+    //       type:this.messageType
+    //     }
+
+    //     this.onNewMessage.emit(this.message);
+    //       return
+    // }
     this.message = {
       message_id: uuidV4(),
       content: this.textMessage,
       room_id: this.roomId,
-      attachments:null,
-      channel_id:this.channelId,
+      attachments: null,
+      channel_id: this.channelId,
       created_at: new Date().getTime(),
-      type:this.messageType,
-      
-    }
-    console.log(this.message,'here at input');
-    
+      type: this.messageType,
+    };
+    console.log(this.message, 'here at input');
+
     this.onNewMessage.emit(this.message);
-    
   }
-  handleEnterKey(event:KeyboardEvent) {
+  handleEnterKey(event: KeyboardEvent) {
     if (event.shiftKey && event.key == 'Enter') {
-      return
+      return;
     }
-    if ( event.key === 'Enter') {
+    if (event.key === 'Enter') {
       event.preventDefault();
       this.sendMessage();
     }
@@ -107,7 +112,6 @@ this.typingUsers=users;
     this.createMessageObj();
     this.clearInput();
     this.checkInput();
-  
   }
   // startRecorder() {
   //   this.isRecording = true;
@@ -115,12 +119,12 @@ this.typingUsers=users;
   //   this.recorderService.start();
   //   setTimeout(async () => {
   //     this.recorderService.stop().then((blob) => {
-      
+
   //       this.recorderService.getBlobOrBase64(blob,(data) => {
   //         const src=(data as string)
   //         console.log(src, 'from src');
   //       this.audioPlayer.create(src);
-        
+
   //       this.audioMessage = data;
   //     })
   //   });

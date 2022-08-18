@@ -2,7 +2,7 @@ import { Entity, Schema, Repository, Client } from "redis-om";
 
 import { redis } from "../db";
 
- export interface ChannelsEntity {
+export interface ChannelsEntity {
   title: string;
   description: string;
   owner_id: string;
@@ -12,7 +12,7 @@ import { redis } from "../db";
   channel_cover: string;
   members: string[];
   created_at: string;
-   rooms: string[];
+  rooms: string[];
 }
 
 export class ChannelsEntity extends Entity {
@@ -34,7 +34,7 @@ const ChannelsSchema = new Schema(ChannelsEntity, {
   members: { type: "string[]" },
 });
 
-export const ChannelsRepo = (async () => {
+export const ChannelsRepo: Promise<Repository<ChannelsEntity>> = (async () => {
   const clientOM = await new Client().use(redis);
   return clientOM.fetchRepository(ChannelsSchema);
 })();

@@ -236,7 +236,10 @@ export default class ChannelsController{
             })
         }
         catch (error) {
-            
+              res.status(500).json({
+                message: "An error occured",
+                error
+              }); 
         }
     }
     /**

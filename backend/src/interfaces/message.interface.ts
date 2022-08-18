@@ -1,4 +1,4 @@
-import { IUser } from "./user.interface";
+import { IUserToView } from "./user.interface";
 import { DateType } from "./common";
 
 export interface IMessage {
@@ -8,11 +8,12 @@ export interface IMessage {
   attachments: null | string[];
   channel_id: string;
   created_at: DateType;
-  type: MessageType;
+  type: IMessageType;
   user_id: string;
-  user: IUser;
-  status?: string;
+  user: IUserToView;
+  status?: IMessageStatus;
 }
+export type IMessageStatus = "edited" | "sent" | "error";
 export type IMessageToView = Omit<IMessage, "user_id">;
 export type IMessageToDB = Omit<IMessage, "user">;
-export type MessageType = "text" | "audio";
+export type IMessageType = "text" | "audio";

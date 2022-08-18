@@ -86,7 +86,7 @@ export default class UsersController {
     }
   }
   static async getUsername(req: Request, res: Response) {
-   
+   //
   }
   static async getUsersById(userId:string) {
 const userRepo = await UsersRepo;
@@ -99,6 +99,6 @@ const userRepo = await UsersRepo;
     return user;
   }
   static async updateUser() {
-    
+    //
   }
 }

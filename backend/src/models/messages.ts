@@ -32,7 +32,7 @@ const MessagesSchema = new Schema(MessagesEntity, {
   created_at: { type: "date", sortable: true },
 });
 
-export const MessagesRepo = (async () => {
+export const MessagesRepo:Promise<Repository<MessagesEntity>> = (async () => {
   const clientOM = await new Client().use(redis);
   return clientOM.fetchRepository(MessagesSchema);
 })();

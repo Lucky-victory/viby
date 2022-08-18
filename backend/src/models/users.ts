@@ -36,7 +36,7 @@ const UsersSchema = new Schema(UsersEntity, {
   friends: { type: "string[]" },
 });
 
-export const UsersRepo = (async () => {
+export const UsersRepo: Promise<Repository<UsersEntity>> = (async () => {
   const clientOM = await new Client().use(redis);
   return clientOM.fetchRepository(UsersSchema);
 })();
