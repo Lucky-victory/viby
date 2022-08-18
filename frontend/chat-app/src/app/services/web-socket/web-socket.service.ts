@@ -1,56 +1,53 @@
+import { IUserToView } from '../../interfaces/user.interface';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 // import { Socket,io } from 'socket.io-client';
 import { Socket } from 'ngx-socket-io';
-import { IMessageToView, INewMessage } from 'src/app/interfaces/message.interface';
-import { IUser } from 'src/app/interfaces/user.interface';
+import {
+  IMessageToView,
+  INewMessage,
+} from 'src/app/interfaces/message.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebSocketService {
-
-  constructor(private socket:Socket,private activeRoute:ActivatedRoute) { }
-  joinRoom(roomId: string) {
+  constructor(private socket: Socket, private activeRoute: ActivatedRoute) {}
+  joinRoom(channelId: string, roomId: string, user: IUserToView) {
     // const roomId = this.activeRoute.snapshot.queryParamMap.get('room');
-    this.socket.emit('join_room',roomId)
+    this.socket.emit('join_room', channelId, roomId, user);
   }
-  joinChannel(channelId:string) {
-    this.socket.emit('join_channel',channelId)
-    
+  joinChannel(channelId: string, user: IUserToView) {
+    this.socket.emit('join_channel', channelId, user);
   }
-  leaveChannel(channelId:string) {
-    
+  leaveChannel(channelId: string) {}
+  newMessage(roomId: string, message: INewMessage, user: IUserToView) {
+    this.socket.emit('new_message', message, roomId, user);
   }
-  onNewMessage(roomId: string,message:INewMessage,user:IUser) {
-  this.socket.emit('new_message',message,roomId,user)
-}
-onReceiveMessage(cb:(msg:IMessageToView) => void) {
-  this.socket.on('receive_message', (message:IMessageToView) => {
-    cb(message)
-    console.log(message,'from msocket')
-  })
-  
-}
-  onMessageEdit(message:IMessageToView) {
-     this.socket.emit('edit_message',message)
+  onReceiveMessage(cb: (msg: IMessageToView) => void) {
+    this.socket.on('new_message', (message: IMessageToView) => {
+      cb(message);
+      console.log(message, 'from msocket');
+    });
   }
-  typing(user:IUser,roomId:string){
-this.socket.emit('typing',user,roomId);
+  onMessageEdit(message: IMessageToView) {
+    this.socket.emit('edit_message', message);
   }
-onTyping(cb:(users:IUser[])=>void){
-  this.socket.on('typing',(users:IUser[])=>{
-cb(users);
-  })
-}
-  stoppedTyping(user:IUser,roomId:string){
-this.socket.emit('stop_typing',user,roomId);
+  typing(user: IUserToView, roomId: string) {
+    this.socket.emit('typing', user, roomId);
   }
-onStoppedTyping(cb:(users:IUser[])=>void){
-  this.socket.on('stop_typing',(users:IUser[])=>{
-cb(users);
-  })
-}
-  onUserJoin(userId:string) {
-}
+  onTyping(cb: (users: IUserToView[]) => void) {
+    this.socket.on('typing', (users: IUserToView[]) => {
+      cb(users);
+    });
+  }
+  stoppedTyping(user: IUserToView, roomId: string) {
+    this.socket.emit('stop_typing', user, roomId);
+  }
+  onStoppedTyping(cb: (users: IUserToView[]) => void) {
+    this.socket.on('stop_typing', (users: IUserToView[]) => {
+      cb(users);
+    });
+  }
+  onJoinRoom(userId: string) {}
 }

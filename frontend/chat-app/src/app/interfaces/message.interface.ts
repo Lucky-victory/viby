@@ -1,5 +1,5 @@
 import { DateType } from './common.interface';
-import { IUser } from './user.interface';
+import { IUserToView } from './user.interface';
 
 export interface IMessage {
   message_id: string;
@@ -10,8 +10,10 @@ export interface IMessage {
   created_at: DateType;
   type: IMessageType;
   user_id: string;
-  user: IUser;
+  user: IUserToView;
+  status?: IMessageStatus;
 }
+export type IMessageStatus = 'edited' | 'sent' | 'error';
 export type IMessageToView = Omit<IMessage, 'user_id'>;
 export type IMessageToDB = Omit<IMessage, 'user'>;
 export type INewMessage = Omit<IMessage, 'user' | 'user_id'>;

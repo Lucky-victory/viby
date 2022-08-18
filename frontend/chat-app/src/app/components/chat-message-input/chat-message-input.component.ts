@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { v4 as uuidV4 } from 'uuid';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { IUser } from 'src/app/interfaces/user.interface';
+import { IUser, IUserToView } from 'src/app/interfaces/user.interface';
 
 import {
   IMessage,
@@ -29,9 +29,9 @@ export class ChatMessageInputComponent implements OnInit {
   private messageType: IMessageType = 'text';
   private textMessageInputStatus: MessageInputStatus = 'create';
   // private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
-  @Output() onNewMessage = new EventEmitter<INewMessage>();
+  @Output() onMessageSend = new EventEmitter<INewMessage>();
   private channelId: string;
-  typingUsers: IUser[];
+  typingUsers: IUserToView[];
   constructor(
     private activeRoute: ActivatedRoute,
     private webSocketService: WebSocketService,
@@ -81,7 +81,7 @@ export class ChatMessageInputComponent implements OnInit {
     //       type:this.messageType
     //     }
 
-    //     this.onNewMessage.emit(this.message);
+    //     this.onMessageSend.emit(this.message);
     //       return
     // }
     this.message = {
@@ -95,7 +95,7 @@ export class ChatMessageInputComponent implements OnInit {
     };
     console.log(this.message, 'here at input');
 
-    this.onNewMessage.emit(this.message);
+    this.onMessageSend.emit(this.message);
   }
   handleEnterKey(event: KeyboardEvent) {
     if (event.shiftKey && event.key == 'Enter') {
