@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { v4 as uuidV4 } from 'uuid';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { IUser, IUserToView } from 'src/app/interfaces/user.interface';
+import {  IUserToView } from 'src/app/interfaces/user.interface';
 
 import {
-  IMessage,
+  
   INewMessage,
   MessageInputStatus,
   IMessageType,
@@ -55,9 +55,12 @@ export class ChatMessageInputComponent implements OnInit {
   handleTyping() {
     const user = this.authService.currentUser;
     this.webSocketService.typing(user, this.roomId);
-    this.webSocketService.onTyping((users) => {
-      this.typingUsers = users;
-    });
+    this.webSocketService.onTyping().subscribe((users) => {
+      
+      console.log('typing');
+    })
+      
+    
   }
   checkInput() {
     // this.isEmpty = this.textMessage === '' && !this.isRecording;

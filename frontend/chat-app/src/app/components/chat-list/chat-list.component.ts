@@ -12,7 +12,7 @@ import { WebSocketService } from 'src/app/services/web-socket/web-socket.service
   styleUrls: ['./chat-list.component.scss'],
 })
 export class ChatListComponent implements OnInit {
-  messages: IMessageToView[] ;
+  messages: IMessageToView[]=[];
   private newMessage: IMessageToView;
   @Input() currentUser: IUser;
  roomMessages:IMessageToView[] = [
@@ -80,13 +80,18 @@ export class ChatListComponent implements OnInit {
       this.roomId = params.get('room');
       console.log(this.roomId);
       
-      this.messages = this.roomMessages.filter((roomMessage) => roomMessage.room_id === this.roomId);
-    })
-       this.webSocketService.onReceiveMessage((message) => {
+      //this.messages = this.roomMessages.filter((roomMessage) => roomMessage.room_id === this.roomId);
+    });
+    
+  })
+  this.webSocketService.onJoinRoom().subscribe((messages:IMessageToView[]) => {
+    this.messages = messages;
+
+  });
+  this.webSocketService.onReceiveMessage().subscribe((message: IMessageToView) => {
       this.messages.push(message);
       
-    })
-    })
+    });
   }
   addNewMessage(message:INewMessage){
     // const msg = message;

@@ -28,7 +28,7 @@
       <ion-input type="password" #passwordInput required></ion-input>
       <ion-buttons slot="end">
         <ion-button (click)="toggleInputType(passwordInput.type)">
-          <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+          <ion-icon name="{{passwordInputType==='text'? 'eye-off-outline':'eye-outline'}}" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-buttons>
       
@@ -39,7 +39,7 @@
       <ion-input type="password" #confirmPasswordInput required></ion-input>
       <ion-buttons slot="end">
         <ion-button (click)="toggleInputType(confirmPasswordInput.type)">
-          <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+          <ion-icon name="{{passwordInputType==='text'? 'eye-off-outline':'eye-outline'}}" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-buttons>
       

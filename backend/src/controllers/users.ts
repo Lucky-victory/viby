@@ -88,10 +88,10 @@ export default class UsersController {
   static async getUsername(req: Request, res: Response) {
    //
   }
-  static async getUsersById(userId:string) {
-const userRepo = await UsersRepo;
+  static async getUserById(userId:string) {
 
-    const user=await userRepo
+
+    const user=await (await UsersRepo)
       .search()
       .where("user_id").equal(userId)
       .returnFirst();

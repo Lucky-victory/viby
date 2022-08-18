@@ -14,20 +14,24 @@ import signUpRouter from "./routes/sign-up";
 
 import AuthMiddleware from "./middlewares/auth";
 
-const whitelist: string[] = [];
+const whitelist: string[] = ['*'];
 app.use(
   cors({
-    origin: (origin, callback) => {
+    origin:'*',
+    /*
+(origin, callback) => {
       if (whitelist.indexOf(origin as string) !== -1) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
       }
     },
+
+    */
   })
 );
 // authentication middleware
-app.use(AuthMiddleware.authenticate());
+//app.use(AuthMiddleware.authenticate());
 
 app.use("/", signUpRouter);
 

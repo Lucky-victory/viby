@@ -6,7 +6,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./sign-in.page.scss'],
 })
 export class SignInPage implements OnInit {
-@ViewChild('passwordInput') passwordInput:HTMLIonInputElement;
+  @ViewChild('passwordInput') passwordInput: HTMLIonInputElement;
+  passwordInputType='password'
   constructor() { }
 
   ngOnInit() {
@@ -14,7 +15,7 @@ export class SignInPage implements OnInit {
 
   toggleInputType(prevType: string) {
     const type = prevType === "password" ? "text" : "password";
-    
+    this.passwordInputType = type;
    this.passwordInput.type = type;
   }
 }

@@ -211,7 +211,7 @@ export default class ChannelsController{
             let { limit = 100,page=1 } = req.query;
             limit = +limit;
             page = +page;
-            const offset = (limit * page) - 1;
+        const offset = limit * (page - 1);
             const channels = await (await ChannelsRepo).search().where('is_public').is.true().page(offset,limit);
           const  channelsToView = Utils.omit(channels, ['rooms', 'members', 'entityId']) as IChannelToView[];
             res.status(200).json({

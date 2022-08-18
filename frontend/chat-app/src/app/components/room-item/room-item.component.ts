@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IRoom } from 'src/app/interfaces/room.interface';
+import { IUserToView } from 'src/app/interfaces/user.interface';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
@@ -11,25 +13,34 @@ import { WebSocketService } from 'src/app/services/web-socket/web-socket.service
 export class RoomItemComponent implements OnInit {
   @Input() room: IRoom;
   roomId: string;
+  @Input() currentUser: IUserToView;
   @Output() roomTitleEv: EventEmitter<string> = new EventEmitter<string>();
   channelId: string;
-  constructor(private router:Router,private activeRoute:ActivatedRoute,private webSocketService:WebSocketService) { }
+  clickCount: number=0;
+  constructor(private router:Router,private activeRoute:ActivatedRoute,private webSocketService:WebSocketService,private authService:AuthService) { }
 
   ngOnInit() {
-    this.channelId = this.activeRoute.snapshot.paramMap.get('channel_id');
+    this.activeRoute.paramMap.subscribe((params) => {
+      this.channelId = params.get('channel_id');
+      
+      this.webSocketService.joinChannel(this.channelId, this.currentUser);
+    });
     
-    this.webSocketService.joinChannel(this.channelId)
-    
-    this.roomId =this.activeRoute.snapshot.queryParamMap.get('room');
-    this.webSocketService.joinRoom(this.roomId)
+    this.activeRoute.queryParamMap.subscribe((params) => {
+      this.roomId = params.get('room');
+      this.webSocketService.joinRoom(this.channelId, this.roomId, this.currentUser);
+    });
     
   }
-  selectRoom(roomId) {
-    this.router.navigate([], {
-      relativeTo:this.activeRoute,
-      queryParams:{room:roomId}
+  selectRoom(room: IRoom) {
+    this.clickCount++;
+    console.log('click',this.clickCount);
+    
+    this.router.navigate(['/channels',room?.channel_id], {
+      queryParams:{room:room?.room_id}
     })
     this.roomTitleEv.emit(this.room?.title)
-  
+      this.webSocketService.joinRoom(room?.channel_id, room?.room_id, this.currentUser);
+
 }
 }

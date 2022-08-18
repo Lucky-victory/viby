@@ -7,26 +7,40 @@ export default (io: Server) => {
   const channelsNamespace = io.of("/channels");
   let typingUsers: IUserToView[] = [];
   const channelsManager = channelsNamespace.on("connection", (socket) => {
+
+/**
+ * @todo Implement events with callback arg
+ */
+
     // emitted when a user joins a channel
     socket.on("join_channel", (channelId:string,user:IUserToView) => {
-      console.log("socket id", socket.id);
     });
-
+    
     // emitted when a user joins a room
     socket.on("join_room", async (channelId: string, roomId: string,user:IUserToView) => {
+      console.log("socket id", socket.id);
       // get previous messages when a user joins a room
       const result = await MessagesController.getMessages(channelId, roomId);
+      // console.log(result);
+      
       socket.join(roomId);
-      channelsManager.to(roomId).emit("join_room", result?.data,user);
+      channelsManager.to(socket.id).emit("join_room", result?.data,user);
     });
     // emitted when a user starts typing
     socket.on("typing", (user: IUserToView, roomId: string) => {
+      typingUsers.push(user)
       // check if the typing user was already among the typing users,
       // if true, return that user otherwise add it to the array
-      typingUsers = typingUsers.map((_user) =>
-        _user?.user_id === user?.user_id ? _user : user
-      );
-
+      typingUsers = typingUsers.reduce((acc, _user) => {
+        
+        _user?.user_id === user?.user_id ? acc.push(user):acc;
+        return acc
+      },[] as IUserToView[])
+        
+      
+      
+      console.log(user);
+      console.log(typingUsers);
       socket.to(roomId).emit("typing", typingUsers);
     });
     // emitted when a user stops typing

@@ -23,22 +23,27 @@ export default class MessagesController {
       const room_id = roomId;
       const channel_id = channelId;
       let { limit = 100, page = 1 } = options;
-      const offset = limit * page - 1;
       limit = +limit;
       page = +page;
+      const offset = limit * (page - 1);
+      
       const messages = await (await MessagesRepo)
         .search()
         .where("channel_id")
         .equal(channel_id)
         .and("room_id")
         .equal(room_id)
-        .sortDescending("created_at")
+        .sortAscending("created_at")
         .page(offset, limit);
       // remove some unwanted properties
       const messagesToView = Utils.omit(messages, [
         "entityId",
         "user_id",
       ]) as IMessageToView[];
+      // console.log(messages,'in control');
+      const userIds = Utils.pick(messages, ['user_id']);
+      console.log(userIds);
+      
       return {
         message: "messages retrieved successfully",
         data: messagesToView,

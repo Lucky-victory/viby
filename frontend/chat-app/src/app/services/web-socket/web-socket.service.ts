@@ -12,9 +12,8 @@ import {
   providedIn: 'root',
 })
 export class WebSocketService {
-  constructor(private socket: Socket, private activeRoute: ActivatedRoute) {}
+  constructor(private socket: Socket) {}
   joinRoom(channelId: string, roomId: string, user: IUserToView) {
-    // const roomId = this.activeRoute.snapshot.queryParamMap.get('room');
     this.socket.emit('join_room', channelId, roomId, user);
   }
   joinChannel(channelId: string, user: IUserToView) {
@@ -24,22 +23,19 @@ export class WebSocketService {
   newMessage(roomId: string, message: INewMessage, user: IUserToView) {
     this.socket.emit('new_message', message, roomId, user);
   }
-  onReceiveMessage(cb: (msg: IMessageToView) => void) {
-    this.socket.on('new_message', (message: IMessageToView) => {
-      cb(message);
-      console.log(message, 'from msocket');
-    });
+  onReceiveMessage() {
+   return  this.socket.fromEvent('new_message')
   }
   onMessageEdit(message: IMessageToView) {
     this.socket.emit('edit_message', message);
   }
   typing(user: IUserToView, roomId: string) {
+  
+    
     this.socket.emit('typing', user, roomId);
   }
-  onTyping(cb: (users: IUserToView[]) => void) {
-    this.socket.on('typing', (users: IUserToView[]) => {
-      cb(users);
-    });
+  onTyping() {
+   return this.socket.fromEvent('typing');
   }
   stoppedTyping(user: IUserToView, roomId: string) {
     this.socket.emit('stop_typing', user, roomId);
@@ -49,5 +45,7 @@ export class WebSocketService {
       cb(users);
     });
   }
-  onJoinRoom(userId: string) {}
+  onJoinRoom() {
+    return this.socket.fromEvent('join_room')
+  }
 }

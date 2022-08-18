@@ -8,7 +8,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 export class SignUpPage implements OnInit {
   @ViewChild('passwordInput') passwordInput:HTMLIonInputElement;
   @ViewChild('confirmPasswordInput') confirmPasswordInput:HTMLIonInputElement;
-  
+    passwordInputType='password'
   constructor() { }
 
   ngOnInit() {
@@ -17,6 +17,7 @@ export class SignUpPage implements OnInit {
   toggleInputType(prevType: string) {
     const type = prevType === "password" ? "text" : "password";
     this.confirmPasswordInput.type=type
-   this.passwordInput.type = type;
+    this.passwordInput.type = type;
+     this.passwordInputType = type;
   }
 }
