@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
+
 import { INewRoom, IRoom } from "../interfaces/rooms.interface";
 
 import merge from "just-merge";
@@ -19,7 +19,7 @@ export default class RoomsController {
       const channel = await ChannelsController.channelExist(channel_id);
       if (!channel) {
         res.status(404).json({
-          message: `channel with id ${channel_id} was not found`,
+          message: `channel with id '${channel_id}' does not exists`,
         });
         return;
       }
@@ -37,9 +37,13 @@ export default class RoomsController {
         description,
         channel_id,
       };
-      const room = (await RoomsController.addNewRoom(newRoom)) as IRoom;
+      const room = (await RoomsController.addNewRoom(newRoom)) as RoomsEntity;
+
+      const roomToView = Utils.omit(room, ["entityId"]) as IRoom;
+      channel.addRoomId(room?.room_id);
+      await (await ChannelsRepo).save(channel);
       res.status(200).json({
-        data: room,
+        data: roomToView,
         message: "room created successfully",
       });
     } catch (error) {
@@ -56,7 +60,7 @@ export default class RoomsController {
       const room = await RoomsController.roomExist(room_id);
       if (!room) {
         res.status(404).json({
-          message: `room with id '${room_id}' was not found`,
+          message: `room with id '${room_id}' does not exist`,
         });
         return;
       }
@@ -69,8 +73,8 @@ export default class RoomsController {
         });
         return;
       }
-      room["description"] = description;
-      room["title"] = title;
+      room["description"] = description || room["description"];
+      room["title"] = title || room["title"];
 
       await (await RoomsRepo).save(room);
       res.status(200).json({
@@ -89,7 +93,7 @@ export default class RoomsController {
       const room = await RoomsController.roomExist(room_id);
       if (!room) {
         res.status(404).json({
-          message: `room with id '${room_id}' was not found`,
+          message: `room with id '${room_id}' does not exist`,
         });
         return;
       }
@@ -104,13 +108,12 @@ export default class RoomsController {
         });
         return;
       }
-      // remove the room id from the channel rooms array and resave the channel
-      channel.rooms = channel.rooms.filter(
-        (roomId) => roomId !== room_id
-      ) as string[];
-      await (await ChannelsRepo).save(channel);
-      // remove(delete) the room 
       await (await RoomsRepo).remove(room?.entityId);
+
+      // remove the room id and resave the channel
+      channel.removeRoomId(room_id);
+      await (await ChannelsRepo).save(channel);
+      // remove(delete) the room
     } catch (error) {
       res.status(500).json({
         message: "An error occurred, couldn't delete room",
@@ -128,13 +131,15 @@ export default class RoomsController {
       const roomSaved = await (
         await RoomsRepo
       ).createAndSave(roomToSave as unknown as EntityData);
-     
+
       return roomSaved;
     } catch (error) {
       if (error) throw error;
     }
   }
-
+  static async getRoomById(roomId: string) {
+    return RoomsController.roomExist(roomId);
+  }
   private static async roomExist(roomId: string): Promise<RoomsEntity | null> {
     return (await RoomsRepo)
       .search()

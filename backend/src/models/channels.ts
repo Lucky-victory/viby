@@ -16,8 +16,17 @@ export interface ChannelsEntity {
 }
 
 export class ChannelsEntity extends Entity {
-  async channelTitle() {
-    return this.title;
+  async addRoomId(roomId: string) {
+    this.rooms.push(roomId);
+  }
+  async addMemberId(memberId: string) {
+    this.members.push(memberId);
+  }
+  removeRoomId(roomId: string) {
+    this.rooms = this.rooms.filter((_roomId) => _roomId !== roomId);
+  }
+  removeMemberId(memberId: string) {
+    this.members = this.members.filter((_memberId) => _memberId !== memberId);
   }
 }
 
@@ -39,5 +48,4 @@ export const ChannelsRepo: Promise<Repository<ChannelsEntity>> = (async () => {
   const repo = clientOM.fetchRepository(ChannelsSchema);
   await repo.createIndex();
   return repo;
-  
 })();

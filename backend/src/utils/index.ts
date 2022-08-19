@@ -3,6 +3,7 @@ import jwt, { SignCallback } from "jsonwebtoken";
 import config from "../config";
 import omit from "just-omit";
 import pick from "just-pick";
+// import pluck from "just-pluck-it";
 import ShortId from "short-unique-id";
 import { v4 as uuidv4 } from "uuid";
 import { Request } from "express";
@@ -11,7 +12,14 @@ import { Request } from "express";
  */
 export default class Utils {
   static generateToken(user: IUserForToken, cb: SignCallback) {
-    jwt.sign(user, config.jwt_secret as string, cb);
+    jwt.sign(
+      user,
+      config.jwt_secret as string,
+      {
+        expiresIn: config.jwt_expiration,
+      },
+      cb
+    );
   }
   static omit<T extends object | object[]>(obj: T, remove: string[]) {
     obj = JSON.parse(JSON.stringify(obj));
@@ -31,6 +39,7 @@ export default class Utils {
     }
     return pick(obj, select);
   }
+
   /**
    * converts a string to lowercase
    * @param val

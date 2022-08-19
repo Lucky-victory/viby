@@ -1,8 +1,11 @@
+import pluck from "just-pluck-it";
 import { IMessageToView } from "./../interfaces/message.interface";
 import { IMessageToDB } from "../interfaces/message.interface";
 import { IUserToView } from "../interfaces/user.interface";
 import { MessagesEntity, MessagesRepo } from "../models/messages";
 import Utils from "../utils";
+import UsersController from "./users";
+import { UsersEntity } from "../models/users";
 
 export default class MessagesController {
   static async createMessage(message: IMessageToDB) {
@@ -16,7 +19,7 @@ export default class MessagesController {
   }
   static addToMessage(message: IMessageToDB, user: IUserToView) {
     message["status"] = "sent";
-    message["created_at"] = new Date();
+    message["created_at"] = Utils.currentTime;
     const messageToDB = message;
     const _message = Utils.omit(message, ["user_id"]) as IMessageToDB;
 
@@ -50,15 +53,35 @@ export default class MessagesController {
         .equal(room_id)
         .sortAscending("created_at")
         .page(offset, limit);
+
+      const userIds = pluck(messages, "user_id");
+      // get users by message userid and merge the message with the user
+      // based on userid
+      const messagesWithUser = await Promise.all(
+        userIds.map(async (userId) => {
+          const user = await UsersController.getUserById(userId);
+          const userToView = Utils.omit(user as UsersEntity, [
+            "password",
+            "email",
+            "friends",
+            "entityId",
+          ]) as IUserToView;
+          let messageWithUser!: IMessageToView;
+          messages.map((message) => {
+            if (message?.user_id === userId)
+              messageWithUser = {
+                ...message,
+                user: userToView,
+              };
+          });
+          return messageWithUser;
+        })
+      );
       // remove some unwanted properties
-      const messagesToView = Utils.omit(messages, [
+      const messagesToView = Utils.omit(messagesWithUser, [
         "entityId",
         "user_id",
       ]) as IMessageToView[];
-      // console.log(messages,'in control');
-      const userIds = Utils.pick(messages, ["user_id"]);
-      console.log(userIds);
-
       return {
         message: "messages retrieved successfully",
         data: messagesToView,

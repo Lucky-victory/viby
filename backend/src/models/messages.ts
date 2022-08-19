@@ -1,3 +1,7 @@
+import {
+  IMessageStatus,
+  IMessageType,
+} from "./../interfaces/message.interface";
 import { UsersRepo } from "./users";
 import { Entity, Schema, Repository, Client } from "redis-om";
 
@@ -7,11 +11,11 @@ export interface MessagesEntity {
   user_id: string;
   content: string;
   attachments: string[];
-  type: string;
+  type: IMessageType;
   message_id: string;
   room_id: string;
   channel_id: string;
-  status: string;
+  status: IMessageStatus;
   created_at: string;
 }
 

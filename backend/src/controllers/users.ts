@@ -131,10 +131,11 @@ export default class UsersController {
         "username",
         "user_id",
       ]) as IUserForToken;
+
       Utils.generateToken(userInfoForToken, (err, encoded) => {
         if (err) throw err;
         res.status(201).json({
-          message: "account created successfully",
+          message: "sign in successful",
           data: {
             token: encoded,
             expires_at: ms(config.jwt_expiration as string),
@@ -148,9 +149,9 @@ export default class UsersController {
         .json({ error, message: "An error occurred, couldn't login" });
     }
   }
-  static async getUsername(req: Request, res: Response) {
-    //
-  }
+  // static async getUsername(req: Request, res: Response) {
+  //   //
+  // }
   static async getUserById(userId: string) {
     const user = await (await UsersRepo)
       .search()
@@ -163,7 +164,9 @@ export default class UsersController {
   static async updateUser() {
     //
   }
-
+  static async getFriends() {
+    //
+  }
   static async userExist(emailOrUsername: string) {
     return await (await UsersRepo)
       .search()

@@ -1,9 +1,11 @@
-import express from "express";
-const app = express();
+import express, { Application, NextFunction, Response, Request } from "express";
+const app: Application = express();
 import { Server } from "socket.io";
 import http from "http";
 const server = http.createServer(app);
+import { errorHandler } from "./middlewares/error-handler";
 import cors from "cors";
+import createError from "http-errors";
 const PORT = process.env.PORT || 3300;
 
 const io = new Server(server);
@@ -12,8 +14,9 @@ socket(io);
 
 import signUpRouter from "./routes/sign-up";
 import signInRouter from "./routes/sign-in";
-import channelsRouter from './routes/channels'
-import AuthMiddleware from "./middlewares/auth";
+import channelsRouter from "./routes/channels";
+import usersRouter from "./routes/users";
+import roomsRouter from "./routes/rooms";
 
 // express middleware for JSON body
 app.use(express.json());
@@ -39,23 +42,26 @@ app.use(
     */
   })
 );
-// authentication middleware
-//app.use(AuthMiddleware.authenticate());
+// you can pass a prefix here, if you want, e.g /api/
+const routesPrefix = "";
+app.use(`${routesPrefix}/sign-up`, signUpRouter);
+app.use(`${routesPrefix}/sign-in`, signInRouter);
+app.use(`${routesPrefix}/channels`, channelsRouter);
+app.use(`${routesPrefix}/rooms`, roomsRouter);
+app.use(`${routesPrefix}/user`, usersRouter);
 
-app.use("/sign-up", signUpRouter);
-app.use("/sign-in", signInRouter);
-app.use('/channels', channelsRouter);
-// authentication middleware
-// app.use(AuthMiddleware.authenticate);
 app.get("/", (req, res) => {
   res.send("<h1>Hello Viby</h1>");
 });
-app.get("/channels", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
 
-// how to checked if a user was already a memeber in that server
-// query the database for that user to see if they are among the prevoiusly stored server members
+// this middleware handles error for unavailable routes
+app.use((req, res, next) => {
+  next(createError(404));
+});
+// handles application wide error
+app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+  errorHandler(err, req, res, next);
+});
 export { server, io };
 server.listen(PORT, () => {
   console.log("server running on http://localhost:" + PORT);

@@ -6,9 +6,9 @@ import { IRoom } from "../interfaces/rooms.interface";
 
 import { IChannel, IChannelToView } from "../interfaces/channels.interface";
 import { EntityData } from "redis-om";
-import { UsersEntity, UsersRepo } from "../models/users";
+import { UsersEntity } from "../models/users";
 import Utils from "../utils";
-import { RoomsEntity, RoomsRepo } from "../models/rooms";
+import UsersController from "./users";
 
 export default class ChannelsController {
   static async createChannel(req: Request, res: Response) {
@@ -46,7 +46,7 @@ export default class ChannelsController {
         channel_cover,
         channel_picture,
       };
-      // redis OM throws an error is boolean is recieved as "boolean"
+      // redis OM throws an error if boolean is recieved as "boolean"
       // doing this resolves that
       newChannel = JSON.parse(JSON.stringify(newChannel));
       const savedChannel = await (
@@ -82,7 +82,7 @@ export default class ChannelsController {
       const channel = await ChannelsController.channelExist(channel_id);
       if (!channel) {
         res.status(404).json({
-          message: `channel with id '${channel_id}' was not found`,
+          message: `channel with id '${channel_id}' does not exist`,
         });
         return;
       }
@@ -93,8 +93,9 @@ export default class ChannelsController {
         });
         return;
       }
-      channel["description"] = description;
-      channel["title"] = title;
+      // if description or title is undefined, reassign them to previous values
+      channel["description"] = description || channel["description"];
+      channel["title"] = title || channel["title"];
       await (await ChannelsRepo).save(channel);
 
       res.status(200).json({
@@ -102,7 +103,7 @@ export default class ChannelsController {
       });
     } catch (error) {
       res.status(500).json({
-        message: "An error occurred, couldn't delete channel",
+        message: "An error occurred, couldn't update channel",
       });
     }
   }
@@ -114,7 +115,7 @@ export default class ChannelsController {
       const channel = await ChannelsController.channelExist(channel_id);
       if (!channel) {
         res.status(404).json({
-          message: `channel with id '${channel_id}' was not found`,
+          message: `channel with id '${channel_id}' does not exist`,
         });
         return;
       }
@@ -150,7 +151,7 @@ export default class ChannelsController {
       const channel = await ChannelsController.channelExist(channel_id);
       if (!channel) {
         res.status(404).json({
-          message: `channel with id '${channel_id}' was not found`,
+          message: `channel with id '${channel_id}' does not exist`,
         });
         return;
       }
@@ -167,17 +168,13 @@ export default class ChannelsController {
         });
         return;
       }
-      // otherwise add to members
-      channel.members?.push(user?.user_id);
+      // add to members and save
+      channel.addMemberId(user?.user_id);
       await (await ChannelsRepo).save(channel);
       // get the user info and return it
-      const newMember = await (await UsersRepo)
-        .search()
-        .where("user_id")
-        .equal(user?.user_id)
-        .returnFirst();
+      const newMember = await UsersController.getUserById(user?.user_id);
 
-      // remove confidential properties
+      // remove unwanted/credential properties
       const member = Utils.omit(newMember as UsersEntity, [
         "password",
         "email",
@@ -187,6 +184,48 @@ export default class ChannelsController {
 
       res.status(200).json({
         message: "successfully added",
+        data: member,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "An error occurred, couldn't add member to channel",
+      });
+    }
+  }
+  /**
+   * Remveo a member from a channel
+   * @param req
+   * @param res
+   * @returns
+   */
+  static async removeMember(req: Request, res: Response) {
+    try {
+      const { channel_id } = req.params;
+      const user = Utils.getAuthenticatedUser(req);
+      const channel = await ChannelsController.channelExist(channel_id);
+      if (!channel) {
+        res.status(404).json({
+          message: `channel with id '${channel_id}' does not exist`,
+        });
+        return;
+      }
+
+      // remove a member and save
+      channel.removeMemberId(user?.user_id);
+      await (await ChannelsRepo).save(channel);
+      // get the user info and return it
+      const removedMember = await UsersController.getUserById(user?.user_id);
+
+      // remove unwanted/credential properties
+      const member = Utils.omit(removedMember as UsersEntity, [
+        "password",
+        "email",
+        "entityId",
+        "friends",
+      ]) as IUserToView;
+
+      res.status(200).json({
+        message: "successfully removed",
         data: member,
       });
     } catch (error) {
@@ -208,18 +247,14 @@ export default class ChannelsController {
       const channel = await ChannelsController.channelExist(channel_id);
       if (!channel) {
         res.status(404).json({
-          message: `channel with id '${channel_id}' was not found`,
+          message: `channel with id '${channel_id}' does not exist`,
         });
         return;
       }
       const { members } = channel;
       const users = await Promise.all(
         members.map(async (memberId) => {
-          const user = await (await UsersRepo)
-            .search()
-            .where("user_id")
-            .equal(memberId)
-            .returnFirst();
+          const user = await UsersController.getUserById(memberId);
           // omit some properties before sending out to client;
           const userToView = Utils.omit(user as UsersEntity, [
             "password",
@@ -253,22 +288,18 @@ export default class ChannelsController {
       const channel = await ChannelsController.channelExist(channel_id);
       if (!channel) {
         res.status(404).json({
-          message: `channel with id '${channel_id}' was not found`,
+          message: `channel with id '${channel_id}' does not exist`,
         });
         return;
       }
-      const { rooms } = channel;
-      const roomsToView = await Promise.all(
-        rooms.map(async (roomId) => {
-          const room = await (await RoomsRepo)
-            .search()
-            .where("room_id")
-            .equal(roomId)
-            .returnFirst();
+      const { rooms: roomIds } = channel;
+      const rooms = await Promise.all(
+        roomIds.map(async (roomId) => {
+          const room = await RoomsController.getRoomById(roomId);
           return room;
         })
       );
-
+      const roomsToView = Utils.omit(rooms, ["entityId"]) as IRoom[];
       res.status(200).json({
         message: "rooms retrieved successfully",
         data: roomsToView,
@@ -324,9 +355,14 @@ export default class ChannelsController {
         .where("members")
         .contain(user?.user_id)
         .returnAll();
+      const channelsToView = Utils.omit(channels, [
+        "rooms",
+        "members",
+        "entityId",
+      ]) as IChannelToView[];
       res.status(200).json({
         message: "channels retrieved successfully",
-        data: channels,
+        data: channelsToView,
       });
     } catch (error) {
       res.status(500).json({
@@ -349,6 +385,7 @@ export default class ChannelsController {
       const channelToView = Utils.omit(channel as ChannelsEntity, [
         "rooms",
         "members",
+        "entityId",
       ]) as IChannelToView;
       res.status(200).json({
         message: "channel retrieved successfully",
@@ -363,15 +400,22 @@ export default class ChannelsController {
   }
   static async searchChannels(req: Request, res: Response) {
     try {
-      const { term } = req.query;
+      const { q } = req.query;
+      if (!q) {
+        res.status(400).json({
+          message: "nothing to search,no query provided",
+          data: null,
+        });
+        return;
+      }
       const channels = await (
         await ChannelsRepo
       )
         .search()
         .where("title")
-        .matches(term as string)
+        .matches(q as string)
         .or("description")
-        .matches(term as string)
+        .matches(q as string)
         .returnAll();
       const channelsToView = Utils.omit(channels, [
         "rooms",
