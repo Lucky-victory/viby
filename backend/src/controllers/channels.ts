@@ -8,7 +8,7 @@ import { IRoom } from "../interfaces/rooms.interface";
 import { IChannel, IChannelToView } from "../interfaces/channels.interface";
 import { EntityData } from "redis-om";
 import { UsersEntity, UsersRepo } from "../models/users";
-import { Utils } from "../utils";
+import Utils  from "../utils";
 
 export default class ChannelsController{
     static async createChannel(req:Request,res:Response) {
@@ -30,7 +30,7 @@ export default class ChannelsController{
             const roomsRepo = await RoomsController.addNewRoom(firstRoom) as IRoom;
             const rooms = [roomsRepo?.room_id];
             // the channel to be saved to the database
-       const newChannel:IChannel= {
+       let newChannel:IChannel= {
          channel_id: channelId,
            title, is_public,
            description,
@@ -41,11 +41,13 @@ export default class ChannelsController{
            channel_cover,
            channel_picture
        };
-            
-            (await ChannelsRepo).createAndSave(newChannel as unknown as EntityData);
+            // redis OM throws an error is boolean is recieved as "boolean"
+            // doing this resolves that
+            newChannel = JSON.parse(JSON.stringify(newChannel)); 
+           const savedChannel=await (await ChannelsRepo).createAndSave(newChannel as unknown as EntityData);
 
             // the channel to be sent out to the frontend
-            const channelToBeSent = Utils.omit(newChannel, ['rooms', 'members']) as IChannelToView;
+            const channelToBeSent = Utils.omit(savedChannel, ['rooms', 'members','entityId']) as IChannelToView;
 
             res.status(201).json({
                 message: "channel created successfully",
@@ -212,7 +214,15 @@ export default class ChannelsController{
             limit = +limit;
             page = +page;
         const offset = limit * (page - 1);
-            const channels = await (await ChannelsRepo).search().where('is_public').is.true().page(offset,limit);
+            const channels = await (await ChannelsRepo).search().where('is_public').is.true().page(offset, limit);
+            if (!channels) {
+                res.status(200).json({
+                    data: [],
+                    message: "no channels"
+                });
+                return
+            }
+
           const  channelsToView = Utils.omit(channels, ['rooms', 'members', 'entityId']) as IChannelToView[];
             res.status(200).json({
                 message: 'channels retrieved successfully',
@@ -223,6 +233,30 @@ export default class ChannelsController{
      res.status(500).json({
                 message: "An error occurred, couldn't fetch channels"
             });       
+        }
+    }
+    static async getChannel(req: Request, res: Response) {
+        try {
+            const { channel_id } = req.params;
+            const channel = await ChannelsController.channelExist(channel_id);
+            if (!channel) {
+                res.status(404).json({
+                    message:`channel with id '${channel_id}' does not exist`,
+                    data:null
+                });
+return
+            }
+         const channelToView = Utils.omit(channel as ChannelsEntity, ['rooms', 'members']) as IChannelToView;
+            res.status(200).json({
+                message: 'channel retrieved successfully',
+                data:channelToView
+            })
+
+        }
+        catch (error) {
+            res.status(500).json({
+                message: "An error occurred, couldn't fetch channel"
+            });  
         }
     }
     static async searchChannels(req: Request, res: Response) {
@@ -248,7 +282,7 @@ export default class ChannelsController{
  * @returns 
  */
     static async channelExist(channelId:string):Promise<ChannelsEntity|null> {
-        return  (await (await ChannelsRepo).search().where('channel_id').equal(channelId).returnFirst());
+        return  await (await ChannelsRepo).search().where('channel_id').equal(channelId).returnFirst();
     }
     /**
      * Check if the user performing the operation has access

@@ -3,12 +3,15 @@ const router = express.Router();
 import UsersController from "../controllers/users";
 import Validators from "../validators";
 import asyncHandler from 'express-async-handler';
+import ChannelsController from "../controllers/channels";
 
 router.post(
   "/",
-  Validators.validateSignUp(),
+  Validators.validateChannelAdd(),
   Validators.validationResult,asyncHandler(
-  UsersController.createNewUser)
+ChannelsController.createChannel)
 );
+router.get("/", asyncHandler(ChannelsController.getPublicChannels))
+router.get("/:channel_id", asyncHandler(ChannelsController.getChannel))
 
 export default router;

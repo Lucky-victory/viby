@@ -6,9 +6,9 @@ import asyncHandler from 'express-async-handler';
 
 router.post(
   "/",
-  Validators.validateSignUp(),
+  Validators.validateSignIn(),
   Validators.validationResult,asyncHandler(
-  UsersController.createNewUser)
+  UsersController.loginUser)
 );
 
 export default router;

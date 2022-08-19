@@ -11,7 +11,8 @@ import socket from "./sockets/channels";
 socket(io);
 
 import signUpRouter from "./routes/sign-up";
-
+import signInRouter from "./routes/sign-in";
+import channelsRouter from './routes/channels'
 import AuthMiddleware from "./middlewares/auth";
 
 // express middleware for JSON body
@@ -42,7 +43,8 @@ app.use(
 //app.use(AuthMiddleware.authenticate());
 
 app.use("/sign-up", signUpRouter);
-
+app.use("/sign-in", signInRouter);
+app.use('/channels', channelsRouter);
 // authentication middleware
 // app.use(AuthMiddleware.authenticate);
 app.get("/", (req, res) => {

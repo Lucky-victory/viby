@@ -4,7 +4,7 @@ import { IMessageToDB, IMessageToView } from "../interfaces/message.interface";
 import { IUserToView } from "../interfaces/user.interface";
 
 export default (io: Server) => {
-  const channelsNamespace = io.of("/channels");
+  const channelsNamespace = io.of("/socket");
   let typingUsers: IUserToView[] = [];
   const channelsManager = channelsNamespace.on("connection", (socket) => {
 

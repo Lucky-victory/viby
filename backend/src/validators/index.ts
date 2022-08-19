@@ -53,9 +53,10 @@ export default class Validators {
         .withMessage("Must be a string")
         .isLength({ min: 3, max: 20 })
         .withMessage("title must be within 3 to 20 character!"),
-      check("is_public")
-        .isBoolean()
-        .withMessage("'is_public' must be a boolean "),
+    //  check("is_public")
+      // .isBoolean()
+        //.withMessage("'is_public' must be a boolean "),
+    
     ];
   }
   static validateRoomAdd() {

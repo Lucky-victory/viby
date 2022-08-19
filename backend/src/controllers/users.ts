@@ -26,18 +26,18 @@ export default class UsersController {
       email = Utils.lower(email);
       const emailHash = md5(email);
 
-      // check if with that email or username already exist
-      const [usernameExist, emailExist] = await Promise.all([
-        await UsersController.userExist(email),
-        await UsersController.userExist(username),
+      // check if  that email or username already exist
+      const [emailExist] = await Promise.all([
+        UsersController.userExist(email),
+    
       ]);
-      if (usernameExist) {
+     /* if (usernameExist) {
         res.status(400).json({
           message: `'${username}' is taken`,
           data: null,
         });
         return;
-      }
+      }*/
       if (emailExist) {
         res.status(400).json({
           message: `user already exist`,
@@ -107,7 +107,7 @@ export default class UsersController {
       );
 
       if (!isPasswordMatch) {
-        res.status(400).json({ message: "Invalid credentials", user: null });
+        res.status(400).json({ message: "Invalid credentials", data: null });
         return;
       }
 
@@ -156,12 +156,15 @@ export default class UsersController {
   }
 
   static async userExist(emailOrUsername: string) {
-    return (await UsersRepo)
-      .search()
-      .where("email")
-      .equal(emailOrUsername)
-      .or("username")
-      .equal(emailOrUsername)
-      .returnFirst();
+    
+      
+      return (await UsersRepo)
+        .search()
+        .where("email")
+        .equal(emailOrUsername)
+        .or("username")
+        .equal(emailOrUsername)
+        .returnFirst();
+    
   }
 }

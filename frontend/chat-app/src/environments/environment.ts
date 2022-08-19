@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiBaseUrl: 'http://localhost:3300',
-  socketUrl: 'http://localhost:3300/channels',
+  socketUrl: 'http://localhost:3300/socket',
 };
 
 /*

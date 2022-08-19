@@ -9,7 +9,7 @@ const redis = createClient({
   await redis.connect();
 })();
 redis.on("error", (err) => {
-  console.log(err);
+  throw err;
 });
 
 export { redis };
