@@ -36,5 +36,8 @@ const ChannelsSchema = new Schema(ChannelsEntity, {
 
 export const ChannelsRepo: Promise<Repository<ChannelsEntity>> = (async () => {
   const clientOM = await new Client().use(redis);
-  return clientOM.fetchRepository(ChannelsSchema);
+  const repo = clientOM.fetchRepository(ChannelsSchema);
+  await repo.createIndex();
+  return repo;
+  
 })();

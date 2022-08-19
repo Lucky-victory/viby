@@ -1,6 +1,6 @@
 import Utils from "./../utils/index";
 import { Request, Response } from "express";
-import { UsersRepo } from "../models/users";
+import { UsersEntity, UsersRepo } from "../models/users";
 import ms from "ms";
 import config from "../config";
 import bcrypt from "bcrypt";
@@ -26,17 +26,17 @@ export default class UsersController {
       const emailHash = md5(email);
 
       // check if  that email or username already exist
-      const [emailExist] = await Promise.all([
-      await  UsersController.userExist(email),
-    
+      const [usernameExist, emailExist] = await Promise.all([
+        await UsersController.userExist(username),
+        await UsersController.userExist(email),
       ]);
-     /* if (usernameExist) {
+      if (usernameExist) {
         res.status(400).json({
           message: `'${username}' is taken`,
           data: null,
         });
         return;
-      }*/
+      }
       if (emailExist) {
         res.status(400).json({
           message: `user already exist`,
@@ -61,7 +61,7 @@ export default class UsersController {
       const user = await (
         await UsersRepo
       ).createAndSave(newUser as unknown as EntityData);
-      await (await UsersRepo).createIndex();
+      // await (await UsersRepo).createIndex();
 
       const userToView = Utils.omit(user, [
         "password",
@@ -86,6 +86,7 @@ export default class UsersController {
         });
       });
     } catch (error) {
+      console.log(error);
       res
         .status(500)
         .json({ error, message: "An error occurred, couldn't create user" });
@@ -95,14 +96,23 @@ export default class UsersController {
     try {
       const { username_or_email, password } = req.body;
 
-      const user = await UsersController.userExist(username_or_email);
-      if (!user) {
-        res.status(400).json({ message: "Invalid credentials", user: null });
+      const [usernameExist, emailExist] = await Promise.all([
+        await UsersController.userExist(username_or_email),
+        await UsersController.userExist(username_or_email),
+      ]);
+
+      if (!(emailExist || usernameExist)) {
+        res.status(400).json({
+          message: `Invalid credentials here`,
+          data: null,
+        });
         return;
       }
+      // if the user was gotten by username, then assign user to it otherwise to email
+      const user = usernameExist ? usernameExist : emailExist;
       const isPasswordMatch = await bcrypt.compare(
         String(password),
-        user?.password
+        user?.password as string
       );
 
       if (!isPasswordMatch) {
@@ -110,13 +120,13 @@ export default class UsersController {
         return;
       }
 
-      const userToView = Utils.omit(user, [
+      const userToView = Utils.omit<UsersEntity>(user as UsersEntity, [
         "password",
         "email",
         "entityId",
         "friends",
       ]) as IUserToView;
-      const userInfoForToken = Utils.pick(user, [
+      const userInfoForToken = Utils.pick<UsersEntity>(user as UsersEntity, [
         "fullname",
         "username",
         "user_id",
@@ -155,15 +165,12 @@ export default class UsersController {
   }
 
   static async userExist(emailOrUsername: string) {
-    
-      
-      return (await UsersRepo)
-        .search()
-        .where("email")
-        .equal(emailOrUsername)
-        .or("username")
-        .equal(emailOrUsername)
-        .returnFirst();
-    
+    return await (await UsersRepo)
+      .search()
+      .where("email")
+      .equal(emailOrUsername)
+      .or("username")
+      .matchesExactly(emailOrUsername)
+      .returnFirst();
   }
 }

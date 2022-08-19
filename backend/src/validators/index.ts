@@ -29,16 +29,16 @@ export default class Validators {
   }
   static validateSignIn() {
     return [
-      check("email_or_username")
+      check("username_or_email")
         .trim()
         .not()
         .isEmpty()
-        .withMessage("email / username and  password is required!"),
+        .withMessage("email / username and  password are required!"),
       check("password")
         .trim()
         .not()
         .isEmpty()
-        .withMessage("email / username and password is required!"),
+        .withMessage("email / username and password are required!"),
     ];
   }
 
@@ -53,10 +53,9 @@ export default class Validators {
         .withMessage("Must be a string")
         .isLength({ min: 3, max: 20 })
         .withMessage("title must be within 3 to 20 character!"),
-    //  check("is_public")
+      //  check("is_public")
       // .isBoolean()
-        //.withMessage("'is_public' must be a boolean "),
-    
+      //.withMessage("'is_public' must be a boolean "),
     ];
   }
   static validateRoomAdd() {

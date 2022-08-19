@@ -128,7 +128,7 @@ export default class RoomsController {
       const roomSaved = await (
         await RoomsRepo
       ).createAndSave(roomToSave as unknown as EntityData);
-      (await RoomsRepo).createIndex();
+     
       return roomSaved;
     } catch (error) {
       if (error) throw error;

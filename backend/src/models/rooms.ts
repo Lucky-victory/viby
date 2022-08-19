@@ -22,5 +22,8 @@ const RoomsSchema = new Schema(RoomsEntity, {
 
 export const RoomsRepo: Promise<Repository<RoomsEntity>> = (async () => {
   const clientOM = await new Client().use(redis);
-  return clientOM.fetchRepository(RoomsSchema);
+const repo = clientOM.fetchRepository(RoomsSchema);
+await repo.createIndex();
+return repo;
+
 })();

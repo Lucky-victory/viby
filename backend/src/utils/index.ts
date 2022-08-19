@@ -37,14 +37,14 @@ export default class Utils {
    * @returns
    */
   static lower(val: string) {
-    return val + "".toLowerCase().trim();
+    return String(val).toLowerCase().trim();
   }
-  static removeSpacesAndDashes(val: string) {
-    return val + "".replace(/\s(-)/g, "");
+  static removeSpaces(val: string) {
+    return String(val).split(" ").join("").trim();
   }
   static generateUsername(fullname: string) {
     const tempId = new ShortId({ length: 4 });
-    const username = Utils.removeSpacesAndDashes(`${fullname}${tempId()}`);
+    const username = Utils.removeSpaces(`${fullname}${tempId()}`);
     return username;
   }
   /**
@@ -59,8 +59,8 @@ export default class Utils {
   }
   /**
    * returns the authenticated user
-   * @param req 
-   * @returns 
+   * @param req
+   * @returns
    */
   static getAuthenticatedUser(req: Request) {
     return req?.auth;

@@ -8,7 +8,7 @@ export default class MessagesController {
   static async createMessage(message: IMessageToDB) {
     try {
       await (await MessagesRepo).createAndSave(message);
-      (await MessagesRepo).createIndex();
+
       return { success: true, error: null };
     } catch (error) {
       if (error) return { success: false, error };

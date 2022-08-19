@@ -1,4 +1,4 @@
-import { UsersRepo } from './users';
+import { UsersRepo } from "./users";
 import { Entity, Schema, Repository, Client } from "redis-om";
 
 import { redis } from "../db";
@@ -17,7 +17,11 @@ export interface MessagesEntity {
 
 export class MessagesEntity extends Entity {
   async getMessageOwner() {
-    return await (await UsersRepo).search().where('user_id').equal(this.user_id).returnFirst();
+    return await (await UsersRepo)
+      .search()
+      .where("user_id")
+      .equal(this.user_id)
+      .returnFirst();
   }
 }
 
@@ -33,7 +37,9 @@ const MessagesSchema = new Schema(MessagesEntity, {
   created_at: { type: "date", sortable: true },
 });
 
-export const MessagesRepo:Promise<Repository<MessagesEntity>> = (async () => {
+export const MessagesRepo: Promise<Repository<MessagesEntity>> = (async () => {
   const clientOM = await new Client().use(redis);
-  return clientOM.fetchRepository(MessagesSchema);
+  const repo = clientOM.fetchRepository(MessagesSchema);
+  await repo.createIndex();
+  return repo;
 })();
