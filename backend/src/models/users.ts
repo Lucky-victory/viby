@@ -38,5 +38,7 @@ const UsersSchema = new Schema(UsersEntity, {
 
 export const UsersRepo: Promise<Repository<UsersEntity>> = (async () => {
   const clientOM = await new Client().use(redis);
-  return clientOM.fetchRepository(UsersSchema);
+  const repo = clientOM.fetchRepository(UsersSchema);
+  await repo.createIndex();
+  return repo;
 })();

@@ -1,7 +1,6 @@
 import Utils from "./../utils/index";
 import { Request, Response } from "express";
 import { UsersRepo } from "../models/users";
-import { v4 as uuidV4 } from "uuid";
 import ms from "ms";
 import config from "../config";
 import bcrypt from "bcrypt";
@@ -16,7 +15,7 @@ import { EntityData } from "redis-om";
 export default class UsersController {
   static async createNewUser(req: Request, res: Response) {
     try {
-      const currentTime = new Date();
+      const currentTime = Utils.currentTime;
 
       let { email } = req.body;
       const { fullname } = req.body;
@@ -28,7 +27,7 @@ export default class UsersController {
 
       // check if  that email or username already exist
       const [emailExist] = await Promise.all([
-        UsersController.userExist(email),
+      await  UsersController.userExist(email),
     
       ]);
      /* if (usernameExist) {
@@ -49,7 +48,7 @@ export default class UsersController {
       const hashedPassword = await bcrypt.hash(String(password), 10);
 
       const newUser: IUser = {
-        user_id: uuidV4(),
+        user_id: Utils.generateID(),
         fullname,
         email,
         username,

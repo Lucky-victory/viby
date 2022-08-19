@@ -4,6 +4,8 @@ import config from "../config";
 import omit from "just-omit";
 import pick from "just-pick";
 import ShortId from "short-unique-id";
+import { v4 as uuidv4 } from "uuid";
+import { Request } from "express";
 /**
  * utilities class
  */
@@ -35,14 +37,32 @@ export default class Utils {
    * @returns
    */
   static lower(val: string) {
-    return String(val).toLowerCase().trim();
+    return val + "".toLowerCase().trim();
   }
   static removeSpacesAndDashes(val: string) {
-    return String(val).replace(/\s(-)/gi, "");
+    return val + "".replace(/\s(-)/g, "");
   }
   static generateUsername(fullname: string) {
     const tempId = new ShortId({ length: 4 });
-    const username = Utils.removeSpacesAndDashes(`${fullname}${tempId}`);
+    const username = Utils.removeSpacesAndDashes(`${fullname}${tempId()}`);
     return username;
+  }
+  /**
+   * generate a UUID,
+   * @param dashes - whether to remove the dash delimiters
+   */
+  static generateID(dashes = true) {
+    return dashes ? uuidv4() : uuidv4().replace(/-/g, "");
+  }
+  static get currentTime() {
+    return new Date();
+  }
+  /**
+   * returns the authenticated user
+   * @param req 
+   * @returns 
+   */
+  static getAuthenticatedUser(req: Request) {
+    return req?.auth;
   }
 }

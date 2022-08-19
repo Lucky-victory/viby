@@ -1,16 +1,15 @@
-import { IUser } from "./user.interface";
+import { IUserForToken } from "./user.interface";
 
 declare global {
   declare namespace Express {
     interface Request {
-      auth: IUser;
+      auth: IUserForToken;
     }
   }
 }
 
-export type DateType = string | number|Date|null;
-export interface IResponse<T>{
-    data: T | null,
-    message?: string;
-    
+export type DateType = string | number | Date | null;
+export interface IResponse<T> {
+  data: T | null;
+  message?: string;
 }
