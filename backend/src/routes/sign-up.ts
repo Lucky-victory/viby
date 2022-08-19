@@ -1,8 +1,13 @@
 import express from "express";
 const router = express.Router();
 import UsersController from "../controllers/users";
+import Validators from "../validators";
 
-router.get("/sign-up", UsersController.createNewUser);
-router.get("/sign-up/:id", UsersController.getUsername);
+router.post(
+  "/",
+  Validators.validateSignUp(),
+  Validators.validationResult,
+  UsersController.createNewUser
+);
 
 export default router;

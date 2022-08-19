@@ -14,10 +14,18 @@ import signUpRouter from "./routes/sign-up";
 
 import AuthMiddleware from "./middlewares/auth";
 
-const whitelist: string[] = ['*'];
+// express middleware for JSON body
+app.use(express.json());
+// express middleware for url encoded body
+app.use(
+  express.urlencoded({
+    extended: false,
+  })
+);
+const whitelist: string[] = ["*"];
 app.use(
   cors({
-    origin:'*',
+    origin: "*",
     /*
 (origin, callback) => {
       if (whitelist.indexOf(origin as string) !== -1) {
@@ -33,7 +41,7 @@ app.use(
 // authentication middleware
 //app.use(AuthMiddleware.authenticate());
 
-app.use("/", signUpRouter);
+app.use("/sign-up", signUpRouter);
 
 // authentication middleware
 // app.use(AuthMiddleware.authenticate);

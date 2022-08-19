@@ -1,104 +1,167 @@
-import { Utils } from "./../utils/index";
+import Utils from "./../utils/index";
 import { Request, Response } from "express";
-import {  UsersRepo } from "../models/users";
+import { UsersRepo } from "../models/users";
 import { v4 as uuidV4 } from "uuid";
-import ms from 'ms';
+import ms from "ms";
 import config from "../config";
-import bcrypt from 'bcrypt';
-import { IUser, IUserForToken, IUserToView } from "../interfaces/user.interface";
+import bcrypt from "bcrypt";
+import md5 from "md5";
+import {
+  IUser,
+  IUserForToken,
+  IUserToView,
+} from "../interfaces/user.interface";
 import { EntityData } from "redis-om";
+
 export default class UsersController {
   static async createNewUser(req: Request, res: Response) {
     try {
-      
-      const currentTime = new Date().getTime();
-      const {fullname,username,email,password } = req.body;
+      const currentTime = new Date();
+
+      let { email } = req.body;
+      const { fullname } = req.body;
+      // the username to be used if no username was supplied in the request
+      const defaultUsername = Utils.generateUsername(fullname);
+      const { username = defaultUsername, password } = req.body;
+      email = Utils.lower(email);
+      const emailHash = md5(email);
+
+      // check if with that email or username already exist
+      const [usernameExist, emailExist] = await Promise.all([
+        await UsersController.userExist(email),
+        await UsersController.userExist(username),
+      ]);
+      if (usernameExist) {
+        res.status(400).json({
+          message: `'${username}' is taken`,
+          data: null,
+        });
+        return;
+      }
+      if (emailExist) {
+        res.status(400).json({
+          message: `user already exist`,
+          data: null,
+        });
+        return;
+      }
+      const defaultAvatar = `https://www.gravatar.com/avatar/${emailHash}.jpg?s=150`;
       const hashedPassword = await bcrypt.hash(String(password), 10);
 
-      const newUser:IUser = {
-       user_id: uuidV4(),
-      fullname,
-      email,
-      username,
-      password:hashedPassword,
+      const newUser: IUser = {
+        user_id: uuidV4(),
+        fullname,
+        email,
+        username,
+        password: hashedPassword,
         created_at: currentTime,
-      friends:[]
-    }
+        profile_picture: defaultAvatar,
+        friends: [],
+      };
 
-    const user = await (await UsersRepo).createAndSave(newUser as unknown as EntityData);
+      const user = await (
+        await UsersRepo
+      ).createAndSave(newUser as unknown as EntityData);
       await (await UsersRepo).createIndex();
 
-      const userToView = Utils.omit(user, ['password', 'email', 'entityId', 'friends']) as IUserToView;
-      const userInfoForToken = Utils.pick(user, ['fullname', 'username', 'user_id']) as IUserForToken;
+      const userToView = Utils.omit(user, [
+        "password",
+        "email",
+        "entityId",
+        "friends",
+      ]) as IUserToView;
+      const userInfoForToken = Utils.pick(user, [
+        "fullname",
+        "username",
+        "user_id",
+      ]) as IUserForToken;
       Utils.generateToken(userInfoForToken, (err, encoded) => {
         if (err) throw err;
         res.status(201).json({
-          message: 'account created successfully',
+          message: "account created successfully",
           data: {
-            
             token: encoded,
             expires_at: ms(config.jwt_expiration as string),
             user: userToView,
-          }
+          },
         });
       });
-  }
-    catch (error) {
-      
-      res.status(500).json({ error,message:'An error occurred, couldn\'t create user' });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error, message: "An error occurred, couldn't create user" });
     }
   }
   static async loginUser(req: Request, res: Response) {
     try {
-      
-      const userRepo = await UsersRepo;
-      const {username_or_email,password } = req.body;
+      const { username_or_email, password } = req.body;
 
-      const user = await userRepo.search().where('email').equal(username_or_email).or('username').equal(username_or_email).returnFirst();
+      const user = await UsersController.userExist(username_or_email);
       if (!user) {
-        res.status(400).json({ message: 'Invalid credentials', user: null });
-        return
+        res.status(400).json({ message: "Invalid credentials", user: null });
+        return;
       }
-      const isPasswordMatch = await bcrypt.compare(String(password), user?.password);
+      const isPasswordMatch = await bcrypt.compare(
+        String(password),
+        user?.password
+      );
 
       if (!isPasswordMatch) {
-        res.status(400).json({ message: 'Invalid credentials', user: null });
-        return
+        res.status(400).json({ message: "Invalid credentials", user: null });
+        return;
       }
-    
-      const userToView = Utils.omit(user, ['password', 'email', 'entityId', 'friends']) as IUserToView;
-   const userInfoForToken = Utils.pick(user, ['fullname', 'username', 'user_id']) as IUserForToken;
+
+      const userToView = Utils.omit(user, [
+        "password",
+        "email",
+        "entityId",
+        "friends",
+      ]) as IUserToView;
+      const userInfoForToken = Utils.pick(user, [
+        "fullname",
+        "username",
+        "user_id",
+      ]) as IUserForToken;
       Utils.generateToken(userInfoForToken, (err, encoded) => {
         if (err) throw err;
         res.status(201).json({
-          message: 'account created successfully',
+          message: "account created successfully",
           data: {
             token: encoded,
             expires_at: ms(config.jwt_expiration as string),
             user: userToView,
-          }
+          },
         });
       });
-  }
-    catch (error) {
-      
-      res.status(500).json({ error,message:'An error occurred, couldn\'t login' });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error, message: "An error occurred, couldn't login" });
     }
   }
   static async getUsername(req: Request, res: Response) {
-   //
+    //
   }
-  static async getUserById(userId:string) {
-
-
-    const user=await (await UsersRepo)
+  static async getUserById(userId: string) {
+    const user = await (await UsersRepo)
       .search()
-      .where("user_id").equal(userId)
+      .where("user_id")
+      .equal(userId)
       .returnFirst();
-      
+
     return user;
   }
   static async updateUser() {
     //
+  }
+
+  static async userExist(emailOrUsername: string) {
+    return (await UsersRepo)
+      .search()
+      .where("email")
+      .equal(emailOrUsername)
+      .or("username")
+      .equal(emailOrUsername)
+      .returnFirst();
   }
 }

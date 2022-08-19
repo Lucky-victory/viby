@@ -1,3 +1,4 @@
+import { UsersRepo } from './users';
 import { Entity, Schema, Repository, Client } from "redis-om";
 
 import { redis } from "../db";
@@ -15,8 +16,8 @@ export interface MessagesEntity {
 }
 
 export class MessagesEntity extends Entity {
-  get messageOwner() {
-    return this.user_id;
+  async getMessageOwner() {
+    return await (await UsersRepo).search().where('user_id').equal(this.user_id).returnFirst();
   }
 }
 

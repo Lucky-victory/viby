@@ -5,10 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 import { v4 as uuidV4 } from 'uuid';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import {  IUserToView } from 'src/app/interfaces/user.interface';
+import { IUserToView } from 'src/app/interfaces/user.interface';
 
 import {
-  
   INewMessage,
   MessageInputStatus,
   IMessageType,
@@ -32,6 +31,7 @@ export class ChatMessageInputComponent implements OnInit {
   @Output() onMessageSend = new EventEmitter<INewMessage>();
   private channelId: string;
   typingUsers: IUserToView[];
+  currentUser: IUserToView;
   constructor(
     private activeRoute: ActivatedRoute,
     private webSocketService: WebSocketService,
@@ -45,10 +45,11 @@ export class ChatMessageInputComponent implements OnInit {
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
     });
-    this.webSocketService.onTyping().subscribe((users:IUserToView[]) => {
+    this.webSocketService.onTyping().subscribe((users: IUserToView[]) => {
       this.typingUsers = users;
       console.log('typing');
     });
+    this.currentUser = this.authService?.currentUser;
   }
 
   handleKeyUp(event: KeyboardEvent) {
@@ -57,11 +58,7 @@ export class ChatMessageInputComponent implements OnInit {
     this.handleTyping();
   }
   handleTyping() {
-    const user = this.authService.currentUser;
-    this.webSocketService.typing(user, this.roomId);
-    
-      
-    
+    this.webSocketService.typing(this.currentUser, this.roomId);
   }
   checkInput() {
     // this.isEmpty = this.textMessage === '' && !this.isRecording;

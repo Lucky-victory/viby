@@ -2,8 +2,7 @@ import { IMessageToView } from "./../interfaces/message.interface";
 import { IMessageToDB } from "../interfaces/message.interface";
 import { IUserToView } from "../interfaces/user.interface";
 import { MessagesEntity, MessagesRepo } from "../models/messages";
-import { Utils } from "../utils";
-import merge from "just-merge";
+import Utils from "../utils";
 
 export default class MessagesController {
   static async createMessage(message: IMessageToDB) {
@@ -16,15 +15,19 @@ export default class MessagesController {
     }
   }
   static addToMessage(message: IMessageToDB, user: IUserToView) {
-    message['status'] = 'sent';
-    message['created_at'] = new Date();
+    message["status"] = "sent";
+    message["created_at"] = new Date();
     const messageToDB = message;
-    const _message = Utils.omit(message, ['user_id']) as IMessageToDB;
-    const messageToView=merge(_message, user) as unknown as  IMessageToView;
+    const _message = Utils.omit(message, ["user_id"]) as IMessageToDB;
+
+    const messageToView: IMessageToView = {
+      user,
+      ..._message,
+    };
     return {
       messageToView,
-      messageToDB
-    }
+      messageToDB,
+    };
   }
   static async getMessages(
     channelId: string,
@@ -38,7 +41,7 @@ export default class MessagesController {
       limit = +limit;
       page = +page;
       const offset = limit * (page - 1);
-      
+
       const messages = await (await MessagesRepo)
         .search()
         .where("channel_id")
@@ -53,9 +56,9 @@ export default class MessagesController {
         "user_id",
       ]) as IMessageToView[];
       // console.log(messages,'in control');
-      const userIds = Utils.pick(messages, ['user_id']);
+      const userIds = Utils.pick(messages, ["user_id"]);
       console.log(userIds);
-      
+
       return {
         message: "messages retrieved successfully",
         data: messagesToView,
