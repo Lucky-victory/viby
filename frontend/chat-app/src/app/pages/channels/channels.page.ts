@@ -3,13 +3,12 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
 import { IChannel } from 'src/app/interfaces/channel.interface';
 import {
-  IMessage,
-  IMessageToDB,
+
   INewMessage,
 } from 'src/app/interfaces/message.interface';
 import { IResponse } from 'src/app/interfaces/response.interface';
 import { IRoom } from 'src/app/interfaces/room.interface';
-import { IUser } from 'src/app/interfaces/user.interface';
+
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
@@ -24,7 +23,7 @@ export class ChannelsPage implements OnInit {
   channels: IChannel[];
   roomTitle: string;
   roomId: string;
-  rooms: IRoom[];
+
   channelId: string;
   newMessage: INewMessage;
 

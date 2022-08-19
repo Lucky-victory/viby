@@ -25,7 +25,7 @@
  <ion-item>
       <ion-label position="floating">Password:</ion-label>
       
-      <ion-input type="password" #passwordInput required></ion-input>
+      <ion-input type="password" #passwordInput required [(ngModel)]="password"></ion-input>
       <ion-buttons slot="end">
         <ion-button (click)="toggleInputType(passwordInput.type)">
           <ion-icon name="{{passwordInputType==='text'? 'eye-off-outline':'eye-outline'}}" slot="icon-only"></ion-icon>
@@ -36,7 +36,7 @@
     <ion-item>
       <ion-label position="floating">Confirm Password:</ion-label>
       
-      <ion-input type="password" #confirmPasswordInput required></ion-input>
+      <ion-input type="password" #confirmPasswordInput required [(ngModel)]="confirmPassword"></ion-input>
       <ion-buttons slot="end">
         <ion-button (click)="toggleInputType(confirmPasswordInput.type)">
           <ion-icon name="{{passwordInputType==='text'? 'eye-off-outline':'eye-outline'}}" slot="icon-only"></ion-icon>
@@ -47,7 +47,7 @@
     <div class="form-info">
       <p>Already have an account? <a href="">Sign in</a></p>
     </div>
-    <ion-button class="submit-btn" type="submit" size="large" expand="block">Sign Up</ion-button>
+    <ion-button class="submit-btn" type="submit" size="large" (click)="signUp()" expand="block">Sign Up</ion-button>
   </form>
 </div>
 

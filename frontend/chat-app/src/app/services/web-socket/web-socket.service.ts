@@ -30,8 +30,6 @@ export class WebSocketService {
     this.socket.emit('edit_message', message);
   }
   typing(user: IUserToView, roomId: string) {
-  
-    
     this.socket.emit('typing', user, roomId);
   }
   onTyping() {

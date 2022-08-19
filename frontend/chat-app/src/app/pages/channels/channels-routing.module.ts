@@ -7,7 +7,6 @@ import { ChannelsPage } from './channels.page';
 const routes: Routes = [
   {
     path: '',
-    canActivate:[ChannelGuard],
     component: ChannelsPage
   },
   {

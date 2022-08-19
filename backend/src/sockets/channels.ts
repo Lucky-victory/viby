@@ -17,32 +17,40 @@ export default (io: Server) => {
     });
     
     // emitted when a user joins a room
-    socket.on("join_room", async (channelId: string, roomId: string,user:IUserToView) => {
-      console.log("socket id", socket.id);
-      // get previous messages when a user joins a room
-      const result = await MessagesController.getMessages(channelId, roomId);
-      // console.log(result);
-      
-      socket.join(roomId);
-      channelsManager.to(socket.id).emit("join_room", result?.data,user);
+    socket.on("join_room", async (channelId: string, roomId: string, user: IUserToView) => {
+      try {
+        
+        console.log("socket id", socket.id);
+        
+        // get previous messages when a user joins a room
+        const result = await MessagesController.getMessages(channelId, roomId);
+        // console.log(result);
+   
+        socket.join(roomId);
+     
+        channelsManager.to(socket.id).emit("join_room", result?.data,user);
+      }
+      catch {
+        
+      }
     });
     // emitted when a user starts typing
     socket.on("typing", (user: IUserToView, roomId: string) => {
-      typingUsers.push(user)
+      // typingUsers.push(user)
       // check if the typing user was already among the typing users,
       // if true, return that user otherwise add it to the array
-      typingUsers = typingUsers.reduce((acc, _user) => {
+   
+      // typingUsers = typingUsers.map(( _user) => {
+      //   
         
-        _user?.user_id === user?.user_id ? acc.push(user):acc;
-        return acc
-      },[] as IUserToView[])
+      //   _user?.user_id === user?.user_id ?user:acc=user;
+      //   return acc
+      // })
+    
         
-      
-      
-      console.log(user);
-      console.log(typingUsers);
       socket.to(roomId).emit("typing", typingUsers);
     });
+
     // emitted when a user stops typing
     socket.on("stop_typing", (user, roomId) => {
       // remove the user that stopped typing
@@ -57,19 +65,16 @@ export default (io: Server) => {
       "new_message",
       async (message: IMessageToDB, roomId: string, user: IUserToView) => {
         // save the message to database
-        message["status"] = "sent";
-        const result = await MessagesController.createMessage(message);
-        const messageWithUser: IMessageToView = {
-          ...message,
-          user,
-        };
+        
+        const {messageToDB,messageToView} = MessagesController.addToMessage(message,user)
+        const result = await MessagesController.createMessage(messageToDB);
         if (!result?.success) {
-          messageWithUser["status"] = "error";
-          channelsManager.to(socket.id).emit("new_message", messageWithUser);
+          messageToView["status"] = "error";
+          channelsManager.to(socket.id).emit("new_message", messageToView);
           return;
         }
         // broadcast the message to everyone, sender inclusive
-        channelsManager.to(roomId).emit("new_message", messageWithUser);
+        channelsManager.to(roomId).emit("new_message", messageToView);
       }
     );
     // emiited when a new message is sent

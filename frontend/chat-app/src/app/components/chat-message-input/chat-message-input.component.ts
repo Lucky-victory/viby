@@ -45,6 +45,10 @@ export class ChatMessageInputComponent implements OnInit {
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
     });
+    this.webSocketService.onTyping().subscribe((users:IUserToView[]) => {
+      this.typingUsers = users;
+      console.log('typing');
+    });
   }
 
   handleKeyUp(event: KeyboardEvent) {
@@ -55,10 +59,7 @@ export class ChatMessageInputComponent implements OnInit {
   handleTyping() {
     const user = this.authService.currentUser;
     this.webSocketService.typing(user, this.roomId);
-    this.webSocketService.onTyping().subscribe((users) => {
-      
-      console.log('typing');
-    })
+    
       
     
   }
@@ -93,7 +94,7 @@ export class ChatMessageInputComponent implements OnInit {
       room_id: this.roomId,
       attachments: null,
       channel_id: this.channelId,
-      created_at: new Date().getTime(),
+      created_at: null,
       type: this.messageType,
     };
     console.log(this.message, 'here at input');

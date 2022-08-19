@@ -3,6 +3,7 @@ import { IMessageToDB } from "../interfaces/message.interface";
 import { IUserToView } from "../interfaces/user.interface";
 import { MessagesEntity, MessagesRepo } from "../models/messages";
 import { Utils } from "../utils";
+import merge from "just-merge";
 
 export default class MessagesController {
   static async createMessage(message: IMessageToDB) {
@@ -12,6 +13,17 @@ export default class MessagesController {
       return { success: true, error: null };
     } catch (error) {
       if (error) return { success: false, error };
+    }
+  }
+  static addToMessage(message: IMessageToDB, user: IUserToView) {
+    message['status'] = 'sent';
+    message['created_at'] = new Date();
+    const messageToDB = message;
+    const _message = Utils.omit(message, ['user_id']) as IMessageToDB;
+    const messageToView=merge(_message, user) as unknown as  IMessageToView;
+    return {
+      messageToView,
+      messageToDB
     }
   }
   static async getMessages(

@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -8,8 +9,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 export class SignUpPage implements OnInit {
   @ViewChild('passwordInput') passwordInput:HTMLIonInputElement;
   @ViewChild('confirmPasswordInput') confirmPasswordInput:HTMLIonInputElement;
-    passwordInputType='password'
-  constructor() { }
+  passwordInputType = 'password';
+  password: string;
+  confirmPassword: string;
+  
+  constructor(private authService:AuthService) { }
 
   ngOnInit() {
   }
@@ -19,5 +23,8 @@ export class SignUpPage implements OnInit {
     this.confirmPasswordInput.type=type
     this.passwordInput.type = type;
      this.passwordInputType = type;
+  }
+  signUp() {
+    // this.authService.signUp()
   }
 }
