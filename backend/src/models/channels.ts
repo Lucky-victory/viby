@@ -28,6 +28,15 @@ export class ChannelsEntity extends Entity {
   removeMemberId(memberId: string) {
     this.members = this.members.filter((_memberId) => _memberId !== memberId);
   }
+  update({title,description,channel_cover,channel_picture,is_public}:Partial<ChannelsEntity>){
+    // assign new values if provided, otherwise reassign to previous values; 
+this.title=title||this.title;
+this.description=description||this.description;
+this.channel_cover=channel_cover||this.channel_cover;
+this.channel_picture=channel_picture||this.channel_picture;
+this.is_public=is_public||this.is_public;
+
+  }
 }
 
 const ChannelsSchema = new Schema(ChannelsEntity, {

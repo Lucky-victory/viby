@@ -13,6 +13,10 @@ import UsersController from "./users";
 export default class ChannelsController {
   static async createChannel(req: Request, res: Response) {
     try {
+      //based on the query, when creating a channel for a user account, create a welcome room
+      // 0=false, 1=true
+      const { f_room = 1 } = req.query;
+      const canCreateRoom = parseInt(f_room as string, 10);
       const channelId = Utils.generateID(false);
       const ownerId = Utils.getAuthenticatedUser(req)?.user_id;
       const currentTime = Utils.currentTime;
@@ -22,17 +26,24 @@ export default class ChannelsController {
         channel_cover,
         channel_picture,
         is_public = true,
+        rooms = [],
       } = req.body;
-
-      // create a welcome room when the channel is created
-      const firstRoom = {
-        title: "welcome",
-        description:
-          "This is the first room in this channel, you can edit or delete it",
-        channel_id: channelId,
-      };
-      const roomsRepo = (await RoomsController.addNewRoom(firstRoom)) as IRoom;
-      const rooms = [roomsRepo?.room_id];
+      if (canCreateRoom) {
+        // create a welcome room when the channel is created
+        const firstRoom = {
+          title: "welcome",
+          description:
+            "This is the first room in this channel, you can edit or delete it",
+          channel_id: channelId,
+          members: [ownerId],
+          message_allowed: false,
+          owner_id: ownerId,
+        };
+        const roomsRepo = (await RoomsController.addNewRoom(
+          firstRoom
+        )) as IRoom;
+        rooms.push(roomsRepo?.room_id);
+      }
       // the channel to be saved to the database
       let newChannel: IChannel = {
         channel_id: channelId,
@@ -40,7 +51,7 @@ export default class ChannelsController {
         is_public,
         description,
         owner_id: ownerId,
-        members: [],
+        members: [ownerId],
         rooms,
         created_at: currentTime,
         channel_cover,
@@ -75,7 +86,9 @@ export default class ChannelsController {
       //@todo implement channel picture/cover update
 
       const { title, description } = req.body;
-
+      let { is_public } = req.body;
+      // convert it to boolean because client OM throws an error if boolean is recieved as "boolean"
+      is_public = is_public ? Boolean(is_public) : false;
       const user = Utils.getAuthenticatedUser(req);
       const { channel_id } = req.params;
 
@@ -93,9 +106,11 @@ export default class ChannelsController {
         });
         return;
       }
-      // if description or title is undefined, reassign them to previous values
-      channel["description"] = description || channel["description"];
-      channel["title"] = title || channel["title"];
+      channel.update({
+        title,
+        description,
+        is_public,
+      });
       await (await ChannelsRepo).save(channel);
 
       res.status(200).json({
@@ -144,7 +159,7 @@ export default class ChannelsController {
    * @param res
    * @returns
    */
-  static async addMember(req: Request, res: Response) {
+  static async addMemberToChannel(req: Request, res: Response) {
     try {
       const { channel_id } = req.params;
       const user = Utils.getAuthenticatedUser(req);
@@ -198,7 +213,7 @@ export default class ChannelsController {
    * @param res
    * @returns
    */
-  static async removeMember(req: Request, res: Response) {
+  static async removeMemberFromChannel(req: Request, res: Response) {
     try {
       const { channel_id } = req.params;
       const user = Utils.getAuthenticatedUser(req);

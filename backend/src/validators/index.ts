@@ -21,10 +21,12 @@ export default class Validators {
         .withMessage("Password is empty!")
         .isLength({ min: 6, max: 20 })
         .withMessage("Password must be 6 to 20 characters long!")
-        .matches(/\d/)
-        .withMessage(" Must contain at least one digit")
-        .matches(/[A-Z]/)
-        .withMessage("Must contain at least one capital letter"),
+        .matches(
+          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/
+        )
+        .withMessage(
+          "Must contain at least one number,one uppercase , one lowercase and one special character"
+        ),
     ];
   }
   static validateSignIn() {

@@ -77,6 +77,7 @@ export default class MessagesController {
           return messageWithUser;
         })
       );
+
       // remove some unwanted properties
       const messagesToView = Utils.omit(messagesWithUser, [
         "entityId",

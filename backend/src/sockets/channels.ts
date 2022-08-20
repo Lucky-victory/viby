@@ -14,6 +14,7 @@ export default (io: Server) => {
 
     // emitted when a user joins a channel
     socket.on("join_channel", (channelId:string,user:IUserToView) => {
+      //
     });
     
     // emitted when a user joins a room
@@ -31,7 +32,7 @@ export default (io: Server) => {
         channelsManager.to(socket.id).emit("join_room", result?.data,user);
       }
       catch {
-        
+        //
       }
     });
     // emitted when a user starts typing

@@ -22,7 +22,9 @@ export default class UsersController {
       // the username to be used if no username was supplied in the request
       const defaultUsername = Utils.generateUsername(fullname);
       const { username = defaultUsername, password } = req.body;
+      // convert the email address to lowercase,
       email = Utils.lower(email);
+      // hash the email to fetch user's avatar from gravatar
       const emailHash = md5(email);
 
       // check if  that email or username already exist
@@ -103,7 +105,7 @@ export default class UsersController {
 
       if (!(emailExist || usernameExist)) {
         res.status(400).json({
-          message: `Invalid credentials here`,
+          message: `Invalid credentials`,
           data: null,
         });
         return;
@@ -166,6 +168,20 @@ export default class UsersController {
   }
   static async getFriends() {
     //
+  }
+  static async getUserProfile(req:Request,res:Response){
+    try{
+      const user= Utils.getAuthenticatedUser(req);
+      
+    }
+
+    catch(error){
+      res
+          .status(500)
+          .json({ error, message: "An error occurred, couldn't retrieve user profile" });
+      
+
+    }
   }
   static async userExist(emailOrUsername: string) {
     return await (await UsersRepo)

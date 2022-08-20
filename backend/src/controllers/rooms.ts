@@ -31,8 +31,15 @@ export default class RoomsController {
         return;
       }
 
-      const { title, description } = req.body;
+      const { title, description,message_allowed=true, } = req.body;
+      let {members}=req.body;
+      // when creating a room , add the room creator as a member
+      // this is crucial to implement a direct message room between two users
+      members=members.push(user?.user_id) as string[];
       const newRoom: INewRoom = {
+        owner_id:user?.user_id,
+        members,
+        message_allowed,
         title,
         description,
         channel_id,
