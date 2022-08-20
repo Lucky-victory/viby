@@ -17,8 +17,15 @@ export interface UsersEntity {
 }
 
 export class UsersEntity extends Entity {
-  get userName() {
-    return this.username;
+  async update({
+    password,
+    fullname,
+    cover_picture,
+    profile_picture,
+    username,
+    bio,
+  }: Partial<UsersEntity>) {
+    //
   }
 }
 

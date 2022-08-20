@@ -8,8 +8,11 @@ const router = express.Router();
 router.use(AuthMiddleware.authenticate());
 router.get("/@me", UsersController.getUserProfile);
 router.get("/channels", asyncHandler(ChannelsController.getChannelsForUser));
-router.post("/update-picture");
-router.post("/update-cover");
+router.get("/friends", asyncHandler(UsersController.getFriends));
+router.post(
+  "/direct-messages",
+  asyncHandler(UsersController.getDirectMessages)
+);
 router.post("/update-profile");
 
 export default router;

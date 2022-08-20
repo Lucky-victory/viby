@@ -173,22 +173,23 @@ export default class UsersController {
 
     return user;
   }
-  static async updateUser() {
-    //
+  static async updateProfile(req: Request, res: Response) {
+    const user = Utils.getAuthenticatedUser(req);
   }
   static async getFriends() {
+    //
+  }
+  static async getDirectMessages() {
     //
   }
   static async getUserProfile(req: Request, res: Response) {
     try {
       const user = Utils.getAuthenticatedUser(req);
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          error,
-          message: "An error occurred, couldn't retrieve user profile",
-        });
+      res.status(500).json({
+        error,
+        message: "An error occurred, couldn't retrieve user profile",
+      });
     }
   }
   static async userExist(emailOrUsername: string) {
