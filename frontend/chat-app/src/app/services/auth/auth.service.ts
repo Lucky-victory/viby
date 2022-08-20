@@ -14,12 +14,15 @@ import { ApiService } from '../api/api.service';
 export class AuthService {
   private readonly apiBaseUrl = environment.apiBaseUrl;
   private readonly sampleUser: IUserToView = {
-    user_id: '1',
+    user_id: 'b23e3692-ee33-4f24-acad-2e743597a22a',
+    username: 'LuckyVictoryU5J6',
+    fullname: 'Lucky Victory',
     profile_picture:
-      'https://images.pexels.com/photos/13095218/pexels-photo-13095218.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
-    username: 'luckyj',
-    fullname: 'Lucky victory',
-    cover_picture: '',
+      'https://www.gravatar.com/avatar/0f69cbedcf462f733c3458f3665e9d75.jpg?s=150',
+    cover_picture: null,
+    created_at: '2022-08-20T14:54:02.883Z',
+    bio: null,
+    status: null,
   };
   constructor(private apiService: ApiService) {}
 

@@ -2,10 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
 import { IChannel } from 'src/app/interfaces/channel.interface';
-import {
-
-  INewMessage,
-} from 'src/app/interfaces/message.interface';
+import { INewMessage } from 'src/app/interfaces/message.interface';
 import { IResponse } from 'src/app/interfaces/response.interface';
 import { IRoom } from 'src/app/interfaces/room.interface';
 
@@ -35,8 +32,8 @@ export class ChannelsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.apiService.get(this.storeUrl).subscribe((result: IResponse) => {
-      this.channels = result.channels;
+    this.apiService.get('/channels').subscribe((result: any) => {
+      this.channels = result.data;
 
       this.activeRoute.paramMap.subscribe((params) => {
         this.channelId = params.get('channel_id');

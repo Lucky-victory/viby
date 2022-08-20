@@ -17,7 +17,7 @@ export default class MessagesController {
       if (error) return { success: false, error };
     }
   }
-  static addToMessage(message: IMessageToDB, user: IUserToView) {
+  static addUserToMessage(message: IMessageToDB, user: IUserToView) {
     message.status = "sent";
     message.created_at = Utils.currentTime;
     const messageToDB = message;
@@ -89,11 +89,12 @@ export default class MessagesController {
         error: null,
       };
     } catch (error) {
-      return {
-        data: null,
-        error,
-        message: "An error occurred, couldn't retrieve messages",
-      };
+      if (error)
+        throw {
+          data: null,
+          error,
+          message: "An error occurred, couldn't retrieve messages",
+        };
     }
   }
   static async updateMessage(message: IMessageToDB, user: IUserToView) {
