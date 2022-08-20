@@ -33,13 +33,13 @@ export default class RoomsController {
         return;
       }
 
-      const { title, description,message_allowed=true, } = req.body;
-      let {members}=req.body;
+      const { title, description, message_allowed = true } = req.body;
+      const { members = [] } = req.body;
       // when creating a room , add the room creator as a member
       // this is crucial to implement a direct message room between two users
-      members=members.push(user?.user_id) as string[];
+      members.push(user?.user_id) as string[];
       const newRoom: INewRoom = {
-        owner_id:user?.user_id,
+        owner_id: user?.user_id,
         members,
         message_allowed,
         title,
@@ -55,15 +55,24 @@ export default class RoomsController {
         data: roomToView,
         message: "room created successfully",
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't create room",
+        error,
+        message: error?.message || "An error occurred, couldn't create room",
       });
     }
   }
   static async updateRoom(req: Request, res: Response) {
     try {
-      const { description, title } = req.body;
+      const { description, title, message_allowed } = req.body;
+
+      const updateables: Partial<RoomsEntity> = {
+        title,
+        description,
+        message_allowed,
+      };
+
       const user = Utils.getAuthenticatedUser(req);
       const { room_id } = req.params;
       const room = await RoomsController.roomExist(room_id);
@@ -82,16 +91,17 @@ export default class RoomsController {
         });
         return;
       }
-      room["description"] = description || room["description"];
-      room["title"] = title || room["title"];
-
+      room.update(updateables);
       await (await RoomsRepo).save(room);
       res.status(200).json({
         message: "room updated successfully",
       });
-    } catch (error) {
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't update room",
+        error,
+        message: error?.message || "An error occurred, couldn't update room",
       });
     }
   }
@@ -123,15 +133,18 @@ export default class RoomsController {
       channel.removeRoomId(room_id);
       await (await ChannelsRepo).save(channel);
       // remove(delete) the room
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't delete room",
+        error,
+        message: error?.message || "An error occurred, couldn't delete room",
       });
     }
   }
-  static async addMemberToRoom(req: Request,res:Response) {
+  static async addMemberToRoom(req: Request, res: Response) {
     try {
       const { room_id } = req.params;
+      const user = Utils.getAuthenticatedUser(req);
       const room = await RoomsController.roomExist(room_id);
       if (!room) {
         res.status(404).json({
@@ -139,39 +152,74 @@ export default class RoomsController {
         });
         return;
       }
-      room.addMemberId(room_id);
+      // check if the user was already a member
+      const alreadyMember = await (await RoomsRepo)
+        .search()
+        .where("members")
+        .contains(user?.user_id)
+        .and("room_id")
+        .equal(room_id)
+        .returnFirst();
+      if (alreadyMember) {
+        res.status(200).json({
+          message: "already a member",
+          data: null,
+        });
+        return;
+      }
+      room.addMemberId(user?.user_id);
       await (await RoomsRepo).save(room);
 
       res.status(200).json({
-        message: "member added successfully"
+        message: "member added successfully",
       });
-    }
-    catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't add member to room",
+        error,
+        message:
+          error?.message || "An error occurred, couldn't add member to room",
       });
     }
   }
-  static async removeMemberFromRoom(req: Request,res:Response) {
+  static async removeMemberFromRoom(req: Request, res: Response) {
     try {
       const { room_id } = req.params;
-const room = await RoomsController.roomExist(room_id);
+      const user = Utils.getAuthenticatedUser(req);
+      const room = await RoomsController.roomExist(room_id);
       if (!room) {
         res.status(404).json({
           message: `room with id '${room_id}' does not exist`,
         });
         return;
       }
-      room.removeMemberId(room_id);
+      // check if the user was a member
+      const isMember = await (await RoomsRepo)
+        .search()
+        .where("members")
+        .contains(user?.user_id)
+        .and("room_id")
+        .equal(room_id)
+        .returnFirst();
+      if (!isMember) {
+        res.status(200).json({
+          message: "not a member",
+          data: null,
+        });
+        return;
+      }
+      room.removeMemberId(user?.user_id);
       await (await RoomsRepo).save(room);
 
       res.status(200).json({
-        message: "member added successfully"
+        message: "member removed successfully",
       });
-    }
-    catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't add member to room",
+        error,
+        message:
+          error?.message || "An error occurred, couldn't add member to room",
       });
     }
   }
@@ -188,7 +236,7 @@ const room = await RoomsController.roomExist(room_id);
       const room = await RoomsController.roomExist(room_id);
       if (!room) {
         res.status(404).json({
-          message: `channel with id '${room_id}' does not exist`,
+          message: `room with id '${room_id}' does not exist`,
         });
         return;
       }
@@ -211,12 +259,15 @@ const room = await RoomsController.roomExist(room_id);
         message: "members retrieved successfully",
         data: users,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't fetch members",
+        error,
+        message: error?.message || "An error occurred, couldn't fetch members",
       });
     }
   }
+
   static async addNewRoom(newRoom: INewRoom): Promise<RoomsEntity | unknown> {
     try {
       const currentTime = Utils.currentTime;

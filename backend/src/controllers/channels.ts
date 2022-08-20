@@ -13,8 +13,6 @@ import UsersController from "./users";
 export default class ChannelsController {
   static async createChannel(req: Request, res: Response) {
     try {
-
-      
       const channelId = Utils.generateID(false);
       const ownerId = Utils.getAuthenticatedUser(req)?.user_id;
       const currentTime = Utils.currentTime;
@@ -26,22 +24,20 @@ export default class ChannelsController {
         is_public = true,
         rooms = [],
       } = req.body;
-      
-        // create a welcome room when the channel is created
-        const firstRoom = {
-          title: "welcome",
-          description:
-            "This is the first room in this channel, you can edit or delete it",
-          channel_id: channelId,
-          members: [ownerId],
-          message_allowed: false,
-          owner_id: ownerId,
-        };
-        const roomsSaved = (await RoomsController.addNewRoom(
-          firstRoom
-        )) as IRoom;
-        rooms.push(roomsSaved?.room_id);
-      
+
+      // create a welcome room when the channel is created
+      const firstRoom = {
+        title: "welcome",
+        description:
+          "This is the first room in this channel, you can edit or delete it",
+        channel_id: channelId,
+        members: [ownerId],
+        message_allowed: false,
+        owner_id: ownerId,
+      };
+      const roomsSaved = (await RoomsController.addNewRoom(firstRoom)) as IRoom;
+      rooms.push(roomsSaved?.room_id);
+
       // the channel to be saved to the database
       const newChannel: IChannel = {
         channel_id: channelId,
@@ -77,12 +73,16 @@ export default class ChannelsController {
   }
   static async updateChannel(req: Request, res: Response) {
     try {
-      //@todo implement channel picture/cover update
+      const { title, description, is_public, channel_cover, channel_picture } =
+        req.body;
 
-      const { title, description } = req.body;
-      let { is_public } = req.body;
-      // convert it to boolean because client OM throws an error if boolean is recieved as "boolean"
-      is_public = is_public ? Boolean(is_public) : false;
+      const updateables: Partial<ChannelsEntity> = {
+        title,
+        description,
+        is_public,
+        channel_cover,
+        channel_picture,
+      };
       const user = Utils.getAuthenticatedUser(req);
       const { channel_id } = req.params;
 
@@ -100,11 +100,7 @@ export default class ChannelsController {
         });
         return;
       }
-      channel.update({
-        title,
-        description,
-        is_public,
-      });
+      channel.update(updateables);
       await (await ChannelsRepo).save(channel);
 
       res.status(200).json({
@@ -218,7 +214,19 @@ export default class ChannelsController {
         });
         return;
       }
-
+      // check if the user was a member
+      const isMember = await (await ChannelsRepo)
+        .search()
+        .where("members")
+        .contains(user?.user_id)
+        .returnFirst();
+      if (!isMember) {
+        res.status(200).json({
+          message: "not a member",
+          data: null,
+        });
+        return;
+      }
       // remove a member and save
       channel.removeMemberId(user?.user_id);
       await (await ChannelsRepo).save(channel);
@@ -297,7 +305,7 @@ export default class ChannelsController {
           return room;
         })
       );
-      const roomsToView = Utils.omit(rooms, ["entityId","members"]) as IRoom[];
+      const roomsToView = Utils.omit(rooms, ["entityId", "members"]) as IRoom[];
       res.status(200).json({
         message: "rooms retrieved successfully",
         data: roomsToView,
@@ -350,12 +358,13 @@ export default class ChannelsController {
    */
   static async getChannelsForUser(req: Request, res: Response) {
     try {
-
       const user = Utils.getAuthenticatedUser(req);
       const channels = await (await ChannelsRepo)
         .search()
         .where("members")
-        .contain(user?.user_id).and('channel_id').not.equal(user?.user_id)
+        .contain(user?.user_id)
+        .and("channel_id")
+        .not.equal(user?.user_id)
         .returnAll();
       const channelsToView = Utils.omit(channels, [
         "rooms",
@@ -435,12 +444,12 @@ export default class ChannelsController {
       });
     }
   }
-  static async addNewChannel(newChannel:Partial<IChannel>) {
+  static async addNewChannel(newChannel: Partial<IChannel>) {
+    newChannel = JSON.parse(JSON.stringify(newChannel));
 
-      newChannel = JSON.parse(JSON.stringify(newChannel));
-
-return await ( await ChannelsRepo
-      ).createAndSave(newChannel as unknown as EntityData)
+    return await (
+      await ChannelsRepo
+    ).createAndSave(newChannel as unknown as EntityData);
   }
   /**
    * Check if a channel exist

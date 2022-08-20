@@ -20,6 +20,14 @@ export class RoomsEntity extends Entity {
   async removeMemberId(memberId: string) {
     this.members = this.members.filter((_memberId) => _memberId !== memberId);
   }
+  async update({ title, description, message_allowed }: Partial<RoomsEntity>) {
+    this.title = title || this.title;
+    this.description = description || this.description;
+    this.message_allowed =
+      typeof message_allowed !== "undefined"
+        ? message_allowed
+        : this.message_allowed;
+  }
 }
 
 const RoomsSchema = new Schema(RoomsEntity, {

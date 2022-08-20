@@ -50,9 +50,9 @@ export default class UsersController {
       const defaultAvatar = `https://www.gravatar.com/avatar/${emailHash}.jpg?s=150`;
       const hashedPassword = await bcrypt.hash(String(password), 10);
       const userId = Utils.generateID();
-      
+
       const newUser: IUser = {
-        user_id:userId,
+        user_id: userId,
         fullname,
         email,
         username,
@@ -63,18 +63,17 @@ export default class UsersController {
       };
       // create a unique channel and set it's id to the user's id
       const newChannel = {
-        channel_id:userId,
+        channel_id: userId,
         owner_id: userId,
         members: [],
         created_at: currentTime,
         rooms: [],
-        is_public:false
-      }
-await ChannelsController.addNewChannel(newChannel)
+        is_public: false,
+      };
+      await ChannelsController.addNewChannel(newChannel);
       const user = await (
         await UsersRepo
       ).createAndSave(newUser as unknown as EntityData);
-      
 
       const userToView = Utils.omit(user, [
         "password",
@@ -180,18 +179,16 @@ await ChannelsController.addNewChannel(newChannel)
   static async getFriends() {
     //
   }
-  static async getUserProfile(req:Request,res:Response){
-    try{
-      const user= Utils.getAuthenticatedUser(req);
-      
-    }
-
-    catch(error){
+  static async getUserProfile(req: Request, res: Response) {
+    try {
+      const user = Utils.getAuthenticatedUser(req);
+    } catch (error) {
       res
-          .status(500)
-          .json({ error, message: "An error occurred, couldn't retrieve user profile" });
-      
-
+        .status(500)
+        .json({
+          error,
+          message: "An error occurred, couldn't retrieve user profile",
+        });
     }
   }
   static async userExist(emailOrUsername: string) {
