@@ -13,10 +13,8 @@ import UsersController from "./users";
 export default class ChannelsController {
   static async createChannel(req: Request, res: Response) {
     try {
-      //based on the query, when creating a channel for a user account, create a welcome room
-      // 0=false, 1=true
-      const { f_room = 1 } = req.query;
-      const canCreateRoom = parseInt(f_room as string, 10);
+
+      
       const channelId = Utils.generateID(false);
       const ownerId = Utils.getAuthenticatedUser(req)?.user_id;
       const currentTime = Utils.currentTime;
@@ -28,7 +26,7 @@ export default class ChannelsController {
         is_public = true,
         rooms = [],
       } = req.body;
-      if (canCreateRoom) {
+      
         // create a welcome room when the channel is created
         const firstRoom = {
           title: "welcome",
@@ -39,13 +37,13 @@ export default class ChannelsController {
           message_allowed: false,
           owner_id: ownerId,
         };
-        const roomsRepo = (await RoomsController.addNewRoom(
+        const roomsSaved = (await RoomsController.addNewRoom(
           firstRoom
         )) as IRoom;
-        rooms.push(roomsRepo?.room_id);
-      }
+        rooms.push(roomsSaved?.room_id);
+      
       // the channel to be saved to the database
-      let newChannel: IChannel = {
+      const newChannel: IChannel = {
         channel_id: channelId,
         title,
         is_public,
@@ -59,11 +57,7 @@ export default class ChannelsController {
       };
       // redis OM throws an error if boolean is recieved as "boolean"
       // doing this resolves that
-      newChannel = JSON.parse(JSON.stringify(newChannel));
-      const savedChannel = await (
-        await ChannelsRepo
-      ).createAndSave(newChannel as unknown as EntityData);
-
+      const savedChannel = await ChannelsController.addNewChannel(newChannel);
       // the channel to be sent out to the frontend
       const channelToView = Utils.omit(savedChannel, [
         "rooms",
@@ -228,24 +222,13 @@ export default class ChannelsController {
       // remove a member and save
       channel.removeMemberId(user?.user_id);
       await (await ChannelsRepo).save(channel);
-      // get the user info and return it
-      const removedMember = await UsersController.getUserById(user?.user_id);
-
-      // remove unwanted/credential properties
-      const member = Utils.omit(removedMember as UsersEntity, [
-        "password",
-        "email",
-        "entityId",
-        "friends",
-      ]) as IUserToView;
-
       res.status(200).json({
         message: "successfully removed",
-        data: member,
+        data: null,
       });
     } catch (error) {
       res.status(500).json({
-        message: "An error occurred, couldn't add member to channel",
+        message: "An error occurred, couldn't remove member from channel",
       });
     }
   }
@@ -314,7 +297,7 @@ export default class ChannelsController {
           return room;
         })
       );
-      const roomsToView = Utils.omit(rooms, ["entityId"]) as IRoom[];
+      const roomsToView = Utils.omit(rooms, ["entityId","members"]) as IRoom[];
       res.status(200).json({
         message: "rooms retrieved successfully",
         data: roomsToView,
@@ -362,13 +345,17 @@ export default class ChannelsController {
       });
     }
   }
+  /**
+   * Get channels where the user is a member, but not where the channelid is same as the user id, because that's a unique channel
+   */
   static async getChannelsForUser(req: Request, res: Response) {
     try {
+
       const user = Utils.getAuthenticatedUser(req);
       const channels = await (await ChannelsRepo)
         .search()
         .where("members")
-        .contain(user?.user_id)
+        .contain(user?.user_id).and('channel_id').not.equal(user?.user_id)
         .returnAll();
       const channelsToView = Utils.omit(channels, [
         "rooms",
@@ -447,6 +434,13 @@ export default class ChannelsController {
         error,
       });
     }
+  }
+  static async addNewChannel(newChannel:Partial<IChannel>) {
+
+      newChannel = JSON.parse(JSON.stringify(newChannel));
+
+return await ( await ChannelsRepo
+      ).createAndSave(newChannel as unknown as EntityData)
   }
   /**
    * Check if a channel exist

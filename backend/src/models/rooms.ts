@@ -14,8 +14,11 @@ export interface RoomsEntity {
 }
 
 export class RoomsEntity extends Entity {
-  async addMemberToChannel(memberId: string) {
+  async addMemberId(memberId: string) {
     this.members.push(memberId);
+  }
+  async removeMemberId(memberId: string) {
+    this.members = this.members.filter((_memberId) => _memberId !== memberId);
   }
 }
 

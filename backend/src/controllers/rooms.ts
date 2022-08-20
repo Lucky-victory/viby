@@ -8,6 +8,8 @@ import { EntityData } from "redis-om";
 import ChannelsController from "./channels";
 import Utils from "../utils";
 import { ChannelsEntity, ChannelsRepo } from "../models/channels";
+import UsersController from "./users";
+import { UsersEntity } from "../models/users";
 
 // todo, transform entities to json
 export default class RoomsController {
@@ -124,6 +126,94 @@ export default class RoomsController {
     } catch (error) {
       res.status(500).json({
         message: "An error occurred, couldn't delete room",
+      });
+    }
+  }
+  static async addMemberToRoom(req: Request,res:Response) {
+    try {
+      const { room_id } = req.params;
+      const room = await RoomsController.roomExist(room_id);
+      if (!room) {
+        res.status(404).json({
+          message: `room with id '${room_id}' does not exist`,
+        });
+        return;
+      }
+      room.addMemberId(room_id);
+      await (await RoomsRepo).save(room);
+
+      res.status(200).json({
+        message: "member added successfully"
+      });
+    }
+    catch (error) {
+      res.status(500).json({
+        message: "An error occurred, couldn't add member to room",
+      });
+    }
+  }
+  static async removeMemberFromRoom(req: Request,res:Response) {
+    try {
+      const { room_id } = req.params;
+const room = await RoomsController.roomExist(room_id);
+      if (!room) {
+        res.status(404).json({
+          message: `room with id '${room_id}' does not exist`,
+        });
+        return;
+      }
+      room.removeMemberId(room_id);
+      await (await RoomsRepo).save(room);
+
+      res.status(200).json({
+        message: "member added successfully"
+      });
+    }
+    catch (error) {
+      res.status(500).json({
+        message: "An error occurred, couldn't add member to room",
+      });
+    }
+  }
+
+  /**
+   * Get members in a room
+   * @param req
+   * @param res
+   * @returns
+   */
+  static async getMembers(req: Request, res: Response) {
+    try {
+      const { room_id } = req.params;
+      const room = await RoomsController.roomExist(room_id);
+      if (!room) {
+        res.status(404).json({
+          message: `channel with id '${room_id}' does not exist`,
+        });
+        return;
+      }
+      const { members } = room;
+      const users = await Promise.all(
+        members.map(async (memberId) => {
+          const user = await UsersController.getUserById(memberId);
+          // omit some properties before sending out to client;
+          const userToView = Utils.omit(user as UsersEntity, [
+            "password",
+            "email",
+            "entityId",
+            "friends",
+          ]);
+          return userToView;
+        })
+      );
+
+      res.status(200).json({
+        message: "members retrieved successfully",
+        data: users,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "An error occurred, couldn't fetch members",
       });
     }
   }

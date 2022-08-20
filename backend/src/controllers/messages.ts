@@ -18,8 +18,8 @@ export default class MessagesController {
     }
   }
   static addToMessage(message: IMessageToDB, user: IUserToView) {
-    message["status"] = "sent";
-    message["created_at"] = Utils.currentTime;
+    message.status = "sent";
+    message.created_at = Utils.currentTime;
     const messageToDB = message;
     const _message = Utils.omit(message, ["user_id"]) as IMessageToDB;
 
@@ -98,7 +98,7 @@ export default class MessagesController {
   }
   static async updateMessage(message: IMessageToDB, user: IUserToView) {
     try {
-      const isAuthorized = this.hasAccess(message, user);
+      const isAuthorized = MessagesController.hasAccess(message, user);
       if (!isAuthorized) {
         return { success: false, error: null };
       }
@@ -119,7 +119,7 @@ export default class MessagesController {
   }
   static async deleteMessage(message: IMessageToDB, user: IUserToView) {
     try {
-      const isAuthorized = this.hasAccess(message, user);
+      const isAuthorized = MessagesController.hasAccess(message, user);
       if (!isAuthorized) {
         return { success: false, error: null };
       }

@@ -11,6 +11,7 @@ import {
   IUserToView,
 } from "../interfaces/user.interface";
 import { EntityData } from "redis-om";
+import ChannelsController from "./channels";
 
 export default class UsersController {
   static async createNewUser(req: Request, res: Response) {
@@ -48,9 +49,10 @@ export default class UsersController {
       }
       const defaultAvatar = `https://www.gravatar.com/avatar/${emailHash}.jpg?s=150`;
       const hashedPassword = await bcrypt.hash(String(password), 10);
-
+      const userId = Utils.generateID();
+      
       const newUser: IUser = {
-        user_id: Utils.generateID(),
+        user_id:userId,
         fullname,
         email,
         username,
@@ -59,11 +61,20 @@ export default class UsersController {
         profile_picture: defaultAvatar,
         friends: [],
       };
-
+      // create a unique channel and set it's id to the user's id
+      const newChannel = {
+        channel_id:userId,
+        owner_id: userId,
+        members: [],
+        created_at: currentTime,
+        rooms: [],
+        is_public:false
+      }
+await ChannelsController.addNewChannel(newChannel)
       const user = await (
         await UsersRepo
       ).createAndSave(newUser as unknown as EntityData);
-      // await (await UsersRepo).createIndex();
+      
 
       const userToView = Utils.omit(user, [
         "password",

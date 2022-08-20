@@ -16,6 +16,10 @@ router.post(
   Validators.validationResult,
   asyncHandler(RoomsController.createRoom)
 );
+router.get('/:room_id/members',asyncHandler(RoomsController.getMembers));
+router.get('/:room_id/join', asyncHandler(RoomsController.addMemberToRoom));
+router.post('/:room_id/leave', asyncHandler(RoomsController.removeMemberFromRoom));
+
 /**
  * update a room info
  */
