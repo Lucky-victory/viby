@@ -7,10 +7,9 @@ export default (io: Server) => {
   const channelsNamespace = io.of("/socket");
   let typingUsers: IUserToView[] = [];
   const channelsManager = channelsNamespace.on("connection", (socket) => {
-    /**
+    /*
      * @todo Implement events with callback arg
-     */
-
+     **/
     // emitted when a user joins a channel
     socket.on("join_channel", (channelId: string, user: IUserToView) => {
       //
@@ -22,19 +21,17 @@ export default (io: Server) => {
       async (channelId: string, roomId: string, user: IUserToView) => {
         try {
           console.log("socket id", socket.id);
-
           // get previous messages when a user joins a room
+          console.log(channelId, roomId);
           const result = await MessagesController.getMessages(
             channelId,
             roomId
           );
 
-          console.log(result);
-
           socket.join(roomId);
-
           channelsManager.to(socket.id).emit("join_room", result?.data, user);
-        } catch {
+        } catch (error) {
+          console.log(error);
           //
         }
       }
@@ -47,7 +44,6 @@ export default (io: Server) => {
 
       // typingUsers = typingUsers.map(( _user) => {
       //
-
       //   _user?.user_id === user?.user_id ?user:acc=user;
       //   return acc
       // })
@@ -69,10 +65,11 @@ export default (io: Server) => {
       "new_message",
       async (message: IMessageToDB, roomId: string, user: IUserToView) => {
         // save the message to database
-
         const { messageToDB, messageToView } =
           MessagesController.addUserToMessage(message, user);
         const result = await MessagesController.createMessage(messageToDB);
+
+        // console.log(messageToDB, messageToView);
         if (!result?.success) {
           messageToView["status"] = "error";
           channelsManager.to(socket.id).emit("new_message", messageToView);

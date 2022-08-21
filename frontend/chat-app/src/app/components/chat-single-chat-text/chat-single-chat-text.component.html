@@ -1,33 +1,28 @@
- <div class="single-chat {{isCurrentUser? 'current-user':''}}  ion-activatable">
-  <ion-ripple-effect *ngIf="isMobile">
-    
-  </ion-ripple-effect>
-          <div class="single-chat-user" >
-            <ng-container *ngIf="!isCurrentUser">
-
-              <div class="single-chat-user-avatar-wrapper">
-                <ion-img
-                [src]="chat?.user?.profile_picture"
-                alt=""
-                class="single-chat-user-avatar"
-                ></ion-img>
-              </div>
-              <div class="single-chat-user-name">
-                <span>{{chat?.user?.fullname}}</span>
-              </div>
-            </ng-container>
-               <div class="single-chat-timestamp">
-              <time attr.datetime="{{chat?.created_at}}">{{chat?.created_at|dateFormatter}}</time>
-            </div>
-          </div>
-                <div class="single-chat-text-wrapper">
-            <span  class="single-chat-text">
-
-              {{chat?.content}}
-            </span>
-            
-         
-          </div>
-    
-        </div>
-       
+<div
+  class="single-chat {{ isCurrentUser ? 'current-user' : '' }}  ion-activatable"
+>
+  <ion-ripple-effect *ngIf="isMobile"> </ion-ripple-effect>
+  <div class="single-chat-user">
+    <ng-container *ngIf="!isCurrentUser">
+      <div class="single-chat-user-avatar-wrapper">
+        <ion-img
+          [src]="chat?.user?.profile_picture"
+          alt=""
+          class="single-chat-user-avatar"
+        ></ion-img>
+      </div>
+      <div class="single-chat-user-name">
+        <span>{{ chat?.user?.fullname }}</span>
+      </div>
+    </ng-container>
+    <div class="single-chat-timestamp">
+      <time attr.datetime="{{ chat?.created_at }}">{{
+        chat?.created_at | dateFormatter
+      }}</time>
+    </div>
+  </div>
+  <div class="single-chat-text-wrapper">
+    <span class="single-chat-text" [innerHTML]="chat?.content | linkify">
+    </span>
+  </div>
+</div>

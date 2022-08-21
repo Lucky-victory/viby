@@ -1,5 +1,14 @@
-<div class="channel-list-container">
-  <channel-item *ngFor="let channel of channels" [channel]="channel" ></channel-item>
-  
-  <new-channel-add></new-channel-add>
-</div>
+<!-- <ion-menu class="channel-main-menu" contentId="sec" side="start" menuId="first"> -->
+<ion-content class="channel-main-menu-content">
+  <!-- <room-list (roomTitleEv)="getRoomTitle($event)"></room-list> -->
+  <div class="channel-list-container">
+    <channel-item
+      *ngFor="let channel of channels"
+      [channel]="channel"
+    ></channel-item>
+
+    <new-channel-add></new-channel-add>
+  </div>
+  <room-list [rooms]="rooms"></room-list>
+</ion-content>
+<!-- </ion-menu> -->

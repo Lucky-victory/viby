@@ -6,7 +6,7 @@ import moment from 'moment';
 })
 export class DateFormatterPipe implements PipeTransform {
 
-  transform(value: string | number, timeFormat: string = 'hh:mm A', dateFormat: string='MMM D, YYYY'): string{
+  transform(value: string | number|Date, timeFormat: string = 'hh:mm A', dateFormat: string='MMM D, YYYY'): string{
     const dateVal = moment(value);
     const dateDiff = moment().diff(dateVal, 'days');
     const time = moment(value).format(timeFormat);

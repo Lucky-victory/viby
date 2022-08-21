@@ -3,7 +3,7 @@ import jwt, { SignCallback } from "jsonwebtoken";
 import config from "../config";
 import omit from "just-omit";
 import pick from "just-pick";
-// import pluck from "just-pluck-it";
+
 import ShortId from "short-unique-id";
 import { v4 as uuidv4 } from "uuid";
 import { Request } from "express";
@@ -74,4 +74,43 @@ export default class Utils {
   static getAuthenticatedUser(req: Request) {
     return req?.auth;
   }
+
+  /**
+   * Merges two array of objects based on a matched key value
+   * @param outer -
+   * @param inner
+   * @param options -
+   * @returns
+   */
+  static arrayMerge<O = object[], I = object[], R = object[]>(
+    outer: O,
+    inner: I,
+    options: Partial<IArrayMergeOptions> = {}
+  ): R | [] {
+    if (!(Array.isArray(outer) && Array.isArray(inner))) {
+      return [];
+    }
+    const {
+      innerTitle = "user",
+      outerProp = "user_id",
+      innerProp = "user_id",
+    } = options;
+    const result = outer.map((item) => {
+      return {
+        ...item,
+        [innerTitle]: {
+          ...inner.reduce((accum, inItem) => {
+            return item[outerProp] === inItem[innerProp] ? inItem : accum;
+          }, {}),
+        },
+      };
+    });
+    return result as unknown as R;
+  }
+}
+
+interface IArrayMergeOptions {
+  outerProp: string;
+  innerProp: string;
+  innerTitle: string;
 }

@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ChannelsPageRoutingModule } from './channels-routing.module';
-
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { ChannelsPage } from './channels.page';
 
 import { ChannelActiveUsersListComponent } from 'src/app/components/channel-active-users-list/channel-active-users-list.component';
@@ -23,16 +23,34 @@ import { NewChannelAddComponent } from 'src/app/components/new-channel-add/new-c
 
 import { DateFormatterModule } from 'src/app/pipes/date-formatter/date-formatter.module';
 import { ChatMessageInputComponent } from 'src/app/components/chat-message-input/chat-message-input.component';
-
+import { DomMutationObserverModule } from '../../directives/dom-mutation-observer/dom-mutation-observer.module';
+import { LinkifyModule } from 'src/app/pipes/linkify/linkify.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ChannelsPageRoutingModule, 
+    ChannelsPageRoutingModule,
+    DomMutationObserverModule,
     DateFormatterModule,
+    LinkifyModule,
+    PickerModule,
   ],
-  declarations: [ChannelsPage, ChannelActiveUsersListComponent, ChannelActiveUsersItemComponent, ChatListComponent, ChatSingleChatAudioComponent, ChatSingleChatTextComponent, ChannelListComponent, ChannelItemComponent, RoomListComponent, RoomItemComponent, NewChannelAddComponent,ChatMessageInputComponent],
+  declarations: [
+    ChannelsPage,
+    ChannelListComponent,
+    ChannelItemComponent,
+    NewChannelAddComponent,
+    ChannelActiveUsersListComponent,
+    ChannelActiveUsersItemComponent,
+    RoomListComponent,
+    RoomItemComponent,
+    ChatListComponent,
+    ChatSingleChatAudioComponent,
+    ChatSingleChatTextComponent,
+
+    ChatMessageInputComponent,
+  ],
 })
 export class ChannelsPageModule {}

@@ -1,7 +1,10 @@
-<ion-item  class="room-item {{room?.room_id === roomId? 'active':''}}" button (click)="selectRoom(room)">
-  <span class="room-item-title" >
-
-  # {{room?.title}}
+<ion-item
+  class="room-item {{ room?.room_id === roomId ? 'active' : '' }}"
+  button
+  (click)="selectRoom(room)"
+  routerDirection="root"
+>
+  <span class="room-item-title">
+    <ion-icon name="chatbubble-ellipses-outline"></ion-icon> {{ room?.title }}
   </span>
-    </ion-item>
-
+</ion-item>

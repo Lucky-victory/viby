@@ -45,7 +45,7 @@ export default class MessagesController {
       page = +page;
       const offset = limit * (page - 1);
 
-      const messages = await (await MessagesRepo)
+      let messages = await (await MessagesRepo)
         .search()
         .where("channel_id")
         .equal(channel_id)
@@ -54,34 +54,35 @@ export default class MessagesController {
         .sortAscending("created_at")
         .page(offset, limit);
 
+      messages = JSON.parse(JSON.stringify(messages));
       const userIds = pluck(messages, "user_id");
+
       // get users by message userid and merge the message with the user
       // based on userid
-      const messagesWithUser = await Promise.all(
+      const messageOwners = await Promise.all(
         userIds.map(async (userId) => {
           const user = await UsersController.getUserById(userId);
+
           const userToView = Utils.omit(user as UsersEntity, [
             "password",
             "email",
             "friends",
             "entityId",
           ]) as IUserToView;
-          let messageWithUser!: IMessageToView;
-          messages.map((message) => {
-            if (message?.user_id === userId)
-              messageWithUser = {
-                ...message,
-                user: userToView,
-              };
-          });
-          return messageWithUser;
+
+          return userToView;
         })
       );
 
+      const messagesWithUser: IMessageToView[] = Utils.arrayMerge(
+        messages,
+        messageOwners
+      );
+
+      console.log(messagesWithUser);
       // remove some unwanted properties
       const messagesToView = Utils.omit(messagesWithUser, [
         "entityId",
-        "user_id",
       ]) as IMessageToView[];
       return {
         message: "messages retrieved successfully",

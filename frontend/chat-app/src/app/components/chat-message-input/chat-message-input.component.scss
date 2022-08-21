@@ -1,4 +1,3 @@
-
 .message-textarea-container {
   display: flex;
   align-items: center;
@@ -36,8 +35,6 @@
   border-radius: inherit;
   width: auto;
   min-width: 0;
-
-
 }
 
 .message-textarea-container .btn {
@@ -48,7 +45,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 .attachment-btn {
   background: #818091;
@@ -57,28 +53,26 @@
 .btn .icon {
   font-size: 20px;
 }
-ion-button.message-send-btn{
-height:auto;
+ion-button.message-send-btn {
+  height: auto;
   &::part(native) {
     position: relative;
     padding: 0.5rem;
     background: var(--accent-color);
     color: #fff;
-    height: 3rem!important;
+    height: 3rem !important;
     width: 3rem;
-    margin:0;
-    border-radius:10px;
+    margin: 0;
+    border-radius: 10px;
   }
- 
 }
 
-.message-btns-container{
+.message-btns-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
-.record-area-container{
+.record-area-container {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -86,4 +80,10 @@ height:auto;
   bottom: 0;
   z-index: 10;
   background-color: var(--accent-color);
+}
+
+emoji-mart.emoji-box {
+  position: absolute;
+  bottom: 100px;
+  right: 0;
 }

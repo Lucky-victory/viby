@@ -7,11 +7,14 @@ import {
   IMessageToView,
   INewMessage,
 } from 'src/app/interfaces/message.interface';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketService {
+  private newMessage$ = new Subject<IMessageToView>();
+  private joinRoom$ = new Subject<IMessageToView[]>();
   constructor(private socket: Socket) {}
   joinRoom(channelId: string, roomId: string, user: IUserToView) {
     this.socket.emit('join_room', channelId, roomId, user);
@@ -19,12 +22,18 @@ export class WebSocketService {
   joinChannel(channelId: string, user: IUserToView) {
     this.socket.emit('join_channel', channelId, user);
   }
+  connect() {
+    return this.socket.connect();
+  }
+  onJoinChannel() {
+    return this.socket.fromOneTimeEvent('join_channel');
+  }
   leaveChannel(channelId: string) {}
   newMessage(roomId: string, message: INewMessage, user: IUserToView) {
     this.socket.emit('new_message', message, roomId, user);
   }
   onReceiveMessage() {
-   return  this.socket.fromEvent('new_message')
+    return this.socket.fromEvent('new_message');
   }
   onMessageEdit(message: IMessageToView) {
     this.socket.emit('edit_message', message);
@@ -33,7 +42,7 @@ export class WebSocketService {
     this.socket.emit('typing', user, roomId);
   }
   onTyping() {
-   return this.socket.fromEvent('typing');
+    return this.socket.fromEvent('typing');
   }
   stoppedTyping(user: IUserToView, roomId: string) {
     this.socket.emit('stop_typing', user, roomId);
@@ -44,6 +53,6 @@ export class WebSocketService {
     });
   }
   onJoinRoom() {
-    return this.socket.fromEvent('join_room')
+    return this.socket.fromEvent('join_room');
   }
 }

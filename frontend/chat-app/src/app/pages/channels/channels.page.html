@@ -1,52 +1,39 @@
-<ion-split-pane when="xl" contentId="main-view">
+<ion-split-pane when="xl" contentId="sec">
+  <channel-list></channel-list>
 
-  <ion-menu class="channel-main-menu" contentId="main-view" side="start" menuId="first" >
-   
-  <ion-content class="channel-main-menu-content">
-    <channel-list [channels]="channels" ></channel-list>
-
-  <room-list (roomTitleEv)="getRoomTitle($event)" ></room-list>
-
-</ion-content>
-  
-</ion-menu> 
-
-<ion-menu class="channel-users-menu" side="end" menuId="second" contentId="main-view">
+  <ion-menu
+    class="channel-users-menu"
+    side="end"
+    menuId="second"
+    contentId="sec"
+  >
     <ion-header class="channel-users-menu-header">
-    <ion-toolbar >
-      <ion-title >MEMBERS</ion-title>
-    </ion-toolbar>
-  </ion-header>
-<ion-content class="ion-no-padding channel-users-menu-content">
+      <ion-toolbar>
+        <ion-title>MEMBERS</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-no-padding channel-users-menu-content">
+      <channel-active-users-list></channel-active-users-list>
+    </ion-content>
+  </ion-menu>
+  <ion-content [fullscreen]="true" id="sec">
+    <ion-header slot="fixed" class="main-view-header">
+      <ion-toolbar>
+        <ion-menu-button menu="first" slot="start"> </ion-menu-button>
+        <ion-title># {{roomTitle}}</ion-title>
 
-  <channel-active-users-list ></channel-active-users-list>
-</ion-content>
-    
-  
-</ion-menu>
-<ion-content id="main-view" [fullscreen]="true">
+        <ion-menu-button menu="second" slot="end">
+          <ion-icon name="people"></ion-icon>
+        </ion-menu-button>
+      </ion-toolbar>
+    </ion-header>
 
-<ion-header slot="fixed" class="main-view-header">
-  <ion-toolbar >
-    <ion-menu-button  menu="first" slot="start">
-      
-    </ion-menu-button>
-    <ion-title># {{roomTitle}}</ion-title>
+    <chat-list></chat-list>
 
-    <ion-menu-button  menu="second" slot="end">
-      <ion-icon name="people"></ion-icon>
-    </ion-menu-button>
-  </ion-toolbar>
-</ion-header>
+    <chat-message-input
+      (onMessageSend)="acceptNewMessage($event)"
+    ></chat-message-input>
+  </ion-content>
 
-
-  <chat-list ></chat-list>
-  
-  
-  <chat-message-input (onMessageSend)="acceptNewMessage($event)"></chat-message-input>
-
-</ion-content>
-    
-
-  </ion-split-pane>
- 
+  <!-- <ion-router-outlet id="sec" name="sec"></ion-router-outlet> -->
+</ion-split-pane>

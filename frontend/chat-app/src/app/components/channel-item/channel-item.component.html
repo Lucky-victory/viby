@@ -1,8 +1,14 @@
-<div class="channel-item-container ion-activatable" [ngClass]="{active:isActive}" (click)="selectChannel(channel?.channel_id)">
-  <ion-ripple-effect></ion-ripple-effect>
-  <div class="channel-item-image-wrapper" >
-    <ion-img class="channel-item-image" src="{{channel?.channel_picture}}">
-
-    </ion-img>
+<ion-menu-toggle autoHide="false">
+  <div
+    class="channel-item-container ion-activatable"
+    [routerLink]="['/channels', channel?.channel_id]"
+    routerDirection="root"
+    routerLinkActive="active"
+  >
+    <ion-ripple-effect></ion-ripple-effect>
+    <div class="channel-item-image-wrapper">
+      <ion-img class="channel-item-image" src="{{ channel?.channel_picture }}">
+      </ion-img>
+    </div>
   </div>
-</div>
+</ion-menu-toggle>
