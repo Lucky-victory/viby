@@ -3,6 +3,7 @@ import jwt, { SignCallback } from "jsonwebtoken";
 import config from "../config";
 import omit from "just-omit";
 import pick from "just-pick";
+import flatten from "just-flatten-it";
 
 import ShortId from "short-unique-id";
 import { v4 as uuidv4 } from "uuid";
@@ -20,6 +21,11 @@ export default class Utils {
       },
       cb
     );
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static flatten<R>(arr: any): R[] {
+    arr = JSON.parse(JSON.stringify(arr));
+    return flatten(arr);
   }
   static omit<T extends object | object[]>(obj: T, remove: string[]) {
     obj = JSON.parse(JSON.stringify(obj));
@@ -76,13 +82,13 @@ export default class Utils {
   }
 
   /**
-   * Merges two array of objects based on a matched key value
+   * Merges and Nest an object based on a matched key value
    * @param outer -
    * @param inner
    * @param options -
    * @returns
    */
-  static arrayMerge<O = object[], I = object[], R = object[]>(
+  static arrayMergeObject<O = object[], I = object[], R = object[]>(
     outer: O,
     inner: I,
     options: Partial<IArrayMergeOptions> = {}
@@ -107,8 +113,42 @@ export default class Utils {
     });
     return result as unknown as R;
   }
-}
 
+  /**
+   * Merges and Nest an array of objects based on a matched key value
+   * @param outer - the main array
+   * @param inner - the array to be nested
+   * @param options -
+   * @returns
+   */
+  static arrayMerge<O = object[], I = object[], R = object[]>(
+    outer: O,
+    inner: I,
+    options: Partial<IArrayMergeOptions> = {}
+  ): R | [] {
+    if (!(Array.isArray(outer) && Array.isArray(inner))) {
+      return [];
+    }
+
+    const {
+      innerTitle = "rooms",
+      outerProp = "channel_id",
+      innerProp = "channel_id",
+    } = options;
+    const result = outer.map((item) => {
+      return {
+        ...item,
+        [innerTitle]: [
+          ...inner.reduce((accum, inItem) => {
+            item[outerProp] === inItem[innerProp] ? accum.push(inItem) : accum;
+            return accum;
+          }, []),
+        ],
+      };
+    });
+    return result as unknown as R;
+  }
+}
 interface IArrayMergeOptions {
   outerProp: string;
   innerProp: string;

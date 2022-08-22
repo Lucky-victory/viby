@@ -80,7 +80,7 @@ export default class MessagesController {
         })
       );
 
-      const messagesWithUser: IMessageToView[] = Utils.arrayMerge(
+      const messagesWithUser: IMessageToView[] = Utils.arrayMergeObject(
         messages,
         messageOwners
       );
@@ -94,12 +94,14 @@ export default class MessagesController {
         data: messagesToView,
         error: null,
       };
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       if (error)
         throw {
           data: null,
           error,
-          message: "An error occurred, couldn't retrieve messages",
+          message:
+            error?.message || "An error occurred, couldn't retrieve messages",
         };
     }
   }

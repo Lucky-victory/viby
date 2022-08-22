@@ -1,6 +1,7 @@
 import { Entity, Schema, Repository, Client } from "redis-om";
 
 import { redis } from "../db";
+import { RoomsRepo } from "./rooms";
 
 export interface ChannelsEntity {
   title: string;
@@ -16,10 +17,10 @@ export interface ChannelsEntity {
 }
 
 export class ChannelsEntity extends Entity {
-  async addRoomId(roomId: string) {
+  addRoomId(roomId: string) {
     this.rooms.push(roomId);
   }
-  async addMemberId(memberId: string) {
+  addMemberId(memberId: string) {
     this.members.push(memberId);
   }
   removeRoomId(roomId: string) {
@@ -28,6 +29,21 @@ export class ChannelsEntity extends Entity {
   removeMemberId(memberId: string) {
     this.members = this.members.filter((_memberId) => _memberId !== memberId);
   }
+  async getRooms() {
+    return await Promise.all(
+      this.rooms.map(async (roomId) => {
+        const rooms = await (await RoomsRepo)
+          .search()
+          .where("channel_id")
+          .equal(this.channel_id)
+          .and("room_id")
+          .equal(roomId)
+          .returnFirst();
+        return rooms;
+      })
+    );
+  }
+
   update({
     title,
     description,

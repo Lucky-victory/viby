@@ -1,12 +1,11 @@
 import { Server } from "socket.io";
-import MessagesController from "../controllers/messages";
 import SocketController from "../controllers/socket";
-import { IMessageToDB, IMessageToView } from "../interfaces/message.interface";
+import { IMessageToDB } from "../interfaces/message.interface";
 import { IUserToView } from "../interfaces/user.interface";
 
 export default (io: Server) => {
   const channelsNamespace = io.of("/socket");
-  let typingUsers: IUserToView[] = [];
+
   const channelsManager = channelsNamespace.on("connection", (socket) => {
     // emitted when a user joins a channel
     socket.on("join_channel", async (channelId: string, user: IUserToView) => {

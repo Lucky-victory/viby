@@ -97,11 +97,12 @@ export default class UsersController {
           },
         });
       });
-    } catch (error) {
-      console.log(error);
-      res
-        .status(500)
-        .json({ error, message: "An error occurred, couldn't create user" });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      res.status(500).json({
+        error,
+        message: error?.message || "An error occurred, couldn't create user",
+      });
     }
   }
   static async loginUser(req: Request, res: Response) {
@@ -155,10 +156,12 @@ export default class UsersController {
           },
         });
       });
-    } catch (error) {
-      res
-        .status(500)
-        .json({ error, message: "An error occurred, couldn't login" });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      res.status(500).json({
+        error,
+        message: error?.message || "An error occurred, couldn't login",
+      });
     }
   }
   // static async getUsername(req: Request, res: Response) {
@@ -185,10 +188,12 @@ export default class UsersController {
   static async getUserProfile(req: Request, res: Response) {
     try {
       const user = Utils.getAuthenticatedUser(req);
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
         error,
-        message: "An error occurred, couldn't retrieve user profile",
+        message:
+          error?.message || "An error occurred, couldn't retrieve user profile",
       });
     }
   }

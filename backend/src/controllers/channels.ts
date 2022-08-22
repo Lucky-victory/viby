@@ -9,6 +9,7 @@ import { EntityData } from "redis-om";
 import { UsersEntity } from "../models/users";
 import Utils from "../utils";
 import UsersController from "./users";
+import { RoomsEntity } from "../models/rooms";
 
 export default class ChannelsController {
   static async createChannel(req: Request, res: Response) {
@@ -65,9 +66,11 @@ export default class ChannelsController {
         message: "channel created successfully",
         data: channelToView,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't create channel",
+        error,
+        message: error?.message || "An error occurred, couldn't create channel",
       });
     }
   }
@@ -106,9 +109,11 @@ export default class ChannelsController {
       res.status(200).json({
         message: "channel updated successfully",
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't update channel",
+        error,
+        message: error?.message || "An error occurred, couldn't update channel",
       });
     }
   }
@@ -136,9 +141,11 @@ export default class ChannelsController {
       res.status(200).json({
         message: "channel deleted successfully",
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't delete channel",
+        error,
+        message: error?.message || "An error occurred, couldn't delete channel",
       });
     }
   }
@@ -191,9 +198,12 @@ export default class ChannelsController {
         message: "successfully added",
         data: member,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't add member to channel",
+        error,
+        message:
+          error?.message || "An error occurred, couldn't add member to channel",
       });
     }
   }
@@ -234,9 +244,13 @@ export default class ChannelsController {
         message: "successfully removed",
         data: null,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't remove member from channel",
+        error,
+        message:
+          error?.message ||
+          "An error occurred, couldn't remove member from channel",
       });
     }
   }
@@ -276,9 +290,11 @@ export default class ChannelsController {
         message: "members retrieved successfully",
         data: users,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't fetch members",
+        error,
+        message: error?.message || "An error occurred, couldn't fetch members",
       });
     }
   }
@@ -310,9 +326,11 @@ export default class ChannelsController {
         message: "rooms retrieved successfully",
         data: roomsToView,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't fetch rooms",
+        error,
+        message: error?.message || "An error occurred, couldn't fetch rooms",
       });
     }
   }
@@ -343,13 +361,15 @@ export default class ChannelsController {
         "members",
         "entityId",
       ]) as IChannelToView[];
+
       res.status(200).json({
         message: "channels retrieved successfully",
         data: channelsToView,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occurred, couldn't fetch channels",
+        message: error?.message || "An error occurred, couldn't fetch channels",
       });
     }
   }
@@ -359,6 +379,8 @@ export default class ChannelsController {
   static async getChannelsForUser(req: Request, res: Response) {
     try {
       const user = Utils.getAuthenticatedUser(req);
+      // each user has a personalized channel based on their userid, so when fetching channels they are members in
+      // don't fetch the one that equals their userid
       const channels = await (await ChannelsRepo)
         .search()
         .where("members")
@@ -366,19 +388,31 @@ export default class ChannelsController {
         .and("channel_id")
         .not.equal(user?.user_id)
         .returnAll();
-      const channelsToView = Utils.omit(channels, [
+
+      const rooms = await Promise.all(
+        channels.map(async (channel) => {
+          const c = await channel.getRooms();
+          return c;
+        })
+      );
+      const flattenRooms = Utils.flatten<RoomsEntity>(rooms);
+      const roomsToView = Utils.omit(flattenRooms, ["entityId"]);
+      let channelsToView = Utils.omit(channels, [
         "rooms",
         "members",
         "entityId",
       ]) as IChannelToView[];
+      channelsToView = Utils.arrayMerge(channelsToView, roomsToView);
+
       res.status(200).json({
         message: "channels retrieved successfully",
         data: channelsToView,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
         error,
-        message: "An error occurred, couldn't fetch channels",
+        message: error?.message || "An error occurred, couldn't fetch channels",
       });
     }
   }
@@ -398,14 +432,18 @@ export default class ChannelsController {
         "members",
         "entityId",
       ]) as IChannelToView;
+      const rooms = await channel.getRooms();
+      const roomsToView = Utils.omit(rooms, ["entityId", "members"]) as IRoom[];
+      channelToView.rooms = roomsToView;
       res.status(200).json({
         message: "channel retrieved successfully",
         data: channelToView,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
         error,
-        message: "An error occurred, couldn't fetch channel",
+        message: error?.message || "An error occurred, couldn't fetch channel",
       });
     }
   }
@@ -437,10 +475,11 @@ export default class ChannelsController {
         message: "channels retrieved successfully",
         data: channelsToView,
       });
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       res.status(500).json({
-        message: "An error occured couldn't search channels",
         error,
+        message: error?.message || "An error occured couldn't search channels",
       });
     }
   }
