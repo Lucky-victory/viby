@@ -11,7 +11,7 @@ export interface IChannel {
   channel_cover?: string;
   channel_id: string;
   members: string[];
-  rooms: [];
+  rooms: string[];
 }
 export type IChannelToView = Omit<IChannel, 'members' | 'rooms'> & {
   rooms?: IRoom[];

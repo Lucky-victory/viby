@@ -19,8 +19,8 @@ export class ChatService {
     this.channels$.next(channels);
     console.log(this.channels$);
   }
-  getChannels() {
-    return this.apiService.get('/channels').toPromise();
+  getChannelsForUser() {
+    return this.apiService.get('/user/channels').toPromise();
   }
   getChannel(channelId: string) {
     return this.apiService.get(`/channels/${channelId}`).toPromise();

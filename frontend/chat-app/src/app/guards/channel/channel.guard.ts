@@ -29,7 +29,7 @@ export class ChannelGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.chatService.getChannels().then((result: any) => {
+    return this.chatService.getChannelsForUser().then((result: any) => {
       const channels = result.data;
       console.log(channels, 'ch');
       if (channels?.length) {
