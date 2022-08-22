@@ -40,6 +40,12 @@ export default class MessagesController {
     try {
       const room_id = roomId;
       const channel_id = channelId;
+      if (!(room_id && channelId))
+        return {
+          message: "no channelid or roomid provided",
+          data: [],
+          error: null,
+        };
       let { limit = 100, page = 1 } = options;
       limit = +limit;
       page = +page;
@@ -79,7 +85,6 @@ export default class MessagesController {
         messageOwners
       );
 
-      console.log(messagesWithUser);
       // remove some unwanted properties
       const messagesToView = Utils.omit(messagesWithUser, [
         "entityId",

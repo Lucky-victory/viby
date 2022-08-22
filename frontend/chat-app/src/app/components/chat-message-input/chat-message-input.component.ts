@@ -129,6 +129,7 @@ export class ChatMessageInputComponent implements OnInit {
     this.createMessageObj();
     this.clearInput();
     this.checkInput();
+    this.showEmoji = false;
   }
   // startRecorder() {
   //   this.isRecording = true;
