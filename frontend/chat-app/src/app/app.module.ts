@@ -17,6 +17,7 @@ import { HttpErrorInterceptorService } from './services/http-error-interceptor/h
 import { UtilsService } from './services/utils/utils.service';
 import { WebSocketService } from './services/web-socket/web-socket.service';
 import { SeoService } from './services/seo/seo.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const config: SocketIoConfig = {
   url: environment.socketUrl, // socket server url;

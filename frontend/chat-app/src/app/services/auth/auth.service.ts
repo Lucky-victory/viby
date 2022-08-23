@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
+import { switchMap, tap } from 'rxjs/operators';
+import { IResponse } from 'src/app/interfaces/common.interface';
 import {
   INewUser,
   IUserCredentials,
+  IUserLogin,
   IUserToView,
 } from 'src/app/interfaces/user.interface';
 import { environment } from 'src/environments/environment';
@@ -26,7 +29,7 @@ export class AuthService {
   };
   constructor(private apiService: ApiService) {}
 
-  setSession(result: IUserCredentials) {
+  set setSession(result: IUserCredentials) {
     const token = result?.token;
     const tokenExpiresAt = result?.expires_at;
     const user = result?.user;
@@ -34,8 +37,20 @@ export class AuthService {
     this.saveToken(token);
     this.setCurrentUser(user);
   }
-  signUp(details: INewUser) {}
-  login(details: Partial<INewUser>) {}
+  signUp(details: INewUser) {
+    return this.apiService
+      .post('/sign-up', details)
+      .pipe(
+        tap((res: IResponse<IUserCredentials>) => (this.setSession = res.data))
+      );
+  }
+  signIn(details: IUserLogin) {
+    return this.apiService
+      .post('/sign-in', details)
+      .pipe(
+        tap((res: IResponse<IUserCredentials>) => (this.setSession = res.data))
+      );
+  }
   getToken(): string {
     return localStorage.getItem('viby_token');
   }
@@ -69,12 +84,12 @@ export class AuthService {
     localStorage.removeItem('viby_user');
     localStorage.removeItem('viby_token_expiration');
   }
-  isLoggedIn(): boolean {
+  get isLoggedIn(): boolean {
     return (
       moment().isBefore(this.getTokenExpiration()) && this.currentUser !== null
     );
   }
-  isLoggedOut() {
-    return !this.isLoggedIn();
+  get isLoggedOut() {
+    return !this.isLoggedIn;
   }
 }

@@ -1,0 +1,14 @@
+#container {
+  position: relative;
+  width: 100%;
+}
+ion-button.sign-up-btn {
+  color: var(--accent-color);
+}
+ion-button.sign-in-btn {
+  background-color: var(--accent-color);
+  color: #fff;
+  border-radius: 20px;
+  --padding-start: 0.875rem;
+  --padding-end: 0.875rem;
+}

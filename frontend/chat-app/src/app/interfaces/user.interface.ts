@@ -21,7 +21,11 @@ export type INewUser = Pick<
   IUser,
   'email' | 'password' | 'fullname' | 'username'
 >;
+export interface IUserLogin {
+  username_or_email: string;
 
+  password: string;
+}
 export interface IUserCredentials {
   token: string;
   expires_at: number;

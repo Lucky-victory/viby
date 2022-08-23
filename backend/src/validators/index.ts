@@ -25,7 +25,7 @@ export default class Validators {
           /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/
         )
         .withMessage(
-          "Must contain at least one number,one uppercase , one lowercase and one special character"
+          "Must contain at least one number,one uppercase ,one lowercase and one special character"
         ),
     ];
   }

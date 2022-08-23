@@ -5,29 +5,52 @@
 </ion-header>
 
 <ion-content>
-<div class="sign-in-form-container">
-  <form  class="sign-in-form" >
-    <ion-item>
-      <ion-label position="floating">Email or Username:</ion-label>
-      <ion-input required ></ion-input>
-    </ion-item>
- <ion-item>
-      <ion-label position="floating">Password:</ion-label>
-      
-      <ion-input #passwordInput type="password" required></ion-input>
-      <ion-buttons slot="end">
-        <ion-button (click)="toggleInputType(passwordInput.type)">
-          <ion-icon name="{{passwordInputType==='text'? 'eye-off-outline':'eye-outline'}}" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-      <div class="input-wrapper">
+  <div class="sign-in-form-container">
+    <p class="error">{{errorMessage}}</p>
+    <form
+      class="sign-in-form"
+      [formGroup]="signInForm"
+      (submit)="signIn($event)"
+    >
+      <ion-item>
+        <ion-label position="floating">Email or Username:</ion-label>
+        <ion-input
+          required=""
+          type="text"
+          formControlName="usernameOrEmail"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Password:</ion-label>
+
+        <ion-input
+          #passwordInput
+          type="password"
+          required=""
+          formControlName="password"
+        ></ion-input>
+        <ion-buttons slot="end">
+          <ion-button (click)="toggleInputType(passwordInput.type)">
+            <ion-icon
+              name="{{passwordInputType==='text'? 'eye-off-outline':'eye-outline'}}"
+              slot="icon-only"
+            ></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <div class="input-wrapper"></div>
+      </ion-item>
+      <div class="form-info">
+        <p>Don't have an account yet? <a routerLink="/sign-up">Sign up</a></p>
       </div>
-    </ion-item>
-    <div class="form-info">
-      <p>Don't have an account yet? <a href="">Sign up</a></p>
-    </div>
-    <ion-button class="submit-btn" type="submit" size="large" expand="block">Sign In</ion-button>
-  
-  </form>
-</div>
+      <ion-button
+        [disabled]="!signInForm.valid||isSending"
+        class="submit-btn"
+        type="submit"
+        size="large"
+        expand="block"
+        ><ion-spinner name="bubbles" *ngIf="isSending"></ion-spinner>
+        {{isSending?'Signing in':'Sign In'}}</ion-button
+      >
+    </form>
+  </div>
 </ion-content>

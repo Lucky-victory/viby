@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Blank </ion-title>
+    <ion-buttons slot="end">
+      <ng-container *ngIf="isLoggedIn">
+        <ion-button (click)="logout()"> Log out </ion-button>
+      </ng-container>
+      <ng-container *ngIf="!isLoggedIn">
+        <ion-button routerLink="/sign-up" class="sign-up-btn">
+          Sign Up
+        </ion-button>
+        <ion-button routerLink="/sign-in" class="sign-in-btn">
+          Sign In
+        </ion-button>
+      </ng-container>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Viby</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <div class="banner">
+      <div class="banner-image-wrapper">
+        <img
+          src="https://images.pexels.com/photos/4353618/pexels-photo-4353618.jpeg?auto=compress&cs=tinysrgb&w=600"
+          alt=""
+          class="banner-image"
+        />
+      </div>
+    </div>
+  </div>
+</ion-content>

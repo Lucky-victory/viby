@@ -101,7 +101,7 @@ export default class UsersController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't create user",
+        message: "An error occurred, couldn't create user",
       });
     }
   }
@@ -160,7 +160,7 @@ export default class UsersController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't login",
+        message: "An error occurred, couldn't login",
       });
     }
   }
@@ -192,8 +192,7 @@ export default class UsersController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message:
-          error?.message || "An error occurred, couldn't retrieve user profile",
+        message: "An error occurred, couldn't retrieve user profile",
       });
     }
   }

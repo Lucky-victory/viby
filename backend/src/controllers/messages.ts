@@ -100,8 +100,7 @@ export default class MessagesController {
         throw {
           data: null,
           error,
-          message:
-            error?.message || "An error occurred, couldn't retrieve messages",
+          message: "An error occurred, couldn't retrieve messages",
         };
     }
   }

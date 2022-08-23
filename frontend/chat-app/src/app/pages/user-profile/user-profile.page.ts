@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile',
@@ -6,10 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-profile.page.scss'],
 })
 export class UserProfilePage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private route: ActivatedRoute) {
+    const ch = this.route.snapshot.paramMap.get('channel_id');
+    console.log(ch, 'fyguhijokpcgvhjk');
   }
 
+  ngOnInit() {}
 }

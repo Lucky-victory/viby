@@ -59,7 +59,7 @@ export default class RoomsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't create room",
+        message: "An error occurred, couldn't create room",
       });
     }
   }
@@ -101,7 +101,7 @@ export default class RoomsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't update room",
+        message: "An error occurred, couldn't update room",
       });
     }
   }
@@ -137,7 +137,7 @@ export default class RoomsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't delete room",
+        message: "An error occurred, couldn't delete room",
       });
     }
   }
@@ -177,8 +177,7 @@ export default class RoomsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message:
-          error?.message || "An error occurred, couldn't add member to room",
+        message: "An error occurred, couldn't add member to room",
       });
     }
   }
@@ -218,8 +217,7 @@ export default class RoomsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message:
-          error?.message || "An error occurred, couldn't add member to room",
+        message: "An error occurred, couldn't add member to room",
       });
     }
   }
@@ -263,7 +261,7 @@ export default class RoomsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't fetch members",
+        message: "An error occurred, couldn't fetch members",
       });
     }
   }

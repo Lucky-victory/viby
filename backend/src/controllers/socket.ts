@@ -25,6 +25,7 @@ export default class SocketController {
       channelsManager.to(socket.id).emit("join_room", result?.data, user);
     } catch (error) {
       console.log(error);
+
       //
     }
   }

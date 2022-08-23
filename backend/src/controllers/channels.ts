@@ -70,7 +70,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't create channel",
+        message: "An error occurred, couldn't create channel",
       });
     }
   }
@@ -113,7 +113,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't update channel",
+        message: "An error occurred, couldn't update channel",
       });
     }
   }
@@ -145,7 +145,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't delete channel",
+        message: "An error occurred, couldn't delete channel",
       });
     }
   }
@@ -202,8 +202,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message:
-          error?.message || "An error occurred, couldn't add member to channel",
+        message: "An error occurred, couldn't add member to channel",
       });
     }
   }
@@ -294,7 +293,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't fetch members",
+        message: "An error occurred, couldn't fetch members",
       });
     }
   }
@@ -330,7 +329,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't fetch rooms",
+        message: "An error occurred, couldn't fetch rooms",
       });
     }
   }
@@ -369,7 +368,7 @@ export default class ChannelsController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       res.status(500).json({
-        message: error?.message || "An error occurred, couldn't fetch channels",
+        message: "An error occurred, couldn't fetch channels",
       });
     }
   }
@@ -412,7 +411,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't fetch channels",
+        message: "An error occurred, couldn't fetch channels",
       });
     }
   }
@@ -443,7 +442,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occurred, couldn't fetch channel",
+        message: "An error occurred, couldn't fetch channel",
       });
     }
   }
@@ -479,7 +478,7 @@ export default class ChannelsController {
     } catch (error: any) {
       res.status(500).json({
         error,
-        message: error?.message || "An error occured couldn't search channels",
+        message: "An error occured couldn't search channels",
       });
     }
   }
