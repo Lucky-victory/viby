@@ -3,13 +3,19 @@
     <ion-title class="app-name"> Viby</ion-title>
     <ion-buttons class="btns-container" slot="end">
       <ng-container *ngIf="isLoggedIn">
-        <ion-button (click)="logout()"> Log out </ion-button>
+        <ion-button class="" (click)="logout()"
+          ><ion-icon name="log-out-outline" slot="start"></ion-icon>
+          <ion-text class="ion-hide-sm-down">log out</ion-text>
+        </ion-button>
       </ng-container>
       <ng-container *ngIf="!isLoggedIn">
         <ion-button routerLink="/sign-up" class="sign-up-btn btn">
           Sign Up
         </ion-button>
-        <ion-button routerLink="/sign-in" class="sign-in-btn btn-round btn-primary">
+        <ion-button
+          routerLink="/sign-in"
+          class="sign-in-btn btn-round btn-primary"
+        >
           Sign In
         </ion-button>
       </ng-container>
@@ -18,7 +24,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
   <div id="container">
     <div class="banner">
       <div class="banner-image-wrapper">
@@ -30,18 +35,19 @@
         />
       </div>
       <div class="banner-text-wrapper">
-        <h1 class="banner-text-heading">connect, grow and inspire with <span class="app-name">viby</span>
+        <h1 class="banner-text-heading">
+          connect, grow and inspire with <span class="app-name">viby</span>
         </h1>
-          <ion-buttons>
+        <ion-buttons>
+          <ion-button
+            class="btn btn-round btn-primary btn-large"
+            routerLink="/sign-up"
+          >
+            <ion-icon class="btn-icon" name="arrow-forward-circle"></ion-icon>
 
-            <ion-button class="btn btn-round btn-primary btn-large" routerLink="/sign-up">
-              <ion-icon class="btn-icon" name="arrow-forward-circle"></ion-icon>
-            
-
-                Get started
-              
-        </ion-button>
-            </ion-buttons> 
+            Get started
+          </ion-button>
+        </ion-buttons>
       </div>
     </div>
   </div>

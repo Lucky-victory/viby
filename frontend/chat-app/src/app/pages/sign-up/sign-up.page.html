@@ -1,11 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Create an Account</ion-title>
+    <ion-title class="ion-hide">Create an Account</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="sign-up-form-container">
+  <ion-card class="sign-up-form-container">
+    <ion-card-title>Create an Account</ion-card-title>
     <p class="error">{{errorMessage}}</p>
     <form
       class="sign-up-form"
@@ -79,5 +80,5 @@
         {{isSending?'Signing up':'Sign Up'}}</ion-button
       >
     </form>
-  </div>
+  </ion-card>
 </ion-content>

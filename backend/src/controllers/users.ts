@@ -196,6 +196,7 @@ export default class UsersController {
       });
     }
   }
+
   static async userExist(emailOrUsername: string) {
     return await (await UsersRepo)
       .search()

@@ -1,56 +1,65 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Sign In</ion-title>
+    <ion-title class="ion-hide">Sign In</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="sign-in-form-container">
-    <p class="error">{{errorMessage}}</p>
-    <form
-      class="sign-in-form"
-      [formGroup]="signInForm"
-      (submit)="signIn($event)"
-    >
-      <ion-item>
-        <ion-label position="floating">Email or Username:</ion-label>
-        <ion-input
-          required=""
-          type="text"
-          formControlName="usernameOrEmail"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Password:</ion-label>
+  <ion-grid>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col>
+        <ion-card class="sign-in-form-container">
+          <ion-card-title>Welcome back,</ion-card-title>
+          <p class="error">{{errorMessage}}</p>
+          <form
+            class="sign-in-form"
+            [formGroup]="signInForm"
+            (submit)="signIn($event)"
+          >
+            <ion-item>
+              <ion-label position="floating">Email or Username:</ion-label>
+              <ion-input
+                required=""
+                type="text"
+                formControlName="usernameOrEmail"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password:</ion-label>
 
-        <ion-input
-          #passwordInput
-          type="password"
-          required=""
-          formControlName="password"
-        ></ion-input>
-        <ion-buttons slot="end">
-          <ion-button (click)="toggleInputType(passwordInput.type)">
-            <ion-icon
-              name="{{passwordInputType==='text'? 'eye-off-outline':'eye-outline'}}"
-              slot="icon-only"
-            ></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <div class="input-wrapper"></div>
-      </ion-item>
-      <div class="form-info">
-        <p>Don't have an account yet? <a routerLink="/sign-up">Sign up</a></p>
-      </div>
-      <ion-button
-        [disabled]="!signInForm.valid||isSending"
-        class="submit-btn btn-round btn-primary btn-large"
-        type="submit"
-        size="large"
-        expand="block"
-        ><ion-spinner name="bubbles" *ngIf="isSending"></ion-spinner>
-        {{isSending?'Signing in':'Sign In'}}</ion-button
-      >
-    </form>
-  </div>
+              <ion-input
+                #passwordInput
+                type="password"
+                required=""
+                formControlName="password"
+              ></ion-input>
+              <ion-buttons slot="end">
+                <ion-button (click)="toggleInputType(passwordInput.type)">
+                  <ion-icon
+                    name="{{passwordInputType==='text'? 'eye-off-outline':'eye-outline'}}"
+                    slot="icon-only"
+                  ></ion-icon>
+                </ion-button>
+              </ion-buttons>
+              <div class="input-wrapper"></div>
+            </ion-item>
+            <div class="form-info">
+              <p>
+                Don't have an account yet? <a routerLink="/sign-up">Sign up</a>
+              </p>
+            </div>
+            <ion-button
+              [disabled]="!signInForm.valid||isSending"
+              class="submit-btn btn-round btn-primary btn-large"
+              type="submit"
+              size="large"
+              expand="block"
+              ><ion-spinner name="bubbles" *ngIf="isSending"></ion-spinner>
+              {{isSending?'Signing in':'Sign In'}}</ion-button
+            >
+          </form>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

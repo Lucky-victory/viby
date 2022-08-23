@@ -66,7 +66,7 @@ ion-buttons{
   }
 }
 ion-button{
-  &.sign-up-btn{
+  &.sign-up-btn,&.logout-btn{
 
     color: var(--accent-color);
   }

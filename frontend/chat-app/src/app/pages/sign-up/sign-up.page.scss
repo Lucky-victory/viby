@@ -1,6 +1,8 @@
 .sign-up-form-container {
   padding: 15px;
   max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 ion-button.submit-btn {
   margin-top: 1rem;
@@ -10,5 +12,5 @@ ion-button.submit-btn {
 }
 .sign-up-form-container a {
   text-decoration: none;
-  color:var(--accent-color);
+  color: var(--accent-color);
 }
