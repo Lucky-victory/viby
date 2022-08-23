@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title slot="start">Explore</ion-title>
+    <ion-title >Explore</ion-title>
     <ion-searchbar></ion-searchbar>
   </ion-toolbar>
 </ion-header>
@@ -9,23 +9,17 @@
   <ion-grid>
 <ion-row >
 
-  <ion-card class="card">
+  <ion-card class="card" *ngFor="let channel of channels">
     <div class="card-image-wrapper">
-      <ion-img class="card-image" src="https://images.pexels.com/photos/4050413/pexels-photo-4050413.jpeg?auto=compress&cs=tinysrgb&w=600"></ion-img>
+      <ion-img class="card-image" [src]="channel?.channel_cover||'https://images.pexels.com/photos/4038866/pexels-photo-4038866.jpeg?auto=compress&cs=tinysrgb&w=600'"></ion-img>
     </div>
     <div class="wrapper">
 
-      <ion-card-title class="card-title ion-text-capitalize">card 1</ion-card-title>
+      <ion-card-title class="card-title ion-text-capitalize">{{channel?.title || 'no title'}}</ion-card-title>
       
-      <ion-button expand="block"  class="btn btn-primary">Join</ion-button>
+      <ion-button expand="block"  class="btn btn-primary" (click)="joinChannel(channel)">Join</ion-button>
       
     </div>
-  </ion-card>
-  <ion-card class="card">
-    <ion-card-title>card 2</ion-card-title>
-  </ion-card>
-  <ion-card class="card">
-    <ion-card-title>card 3</ion-card-title>
   </ion-card>
 </ion-row>
   </ion-grid>

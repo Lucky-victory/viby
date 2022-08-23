@@ -2,8 +2,10 @@ $image-bd-radius:10px 10px 15px 15px;
 $image-height:200px;
 $card-width:300px;
 ion-card{
-    
+
     &.card{
+        margin-left: auto;
+        margin-right: auto;
         width: 100%;
         max-width:$card-width;
         min-height: 200px;
@@ -12,7 +14,7 @@ ion-card{
         }
         .card-title{
             margin-bottom: 0.625rem;
-            
+
         }
         .card-image-wrapper{
             height: $image-height;

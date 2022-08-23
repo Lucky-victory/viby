@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:3300',
+  apiBaseUrl: 'https://3300-luckyvictory-chatapp-1a3pot4nnej.ws-eu62.gitpod.io/',
   socketUrl: 'http://localhost:3300/socket',
 };
 
