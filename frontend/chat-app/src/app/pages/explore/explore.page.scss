@@ -1,0 +1,35 @@
+$image-bd-radius:10px 10px 15px 15px;
+$image-height:200px;
+$card-width:300px;
+ion-card{
+    
+    &.card{
+        width: 100%;
+        max-width:$card-width;
+        min-height: 200px;
+        .wrapper{
+            padding:1rem;
+        }
+        .card-title{
+            margin-bottom: 0.625rem;
+            
+        }
+        .card-image-wrapper{
+            height: $image-height;
+    
+            border-radius: $image-bd-radius;
+            
+        ion-img{
+            &.card-image{
+                border-radius:$image-bd-radius ;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                &::part(image){
+border-radius: inherit;
+                }
+            }
+        }
+        }
+    }
+}

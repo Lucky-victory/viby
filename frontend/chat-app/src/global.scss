@@ -25,7 +25,11 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 @import "~@ctrl/ngx-emoji-mart/picker";
+@import 'https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500&family=Pacifico&display=swap';
 
+*{
+  font-family: 'Josefin Sans', sans-serif;
+}
 :root {
   --primary-bg: #fefefe;
   --primary-bg-light: #fefefeaa;
@@ -54,4 +58,58 @@
 }
 .link-in-chat {
   text-decoration: none;
+}
+ion-buttons{
+  &.btns-container{
+    
+  padding-right:1rem;
+  }
+}
+ion-button{
+  &.sign-up-btn{
+
+    color: var(--accent-color);
+  }
+  &.btn{
+    border-radius:5px;
+    &::part(native){
+
+    border-radius:5px;
+    }
+  }
+  
+  &.btn-round{
+
+    border-radius: 30px;
+    &::part(native){
+    border-radius: 30px;
+      
+    }
+  }
+  &.btn-primary{
+--padding-start: 0.875rem;
+  --padding-end: 0.875rem;
+  background-color: var(--accent-color);
+  color: #fff;
+  &::part(native){
+    --padding-start: 0.875rem;
+  --padding-end: 0.875rem;
+    background-color: var(--accent-color);
+  color: #fff;
+  }
+  }
+  &.btn-large{
+--padding-top:0.75rem;
+--padding-bottom:0.75rem;
+height: auto;
+font-size: 20px;
+  &::part(native){
+ --padding-top:0.875rem;
+--padding-bottom:0.875rem;
+height: auto;
+font-size: 20px; 
+
+}
+}
+
 }
