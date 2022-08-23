@@ -42,10 +42,6 @@ const routes: Routes = [
     path: 'explore',
     loadChildren: () => import('./pages/explore/explore.module').then( m => m.ExplorePageModule)
   },
-  {
-    path: 'chat-room',
-    loadChildren: () => import('./pages/chat-room/chat-room.module').then( m => m.ChatRoomPageModule)
-  },
 
 
   {

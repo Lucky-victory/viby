@@ -1,5 +1,5 @@
 import { IMessageToDB } from './../../interfaces/message.interface';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 // import { AudioPlayer } from 'src/app/services/audio/audio.service';
 // import { AudioRecorderService } from 'src/app/services/recorder/recorder.service';
@@ -13,6 +13,7 @@ import {
   MessageInputStatus,
   IMessageType,
 } from 'src/app/interfaces/message.interface';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'chat-message-input',
@@ -30,15 +31,19 @@ export class ChatMessageInputComponent implements OnInit {
   private textMessageInputStatus: MessageInputStatus = 'create';
   // private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
   @Output() onMessageSend = new EventEmitter<INewMessage>();
+  @ViewChild('textAreaContainer') textAreaContainer: ElementRef<HTMLDivElement>;
   private channelId: string;
   typingUsers: IUserToView[];
   currentUser: IUserToView;
   showEmoji: boolean = false;
+  private isMobile: boolean;
   constructor(
     private activeRoute: ActivatedRoute,
     private webSocketService: WebSocketService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,private platform:Platform
+  ) {
+    this.isMobile = platform.is('mobile');
+  }
 
   ngOnInit() {
     this.activeRoute.queryParamMap.subscribe((params) => {
@@ -54,7 +59,7 @@ export class ChatMessageInputComponent implements OnInit {
     this.currentUser = this.authService?.currentUser;
   }
 
-  handleKeyUp(event: KeyboardEvent) {
+  handleKeyDown(event: KeyboardEvent) {
     this.handleEnterKey(event);
     this.checkInput();
     this.handleTyping();
@@ -111,11 +116,15 @@ export class ChatMessageInputComponent implements OnInit {
     if (event.shiftKey && event.key == 'Enter') {
       return;
     }
-    event.preventDefault();
-    if (event.key === 'Enter') {
+
+    
+    if (event.key === 'Enter' && !this.isMobile) {
+      event.preventDefault();
       this.sendMessage();
+      
     }
   }
+  
   addEmoji(event) {
     this.textMessage += event?.emoji?.native;
     this.checkInput();

@@ -1,6 +1,5 @@
 <div
-  class="single-chat {{ isCurrentUser ? 'current-user' : '' }}  ion-activatable"
->
+  class="single-chat {{ isCurrentUser ? 'current-user' : '' }}  ion-activatable" >
   <ion-ripple-effect *ngIf="isMobile"> </ion-ripple-effect>
   <div class="single-chat-user">
     <ng-container *ngIf="!isCurrentUser">
@@ -21,8 +20,16 @@
       }}</time>
     </div>
   </div>
-  <div class="single-chat-text-wrapper">
-    <span class="single-chat-text" [innerHTML]="chat?.content | linkify">
-    </span>
+  <div class="wrapper">
+
+    <div class="single-chat-text-wrapper">
+      <span class="single-chat-text" [innerHTML]="chat?.content | linkify">
+      </span>
+      <ion-buttons class="ion-hide-lg-up">
+        <ion-button (click)="showActions()" >
+          <ion-icon slot="icon-only" name="ellipsis"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-<div class="message-textarea-container">
+<div class="message-textarea-container" #textAreaContainer>
   <!-- <div class="typing-users">
           <span *ngFor="let typingUser of typingUsers">
             {{typingUser?.fullname}}
@@ -15,7 +15,7 @@
   <div class="message-textarea-wrapper">
     <textarea
       [(ngModel)]="textMessage"
-      (keyup)="handleKeyUp($event)"
+      (keydown)="handleKeyDown($event)"
       placeholder="Type a message"
       name="message-textarea"
       class="message-textarea"
@@ -49,7 +49,7 @@
           </ion-button>
         </div> -->
   <emoji-mart
-    *ngIf="showEmoji"
+    [ngClass]="{show:showEmoji}"
     class="emoji-box"
     (emojiClick)="addEmoji($event)"
   ></emoji-mart>

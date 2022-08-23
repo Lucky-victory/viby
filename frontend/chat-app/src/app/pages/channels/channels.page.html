@@ -1,4 +1,15 @@
 <ion-split-pane when="xl" contentId="sec">
+
+  <ion-header  class="main-view-header">
+      <ion-toolbar>
+        <ion-menu-button menu="first" slot="start"> </ion-menu-button>
+        <ion-title># no title</ion-title>
+
+        <ion-menu-button menu="second" slot="end">
+          <ion-icon name="people"></ion-icon>
+        </ion-menu-button>
+      </ion-toolbar>
+    </ion-header>
   <channel-list></channel-list>
 
   <ion-menu
@@ -16,24 +27,7 @@
       <channel-active-users-list></channel-active-users-list>
     </ion-content>
   </ion-menu>
-  <ion-content [fullscreen]="true" id="sec">
-    <ion-header slot="fixed" class="main-view-header">
-      <ion-toolbar>
-        <ion-menu-button menu="first" slot="start"> </ion-menu-button>
-        <ion-title># {{roomTitle}}</ion-title>
 
-        <ion-menu-button menu="second" slot="end">
-          <ion-icon name="people"></ion-icon>
-        </ion-menu-button>
-      </ion-toolbar>
-    </ion-header>
 
-    <chat-list></chat-list>
-
-    <chat-message-input
-      (onMessageSend)="acceptNewMessage($event)"
-    ></chat-message-input>
-  </ion-content>
-
-  <!-- <ion-router-outlet id="sec" name="sec"></ion-router-outlet> -->
+ <ion-router-outlet id="sec" ></ion-router-outlet> 
 </ion-split-pane>

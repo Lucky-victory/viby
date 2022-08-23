@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-chat-room',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatRoomPage implements OnInit {
 
-  constructor() { }
+  constructor(private utilsService:UtilsService) { }
 
   ngOnInit() {
   }
-
+  async showAction() {
+      await this.utilsService.showActionSheet()
+    
+  }
 }

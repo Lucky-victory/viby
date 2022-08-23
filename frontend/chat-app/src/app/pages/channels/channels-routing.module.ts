@@ -15,7 +15,8 @@ const routes: Routes = [
   {
     path: ':channel_id',
 
-    component: ChannelsPage,
+    
+    loadChildren: () => import('../chat-room/chat-room.module').then( m => m.ChatRoomPageModule)
   },
 ];
 

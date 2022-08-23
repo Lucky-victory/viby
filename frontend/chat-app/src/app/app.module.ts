@@ -18,6 +18,7 @@ import { UtilsService } from './services/utils/utils.service';
 import { WebSocketService } from './services/web-socket/web-socket.service';
 import { SeoService } from './services/seo/seo.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LongPressDirective } from './directives/long-press/long-press.directive';
 
 const config: SocketIoConfig = {
   url: environment.socketUrl, // socket server url;
@@ -27,7 +28,7 @@ const config: SocketIoConfig = {
   },
 };
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LongPressDirective],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

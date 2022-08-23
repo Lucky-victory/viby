@@ -46,11 +46,9 @@ import { LinkifyModule } from 'src/app/pipes/linkify/linkify.module';
     ChannelActiveUsersItemComponent,
     RoomListComponent,
     RoomItemComponent,
-    ChatListComponent,
-    ChatSingleChatAudioComponent,
-    ChatSingleChatTextComponent,
+  
 
-    ChatMessageInputComponent,
+    
   ],
 })
 export class ChannelsPageModule {}
