@@ -1,17 +1,15 @@
 <ion-split-pane when="xl" contentId="sec">
-
-  <ion-header  class="main-view-header">
-      <ion-toolbar>
-        <ion-menu-button menu="first" slot="start"> </ion-menu-button>
-        <ion-title># no title</ion-title>
-
-        <ion-menu-button menu="second" slot="end">
-          <ion-icon name="people"></ion-icon>
-        </ion-menu-button>
-      </ion-toolbar>
-    </ion-header>
-  <channel-list></channel-list>
-
+  <ion-menu
+    class="channel-main-menu"
+    contentId="sec"
+    type="overlay"
+    side="start"
+    menuId="first"
+  >
+    <ion-content class="channel-main-menu-content">
+      <channel-list></channel-list>
+    </ion-content>
+  </ion-menu>
   <ion-menu
     class="channel-users-menu"
     side="end"
@@ -28,6 +26,5 @@
     </ion-content>
   </ion-menu>
 
-
- <ion-router-outlet id="sec" ></ion-router-outlet> 
+  <ion-router-outlet id="sec"></ion-router-outlet>
 </ion-split-pane>

@@ -1,6 +1,9 @@
 <div
-  class="single-chat {{ isCurrentUser ? 'current-user' : '' }}  ion-activatable" >
-  <ion-ripple-effect *ngIf="isMobile"> </ion-ripple-effect>
+  class="single-chat {{ isCurrentUser ? 'current-user' : '' }}  ion-activatable"
+  longPress
+  (pressed)="mobilePress($event, chat)"
+>
+  <ion-ripple-effect class="ion-hide-md-up"> </ion-ripple-effect>
   <div class="single-chat-user">
     <ng-container *ngIf="!isCurrentUser">
       <div class="single-chat-user-avatar-wrapper">
@@ -21,13 +24,16 @@
     </div>
   </div>
   <div class="wrapper">
-
     <div class="single-chat-text-wrapper">
       <span class="single-chat-text" [innerHTML]="chat?.content | linkify">
       </span>
-      <ion-buttons class="ion-hide-lg-up">
-        <ion-button (click)="showActions()" >
-          <ion-icon slot="icon-only" name="ellipsis"></ion-icon>
+      <ion-buttons
+        class="ion-hide-md-down action-btn {{
+          isCurrentUser ? 'current-user' : ''
+        }}"
+      >
+        <ion-button (click)="showActions($event, chat)">
+          <ion-icon name="ellipsis-vertical-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </div>

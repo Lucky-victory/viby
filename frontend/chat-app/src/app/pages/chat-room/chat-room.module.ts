@@ -13,17 +13,31 @@ import { ChatListComponent } from 'src/app/components/chat-list/chat-list.compon
 import { ChatSingleChatTextComponent } from 'src/app/components/chat-single-chat-text/chat-single-chat-text.component';
 import { ChatSingleChatAudioComponent } from 'src/app/components/chat-single-chat-audio/chat-single-chat-audio.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { DateFormatterModule } from 'src/app/pipes/date-formatter/date-formatter.module';
+import { LinkifyModule } from 'src/app/pipes/linkify/linkify.module';
+import { LongPressModule } from 'src/app/directives/long-press/long-press.module';
 import { PopoverActionsComponent } from 'src/app/components/popover-actions/popover-actions.component';
+import { DomMutationObserverModule } from 'src/app/directives/dom-mutation-observer/dom-mutation-observer.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ChatRoomPageRoutingModule,PickerModule
+    ChatRoomPageRoutingModule,
+    PickerModule,
+    DateFormatterModule,
+    LinkifyModule,
+    LongPressModule,
+    DomMutationObserverModule,
   ],
-  declarations: [ChatRoomPage,ChatMessageInputComponent,ChatListComponent,    ChatSingleChatAudioComponent,
-    ChatSingleChatTextComponent,PopoverActionsComponent
-]
+  declarations: [
+    ChatRoomPage,
+    ChatMessageInputComponent,
+    ChatListComponent,
+    ChatSingleChatAudioComponent,
+    ChatSingleChatTextComponent,
+    PopoverActionsComponent,
+  ],
 })
 export class ChatRoomPageModule {}

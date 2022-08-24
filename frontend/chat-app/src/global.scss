@@ -25,10 +25,10 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 @import "~@ctrl/ngx-emoji-mart/picker";
-@import 'https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500&family=Pacifico&display=swap';
+@import "https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500&family=Pacifico&display=swap";
 
-*{
-  font-family: 'Josefin Sans', sans-serif;
+* {
+  font-family: "Josefin Sans", sans-serif;
 }
 :root {
   --primary-bg: #fefefe;
@@ -38,9 +38,9 @@
   --secondary-bg: #dee0e0;
   --secondary-color: #b3b5b8;
   --active-room-bg: #6f636f;
-  --chat-area-bg: #e6fffc;
-  --chat-bg: #fefefe;
-  --current-user-chat-bg: var(--accent-colo, #202423);
+  --chat-area-bg: #e9ffff;
+  --chat-bg: #fff;
+  --current-user-chat-bg: var(--accent-colo, #293774);
   --message-textarea-height: 70px;
 }
 @media (prefers-color-scheme: dark) {
@@ -59,57 +59,51 @@
 .link-in-chat {
   text-decoration: none;
 }
-ion-buttons{
-  &.btns-container{
-    
-  padding-right:1rem;
+ion-buttons {
+  &.btns-container {
+    padding-right: 1rem;
   }
 }
-ion-button{
-  &.sign-up-btn,&.logout-btn{
-
+ion-button {
+  &.sign-up-btn,
+  &.logout-btn {
     color: var(--accent-color);
   }
-  &.btn{
-    border-radius:5px;
-    &::part(native){
-
-    border-radius:5px;
+  &.btn {
+    border-radius: 5px;
+    &::part(native) {
+      border-radius: 5px;
     }
   }
-  
-  &.btn-round{
 
+  &.btn-round {
     border-radius: 30px;
-    &::part(native){
-    border-radius: 30px;
-      
+    &::part(native) {
+      border-radius: 30px;
     }
   }
-  &.btn-primary{
---padding-start: 0.875rem;
-  --padding-end: 0.875rem;
-  background-color: var(--accent-color);
-  color: #fff;
-  &::part(native){
+  &.btn-primary {
     --padding-start: 0.875rem;
-  --padding-end: 0.875rem;
+    --padding-end: 0.875rem;
     background-color: var(--accent-color);
-  color: #fff;
+    color: #fff;
+    &::part(native) {
+      --padding-start: 0.875rem;
+      --padding-end: 0.875rem;
+      background-color: var(--accent-color);
+      color: #fff;
+    }
   }
+  &.btn-large {
+    --padding-top: 0.75rem;
+    --padding-bottom: 0.75rem;
+    height: auto;
+    font-size: 20px;
+    &::part(native) {
+      --padding-top: 0.875rem;
+      --padding-bottom: 0.875rem;
+      height: auto;
+      font-size: 20px;
+    }
   }
-  &.btn-large{
---padding-top:0.75rem;
---padding-bottom:0.75rem;
-height: auto;
-font-size: 20px;
-  &::part(native){
- --padding-top:0.875rem;
---padding-bottom:0.875rem;
-height: auto;
-font-size: 20px; 
-
-}
-}
-
 }

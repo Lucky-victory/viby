@@ -1,14 +1,14 @@
-<ion-menu-toggle autoHide="false">
-  <div
-    class="channel-item-container ion-activatable"
-    [routerLink]="['/channels', channel?.channel_id]"
-    routerDirection="root"
-    routerLinkActive="active"
-  >
-    <ion-ripple-effect></ion-ripple-effect>
-    <div class="channel-item-image-wrapper">
-      <ion-img class="channel-item-image" src="{{ channel?.channel_picture }}">
-      </ion-img>
-    </div>
+<!-- <ion-menu-toggle auto-hide="false"> -->
+<div
+  class="channel-item-container ion-activatable"
+  [routerLink]="['/channels', channel?.channel_id]"
+  routerDirection="root"
+  routerLinkActive="active"
+>
+  <ion-ripple-effect></ion-ripple-effect>
+  <div class="channel-item-image-wrapper">
+    <ion-img class="channel-item-image" src="{{ channel?.channel_picture }}">
+    </ion-img>
   </div>
-</ion-menu-toggle>
+</div>
+<!-- </ion-menu-toggle> -->

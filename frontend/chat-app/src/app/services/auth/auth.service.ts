@@ -65,10 +65,10 @@ export class AuthService {
     );
   }
   getTokenExpiration() {
-    const expiration = JSON.parse(
-      localStorage.getItem('viby_token_expiration')
-    ) as number;
-    return moment(expiration);
+    const expiration = localStorage.getItem('viby_token_expiration');
+
+    const expiresAt = JSON.parse(expiration);
+    return moment(expiresAt);
   }
   setCurrentUser(user: IUserToView) {
     localStorage.setItem('viby_user', JSON.stringify(user));
@@ -85,9 +85,7 @@ export class AuthService {
     localStorage.removeItem('viby_token_expiration');
   }
   get isLoggedIn(): boolean {
-    return (
-      moment().isBefore(this.getTokenExpiration()) && this.currentUser !== null
-    );
+    return moment().isBefore(this.getTokenExpiration());
   }
   get isLoggedOut() {
     return !this.isLoggedIn;

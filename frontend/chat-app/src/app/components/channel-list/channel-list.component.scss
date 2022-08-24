@@ -6,6 +6,9 @@
   height: 100%;
   flex-shrink: 0;
 }
+.wrapper {
+  display: flex;
+}
 ion-menu.channel-users-menu::part(container) {
   border-radius: 10px 0 0 10px;
   margin-left: 15px;

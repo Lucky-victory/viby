@@ -33,7 +33,7 @@ import { LinkifyModule } from 'src/app/pipes/linkify/linkify.module';
     IonicModule,
     ChannelsPageRoutingModule,
     DomMutationObserverModule,
-    DateFormatterModule,
+
     LinkifyModule,
     PickerModule,
   ],
@@ -46,9 +46,6 @@ import { LinkifyModule } from 'src/app/pipes/linkify/linkify.module';
     ChannelActiveUsersItemComponent,
     RoomListComponent,
     RoomItemComponent,
-  
-
-    
   ],
 })
 export class ChannelsPageModule {}

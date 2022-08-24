@@ -11,12 +11,16 @@ const routes: Routes = [
 
     component: ChannelsPage,
     // canActivate: [ChannelGuard],
-  },
-  {
-    path: ':channel_id',
+    children: [
+      {
+        path: ':channel_id',
 
-    
-    loadChildren: () => import('../chat-room/chat-room.module').then( m => m.ChatRoomPageModule)
+        loadChildren: () =>
+          import('../chat-room/chat-room.module').then(
+            (m) => m.ChatRoomPageModule
+          ),
+      },
+    ],
   },
 ];
 

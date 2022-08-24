@@ -5,14 +5,12 @@ import {
   OnInit,
   ElementRef,
   AfterViewInit,
+  ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime, switchMap, tap } from 'rxjs/operators';
-import {
-  IMessageToView,
-  INewMessage,
-} from 'src/app/interfaces/message.interface';
+import { IMessageToView } from 'src/app/interfaces/message.interface';
 import { IUser } from 'src/app/interfaces/user.interface';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -27,7 +25,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
   messages: IMessageToView[] = [];
   private newMessage: IMessageToView;
   @Input() currentUser: IUser;
-
+  @ViewChild('chatListContainer') chatListContainer: ElementRef;
   private roomId: string;
   private channelId: Observable<string>;
   private newMessageSub: Subscription;
@@ -39,10 +37,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private activeRoute: ActivatedRoute,
     private apiService: ApiService,
-    private webSocketService: WebSocketService,
-    private authService: AuthService,
-    private router: Router,
-    private elementRef: ElementRef
+    private webSocketService: WebSocketService
   ) {}
 
   ngOnInit() {
@@ -72,9 +67,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
   ngAfterViewInit(): void {
-    const elem = this.elementRef.nativeElement.querySelector(
-      '.chat-list-container'
-    );
+    const elem = this.chatListContainer.nativeElement;
+    console.log(elem);
 
     this.scrollEvent$ = fromEvent(elem, 'scroll');
     this.scrollEventSub = this.scrollEvent$
@@ -99,9 +93,16 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Autoscrolls (only if user is scrolled down), the chatListContainer to bottom when a new message is added to the DOM
    */
-  scrollToBottom(elem: HTMLDivElement) {
+  scrollToBottom(event: Event) {
+    const elem = event as unknown as HTMLDivElement;
     if (this.isScrolledDown) {
       elem.scrollTop = elem.scrollHeight;
     }
+  }
+  editFunc(chat) {
+    console.log(chat, 'from edit');
+  }
+  deleteFunc(chat) {
+    console.log(chat, 'from delete');
   }
 }

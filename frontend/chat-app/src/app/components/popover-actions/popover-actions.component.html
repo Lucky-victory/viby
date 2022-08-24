@@ -1,12 +1,9 @@
-<p>
-  popover-actions works!
-</p>
+<ion-list lines="none">
+  <ng-container *ngFor="let button of buttons">
+    <ion-item button (click)="onClick(button)" [detail]="false">
+      <ion-icon [name]="button?.icon" class="icon"></ion-icon>
 
-<ion-card class="popover-card">
-  <ion-item button>
-    
-      <ion-icon name="create-outline"></ion-icon>
-edit
-    </ion-item>
-  
-</ion-card>
+      {{ button?.text }}</ion-item
+    >
+  </ng-container>
+</ion-list>

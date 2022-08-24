@@ -17,6 +17,8 @@ export class HomePage implements OnInit {
     this.isLoggedIn = this.authService.isLoggedIn;
   }
   logout() {
+    console.log('logout');
+    
     this.authService.logout();
     this.isLoggedIn = this.authService.isLoggedIn;
   }
