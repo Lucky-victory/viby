@@ -1,5 +1,13 @@
 import { IMessageToDB } from './../../interfaces/message.interface';
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 // import { AudioPlayer } from 'src/app/services/audio/audio.service';
 // import { AudioRecorderService } from 'src/app/services/recorder/recorder.service';
@@ -14,13 +22,15 @@ import {
   IMessageType,
 } from 'src/app/interfaces/message.interface';
 import { Platform } from '@ionic/angular';
+import { ChatService } from 'src/app/services/chat/chat.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'chat-message-input',
   templateUrl: './chat-message-input.component.html',
   styleUrls: ['./chat-message-input.component.scss'],
 })
-export class ChatMessageInputComponent implements OnInit {
+export class ChatMessageInputComponent implements OnInit, OnDestroy {
   textMessage: string = '';
   // audioMessage:string|Blob|ArrayBuffer=''
   isEmpty: boolean = true;
@@ -37,10 +47,13 @@ export class ChatMessageInputComponent implements OnInit {
   currentUser: IUserToView;
   showEmoji: boolean = false;
   private isMobile: boolean;
+  private messageToEditSub: Subscription;
   constructor(
     private activeRoute: ActivatedRoute,
     private webSocketService: WebSocketService,
-    private authService: AuthService,private platform:Platform
+    private chatService: ChatService,
+    private authService: AuthService,
+    private platform: Platform
   ) {
     this.isMobile = platform.is('mobile');
   }
@@ -57,6 +70,14 @@ export class ChatMessageInputComponent implements OnInit {
     //   console.log('typing');
     // });
     this.currentUser = this.authService?.currentUser;
+    this.messageToEditSub = this.chatService.messageToEdit$.subscribe(
+      (message) => {
+        this.message = message;
+        this.textMessageInputStatus = 'edit';
+        this.textMessage = message.content;
+        // this.message=message
+      }
+    );
   }
 
   handleKeyDown(event: KeyboardEvent) {
@@ -93,6 +114,16 @@ export class ChatMessageInputComponent implements OnInit {
     //     this.onMessageSend.emit(this.message);
     //       return
     // }
+    if (this.textMessageInputStatus === 'edit') {
+      this.message.content = this.textMessage;
+      this.webSocketService.messageEdit(
+        this.message,
+        this.roomId,
+        this.currentUser
+      );
+
+      return;
+    }
     this.message = {
       message_id: uuidV4(),
       content: this.textMessage,
@@ -117,14 +148,12 @@ export class ChatMessageInputComponent implements OnInit {
       return;
     }
 
-    
     if (event.key === 'Enter' && !this.isMobile) {
       event.preventDefault();
       this.sendMessage();
-      
     }
   }
-  
+
   addEmoji(event) {
     this.textMessage += event?.emoji?.native;
     this.checkInput();
@@ -161,4 +190,8 @@ export class ChatMessageInputComponent implements OnInit {
   // playAndPause() {
   //   this.audioPlayer.play();
   // }
+
+  ngOnDestroy(): void {
+    this.messageToEditSub.unsubscribe();
+  }
 }

@@ -17,9 +17,7 @@ export default class SocketController {
     try {
       console.log("socket id", socket.id);
       // get previous messages when a user joins a room
-      //   console.log(channelId, roomId);
       const result = await MessagesController.getMessages(channelId, roomId);
-      console.log(result);
 
       socket.join(roomId);
       channelsManager.to(socket.id).emit("join_room", result?.data, user);
@@ -73,30 +71,30 @@ export default class SocketController {
     user: IUserToView
   ) {
     // save the message to database
-    message["status"] = "edited";
-    const result = await MessagesController.updateMessage(message, user);
-    const messageWithUser: IMessageToView = {
-      ...message,
+
+    const { messageToDB, messageToView } = MessagesController.addUserToMessage(
+      message,
       user,
-    };
+      false
+    );
+    const result = await MessagesController.updateMessage(messageToDB, user);
+
     if (!result?.success) {
       // if there was an error editing the message
       // change the status back to sent, since it was already initially sent
-      messageWithUser["status"] = "sent";
+      console.log("not editted");
+
+      messageToView["status"] = "sent";
       //then  emit it to only the user that sent it.
       channelsManager
         .to(socket.id)
-        .emit("edit_message", messageWithUser, result?.success);
+        .emit("edit_message", messageToView, result?.success);
       return;
     }
-    // query the database for the editted message and return it
-    const editedMessage = await MessagesController.getMessageById(
-      message?.message_id
-    );
-    editedMessage["user"] = user;
+
     // broadcast the message to everyone, sender inclusive
     channelsManager
       .to(roomId)
-      .emit("edit_message", editedMessage, result?.success);
+      .emit("edit_message", messageToView, result?.success);
   }
 }

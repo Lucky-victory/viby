@@ -1,5 +1,8 @@
 import pluck from "just-pluck-it";
-import { IMessageToView } from "./../interfaces/message.interface";
+import {
+  IMessageStatus,
+  IMessageToView,
+} from "./../interfaces/message.interface";
 import { IMessageToDB } from "../interfaces/message.interface";
 import { IUserToView } from "../interfaces/user.interface";
 import { MessagesEntity, MessagesRepo } from "../models/messages";
@@ -17,16 +20,22 @@ export default class MessagesController {
       if (error) return { success: false, error };
     }
   }
-  static addUserToMessage(message: IMessageToDB, user: IUserToView) {
-    message.status = "sent";
-    message.created_at = Utils.currentTime;
+  static addUserToMessage(
+    message: IMessageToDB,
+    user: IUserToView,
+    isCreate = true
+  ) {
+    if (isCreate) {
+      message.status = "sent";
+      message.created_at = Utils.currentTime;
+    } else {
+      message.status = "edited";
+    }
     const messageToDB = message;
-    const _message = Utils.omit(message, ["user_id"]) as IMessageToDB;
 
-    const messageToView: IMessageToView = {
-      user,
-      ..._message,
-    };
+    const messageToView: IMessageToView = Utils.merge(message, { user });
+    console.log(messageToView);
+
     return {
       messageToView,
       messageToDB,
@@ -116,7 +125,9 @@ export default class MessagesController {
       if (prevMessage) {
         // update the content of the previous message and save it
         prevMessage.content = message?.content;
+        prevMessage.status = message?.status as IMessageStatus;
         await (await MessagesRepo).save(prevMessage);
+        console.log(prevMessage, "edittttt");
 
         return { success: true, error: null };
       }
@@ -153,10 +164,7 @@ export default class MessagesController {
       messageId
     )) as MessagesEntity;
     // remove some unwanted properties
-    const messageToView = Utils.omit(message, [
-      "entityId",
-      "user_id",
-    ]) as IMessageToView;
+    const messageToView = Utils.omit(message, ["entityId"]) as IMessageToView;
     return messageToView;
   }
   /**

@@ -31,7 +31,7 @@ export class ChannelListComponent implements OnInit {
   ngOnInit() {
     this.chatService
       .getChannelsForUser()
-      .then((result: IResponse<IChannelToView[]>) => {
+      .subscribe((result: IResponse<IChannelToView[]>) => {
         console.log(result, 'here');
         this.channels = result.data;
         if (this.channels?.length) {

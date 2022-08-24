@@ -1,9 +1,9 @@
 import { IUserToView } from '../../interfaces/user.interface';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-// import { Socket,io } from 'socket.io-client';
+
 import { Socket } from 'ngx-socket-io';
 import {
+  IMessageToDB,
   IMessageToView,
   INewMessage,
 } from 'src/app/interfaces/message.interface';
@@ -35,8 +35,16 @@ export class WebSocketService {
   onReceiveMessage() {
     return this.socket.fromEvent('new_message');
   }
-  onMessageEdit(message: IMessageToView) {
-    this.socket.emit('edit_message', message);
+  messageEdit(message: IMessageToDB, roomId: string, user: IUserToView) {
+    console.log({
+      message,
+      roomId,
+      user,
+    });
+    this.socket.emit('edit_message', message, roomId, user);
+  }
+  onMessageEdit() {
+    return this.socket.fromEvent('edit_message');
   }
   typing(user: IUserToView, roomId: string) {
     this.socket.emit('typing', user, roomId);
@@ -47,8 +55,8 @@ export class WebSocketService {
   stoppedTyping(user: IUserToView, roomId: string) {
     this.socket.emit('stop_typing', user, roomId);
   }
-  onStoppedTyping(cb: (users: IUserToView[]) => void) {
-    this.socket.on('stop_typing', (users: IUserToView[]) => {
+  onStoppedTyping(cb: (users: IUserToView) => void) {
+    this.socket.on('stop_typing', (users: IUserToView) => {
       cb(users);
     });
   }

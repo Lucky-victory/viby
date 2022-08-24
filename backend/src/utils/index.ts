@@ -8,6 +8,7 @@ import flatten from "just-flatten-it";
 import ShortId from "short-unique-id";
 import { v4 as uuidv4 } from "uuid";
 import { Request } from "express";
+import merge from "just-merge";
 /**
  * utilities class
  */
@@ -21,6 +22,9 @@ export default class Utils {
       },
       cb
     );
+  }
+  static merge<T extends object,O extends object[],R extends object>(obj:T, ...objs:O):R{
+   return merge(obj,...objs) as unknown as R;
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static flatten<R>(arr: any): R[] {

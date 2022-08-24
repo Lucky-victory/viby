@@ -26,6 +26,7 @@
     "@capacitor/status-bar": "4.0.1",
     "@ctrl/ngx-emoji-mart": "^7.0.0",
     "@ionic/angular": "^6.1.9",
+    "just-omit": "^2.1.1",
     "linkify-html": "^3.0.5",
     "linkifyjs": "^3.0.5",
     "moment": "^2.29.4",

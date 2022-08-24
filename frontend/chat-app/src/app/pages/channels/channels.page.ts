@@ -44,7 +44,7 @@ export class ChannelsPage implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.chatService.getChannelsForUser().then((result: any) => {
+    this.chatService.getChannelsForUser().subscribe((result: any) => {
       console.log(result, 'here');
       this.channels = result.data;
     });

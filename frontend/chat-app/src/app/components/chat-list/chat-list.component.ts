@@ -1,3 +1,5 @@
+import { IMessageToDB } from './../../interfaces/message.interface';
+import omit from 'just-omit';
 import {
   Component,
   Input,
@@ -14,6 +16,7 @@ import { IMessageToView } from 'src/app/interfaces/message.interface';
 import { IUser } from 'src/app/interfaces/user.interface';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { ChatService } from 'src/app/services/chat/chat.service';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
@@ -37,7 +40,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private activeRoute: ActivatedRoute,
     private apiService: ApiService,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private chatService: ChatService
   ) {}
 
   ngOnInit() {
@@ -65,10 +69,19 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.messages.push(message);
       });
+    this.webSocketService
+      .onMessageEdit()
+      .subscribe((message: IMessageToView) => {
+        this.messages = this.messages.map((prevMessage) => {
+          if (prevMessage.message_id === message?.message_id) {
+            return message;
+          }
+          return prevMessage;
+        });
+      });
   }
   ngAfterViewInit(): void {
     const elem = this.chatListContainer.nativeElement;
-    console.log(elem);
 
     this.scrollEvent$ = fromEvent(elem, 'scroll');
     this.scrollEventSub = this.scrollEvent$
@@ -100,7 +113,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   editFunc(chat) {
-    console.log(chat, 'from edit');
+    // remove the user property from the object
+    const messageToEdit = omit(chat, ['user']) as IMessageToDB;
+    console.log(messageToEdit, 'from edit');
+    this.chatService.setMessageToEdit(messageToEdit);
   }
   deleteFunc(chat) {
     console.log(chat, 'from delete');
