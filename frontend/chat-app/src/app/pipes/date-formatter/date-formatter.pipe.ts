@@ -11,11 +11,11 @@ export class DateFormatterPipe implements PipeTransform {
     dateFormat: string = 'MMM D, YYYY'
   ): string {
     const dateVal = moment(value);
-    const d = new Date().getTime();
-    const mo = dateVal.diff(d, 'hour');
-    console.log(mo, 'no');
-
-    const dateDiff = moment().diff(dateVal, 'days');
+    // in other to get an accurate comparison, set both times to midnight
+    const currentDate = moment(new Date().setHours(0, 0, 0, 0));
+    const recievedDate = moment(new Date(value).setHours(0, 0, 0, 0));
+    // compare the days difference
+    const dateDiff = currentDate.diff(recievedDate, 'days');
     const time = moment(value).format(timeFormat);
 
     let transformedDate = '';
