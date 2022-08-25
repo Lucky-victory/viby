@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { UserProfilePicComponent } from './user-profile-pic.component';
+import { UserProfilePicComponent } from './user-profile-card.component';
 
 describe('UserProfilePicComponent', () => {
   let component: UserProfilePicComponent;
@@ -9,8 +9,8 @@ describe('UserProfilePicComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserProfilePicComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [UserProfilePicComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UserProfilePicComponent);

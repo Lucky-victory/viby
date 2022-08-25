@@ -3,10 +3,13 @@
   longPress
   (pressed)="mobilePress($event, chat)"
 >
-  <ion-ripple-effect class="ion-hide-md-up"> </ion-ripple-effect>
+  <ion-ripple-effect [ngClass]="{ 'ion-hide': isDesktop }"> </ion-ripple-effect>
   <div class="single-chat-user">
     <ng-container *ngIf="!isCurrentUser">
-      <div class="single-chat-user-avatar-wrapper">
+      <div
+        class="single-chat-user-avatar-wrapper"
+        (click)="showUserProfile($event, chat?.user?.user_id)"
+      >
         <ion-img
           [src]="chat?.user?.profile_picture"
           alt=""
@@ -22,15 +25,25 @@
         chat?.created_at | dateFormatter
       }}</time>
     </div>
+    <div
+      *ngIf="isCurrentUser"
+      class="single-chat-user-avatar-wrapper"
+      (click)="showUserProfile($event, chat?.user?.user_id)"
+    >
+      <ion-img
+        [src]="chat?.user?.profile_picture"
+        alt=""
+        class="single-chat-user-avatar"
+      ></ion-img>
+    </div>
   </div>
   <div class="wrapper">
     <div class="single-chat-text-wrapper">
       <span class="single-chat-text" [innerHTML]="chat?.content | linkify">
       </span>
       <ion-buttons
-        class="ion-hide-md-down action-btn {{
-          isCurrentUser ? 'current-user' : ''
-        }}"
+        class="action-btn"
+        [ngClass]="{ 'ion-hide': !isDesktop, 'current-user': isCurrentUser }"
       >
         <ion-button (click)="showActions($event, chat)">
           <ion-icon name="ellipsis-vertical-outline"></ion-icon>

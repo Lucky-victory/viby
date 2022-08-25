@@ -32,7 +32,6 @@ export class UtilsService {
   async showActionSheet(options?: ActionSheetOptions) {
     const actionSheet = await this.actionSheetCtrl.create({
       ...options,
-      mode: 'ios',
     });
     await actionSheet.present();
 
@@ -40,7 +39,7 @@ export class UtilsService {
     return { data };
   }
   async showLoader(options: LoadingOptions) {
-    const loader = await this.loadingCtrl.create({ ...options, mode: 'ios' });
+    const loader = await this.loadingCtrl.create(options);
     await loader.present();
 
     await loader.onDidDismiss();
@@ -48,7 +47,6 @@ export class UtilsService {
   async showAlert(options: AlertOptions) {
     const alertCtrl = await this.alertController.create({
       ...options,
-      mode: 'ios',
     });
     await alertCtrl.present();
 
@@ -56,7 +54,7 @@ export class UtilsService {
     return { role };
   }
   async showPopover(options: PopoverOptions) {
-    const popover = await this.popoverCtrl.create({ ...options, mode: 'ios' });
+    const popover = await this.popoverCtrl.create(options);
     await popover.present();
     const { data } = await popover.onDidDismiss();
     return { data };
@@ -88,8 +86,15 @@ export class UtilsService {
     return role;
   }
   async showModal(options: ModalOptions) {
-    const modal = await this.modalCtrl.create({ ...options, mode: 'ios' });
+    const modal = await this.modalCtrl.create(options);
     await modal.present();
     const { role } = await modal.onDidDismiss();
+    return { role };
+  }
+  async showModalOrPopover(options: ModalOptions | PopoverOptions) {
+    if (this.platform.is('desktop')) {
+      return await this.showPopover(options);
+    }
+    return this.showModal(options);
   }
 }

@@ -178,68 +178,111 @@ export default class UsersController {
   }
   static async updateProfile(req: Request, res: Response) {
     try {
-      
       const authUser = Utils.getAuthenticatedUser(req);
-      const { username, email, fullname,profile_picture,cover_picture,bio } = req.body;
+      const { username, email, fullname, profile_picture, cover_picture, bio } =
+        req.body;
       const user = await UsersController.getUserById(authUser?.user_id);
       if (!user) {
         res.status(404).json({
-          message:'user does not exist',data:null
+          message: "user does not exist",
+          data: null,
         });
         return;
       }
       const isAuthorized = UsersController.hasAccess(authUser, user);
-      if(!isAuthorized){
+      if (!isAuthorized) {
         res.status(401).json({
-          message: 'Unauthorized'
+          message: "Unauthorized",
         });
-        return 
+        return;
       }
 
-      await user.update({ email, fullname, cover_picture, profile_picture, username, bio, });
+      await user.update({
+        email,
+        fullname,
+        cover_picture,
+        profile_picture,
+        username,
+        bio,
+      });
       await (await UsersRepo).save(user);
 
-      const userToView = Utils.omit(user, ['email', 'password', 'entityId', 'friends']);
+      const userToView = Utils.omit(user, [
+        "email",
+        "password",
+        "entityId",
+        "friends",
+      ]);
       res.status(200).json({
-        message:'Profile updated successfully',data:userToView
-      })
+        message: "Profile updated successfully",
+        data: userToView,
+      });
     } catch (error) {
       res.status(500).json({
-        message:'An occured, couldn\'t update profile'
-      })
+        message: "An occured, couldn't update profile",
+      });
     }
-
+  }
+  static async getUser(req: Request, res: Response) {
+    try {
+      const { user_id } = req.params;
+      const user = await UsersController.getUserById(user_id);
+      const userToView = Utils.omit(user as UsersEntity, [
+        "entityId",
+        "email",
+        "password",
+        "friends",
+      ]);
+      if (user) {
+        res.status(200).json({
+          message: "user retrieved successfully",
+          data: userToView,
+        });
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "An error occured, couldn't fetch messages" });
+    }
   }
   static async getFriends() {
     //
   }
-  static async getDirectMessages(req:Request,res:Response) {
+  static async getDirectMessages(req: Request, res: Response) {
     try {
-      
       const user = Utils.getAuthenticatedUser(req);
       const userId = user?.user_id;
-    // each user has a predefined channel
-    // get a channel where the channel_id is the same as the user_id
-    const userChannel = await ChannelsController.channelExist(userId);
-    if (!userChannel) {
-      res.status(404).json({
-        message: `channel with id '${userId}' does not exist`, data: null
-      });
-  return 
-}
-const roomsToView = await ChannelsController.getRoomsInChannel(userChannel);
+      // each user has a predefined channel
+      // get a channel where the channel_id is the same as the user_id
+      const userChannel = await ChannelsController.channelExist(userId);
+      if (!userChannel) {
+        res.status(404).json({
+          message: `channel with id '${userId}' does not exist`,
+          data: null,
+        });
+        return;
+      }
+      const roomsToView = await ChannelsController.getRoomsInChannel(
+        userChannel
+      );
       res.status(200).json({
-  message:'direct messages retrieved successfully',data:roomsToView
-})
-      
+        message: "direct messages retrieved successfully",
+        data: roomsToView,
+      });
     } catch (error) {
-      res.status(500).json({message:'An error occured, couldn\'t fetch messages'})
-}
+      res
+        .status(500)
+        .json({ message: "An error occured, couldn't fetch messages" });
+    }
   }
   static async getUserProfile(req: Request, res: Response) {
     try {
       const user = Utils.getAuthenticatedUser(req);
-      const userDetails = await (await UsersRepo).search().where('user_id').equal(user?.user_id).returnFirst();
+      const userDetails = await (await UsersRepo)
+        .search()
+        .where("user_id")
+        .equal(user?.user_id)
+        .returnFirst();
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -259,7 +302,7 @@ const roomsToView = await ChannelsController.getRoomsInChannel(userChannel);
       .matchesExactly(emailOrUsername)
       .returnFirst();
   }
-  static hasAccess(authUser:IUserForToken,user:UsersEntity) {
+  static hasAccess(authUser: IUserForToken, user: UsersEntity) {
     return authUser?.user_id === user?.user_id;
   }
 }

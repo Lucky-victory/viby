@@ -27,6 +27,19 @@ const routes: Routes = [
             (m) => m.ChatRoomPageModule
           ),
       },
+      {
+        path: '',
+        redirectTo: '@me',
+        pathMatch: 'full',
+      },
+      {
+        path: '@me',
+
+        loadChildren: () =>
+          import('../user-profile/user-profile.module').then(
+            (m) => m.UserProfilePageModule
+          ),
+      },
     ],
   },
 ];

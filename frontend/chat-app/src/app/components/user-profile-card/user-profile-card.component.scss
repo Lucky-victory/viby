@@ -1,0 +1,95 @@
+$avatar-width: 70px;
+$header-image-height: 120px;
+ion-card {
+  &.card {
+    max-width: 100%;
+  }
+}
+.card-header {
+  position: relative;
+  padding-bottom: $avatar-width / 2;
+  margin-bottom: 1.5rem;
+}
+.card-header-image-wrapper {
+  height: $header-image-height;
+  position: relative;
+  .card-header-image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}
+.card-user-image-wrapper {
+  width: $avatar-width;
+  height: $avatar-width;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--text-color);
+  position: absolute;
+  left: 15px;
+  bottom: calc($avatar-width / 4);
+  transform: translateY(($avatar-width / 4));
+  .card-user-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .card-user-status {
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    right: 5px;
+    bottom: 8px;
+    transform: translateY(7px);
+    border-radius: 50%;
+    border: 3px solid transparent;
+    background-color: currentColor;
+    &.online {
+      background-color: #00a693;
+      border-color: var(--text-color);
+    }
+    &.offline {
+      border-color: var(--text-color);
+    }
+  }
+}
+
+.card-content {
+  .card-content-user-details {
+    padding-left: 1rem;
+    .card-user-fullname {
+      font-size: 30px;
+      text-transform: capitalize;
+      color: var(--text-color);
+    }
+    .card-user-username {
+    }
+  }
+}
+
+.card-btn[fill="solid"] {
+  --background: var(--accent-color);
+}
+.card-btn[fill="outline"] {
+  --color: var(--accent-color);
+  --border-color: var(--accent-color);
+  --padding-top: 0.625rem !important;
+  --padding-bottom: 0.625rem !important;
+}
+.card-buttons-container {
+  padding: 1rem 0.5rem;
+  display: flex;
+  justify-content: space-evenly;
+
+  .card-btn {
+    flex: 1;
+    --padding-top: 0.75rem;
+    --padding-bottom: 0.75rem;
+    &::part(native) {
+      height: auto;
+    }
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+}

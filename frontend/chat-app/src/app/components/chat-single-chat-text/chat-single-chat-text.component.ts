@@ -1,3 +1,5 @@
+import { IResponse } from './../../interfaces/common.interface';
+import { UserProfileCardComponent } from 'src/app/components/user-profile-card/user-profile-card.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ActionSheetButton,
@@ -21,6 +23,7 @@ export class ChatSingleChatTextComponent implements OnInit {
   currentUser: IUserToView;
   isCurrentUser!: boolean;
   isMobile!: boolean;
+  isDesktop: boolean;
   private canEdit: boolean;
   private canCopy: boolean;
   private canDelete: boolean;
@@ -33,6 +36,7 @@ export class ChatSingleChatTextComponent implements OnInit {
   ) {
     this.currentUser = this.authService.currentUser;
     this.isMobile = this.platform.is('mobile');
+    this.isDesktop = this.platform.is('desktop');
   }
   ngOnInit(chat = this.chat) {
     this.isCurrentUser = chat?.user?.user_id === this.currentUser?.user_id;
@@ -113,4 +117,20 @@ export class ChatSingleChatTextComponent implements OnInit {
   deleteFunc(chat: IMessageToView) {
     this.ondelete.emit(chat);
   }
+  showUserProfile = async (event, userId: string) => {
+    this.authService
+      .getUserProfile(userId)
+      .subscribe(async (result: IResponse<IUserToView>) => {
+        const user = result.data;
+        await this.utilsService.showModalOrPopover({
+          component: UserProfileCardComponent,
+          componentProps: { user },
+          breakpoints: [0, 0.5, 1],
+          initialBreakpoint: 0.5,
+          canDismiss: true,
+          event,
+          cssClass: 'user-profile-card',
+        });
+      });
+  };
 }

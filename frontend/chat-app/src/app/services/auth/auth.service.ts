@@ -51,6 +51,9 @@ export class AuthService {
         tap((res: IResponse<IUserCredentials>) => (this.setSession = res.data))
       );
   }
+  getUserProfile(userId:string){
+    return this.apiService.get(`/user/others/${userId}`);
+  }
   getToken(): string {
     return localStorage.getItem('viby_token');
   }

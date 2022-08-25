@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IUserToView } from 'src/app/interfaces/user.interface';
 
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -11,10 +12,13 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class HomePage implements OnInit {
   isLoggedIn: boolean;
   currentUser: IUserToView;
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
   ionViewWillEnter() {
     this.isLoggedIn = this.authService.isLoggedIn;
     this.currentUser = this.authService.currentUser;
+    if (this.isLoggedIn) {
+      this.router.navigate(['/channels/@me']);
+    }
   }
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn;

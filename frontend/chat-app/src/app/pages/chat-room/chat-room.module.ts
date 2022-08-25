@@ -18,6 +18,7 @@ import { LinkifyModule } from 'src/app/pipes/linkify/linkify.module';
 import { LongPressModule } from 'src/app/directives/long-press/long-press.module';
 import { PopoverActionsComponent } from 'src/app/components/popover-actions/popover-actions.component';
 import { DomMutationObserverModule } from 'src/app/directives/dom-mutation-observer/dom-mutation-observer.module';
+import { UserProfileCardComponent } from 'src/app/components/user-profile-card/user-profile-card.component';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { DomMutationObserverModule } from 'src/app/directives/dom-mutation-obser
     ChatSingleChatAudioComponent,
     ChatSingleChatTextComponent,
     PopoverActionsComponent,
+    UserProfileCardComponent,
   ],
 })
 export class ChatRoomPageModule {}

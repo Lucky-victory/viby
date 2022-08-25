@@ -7,17 +7,15 @@
           ><ion-icon name="log-out-outline" slot="start"></ion-icon>
           <ion-text class="ion-hide-sm-down">log out</ion-text>
         </ion-button>
-        <ion-chip
-          color="primary"
-          mode="ios"
-          outline="true"
-          [routerLink]="['/channels/@me']"
-        >
+        <ion-chip color="primary" class="" [routerLink]="['/channels/@me']">
           <ion-avatar>
             <img [src]="currentUser?.profile_picture" />
           </ion-avatar>
 
-          <ion-label class="ion-hide-sm-down">
+          <ion-label
+            class="ion-hide-sm-down"
+            [ngStyle]="{'color':'var(--accent-color)'}"
+          >
             {{currentUser?.fullname}}
           </ion-label>
         </ion-chip>
@@ -37,9 +35,8 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content [fullscreen]="true">
-  <user-profile-pic></user-profile-pic>
+  <!-- <user-profile-card></user-profile-card> -->
   <div id="container">
     <div class="banner">
       <div class="banner-image-wrapper">
@@ -57,7 +54,8 @@
         <ion-buttons>
           <ion-button
             class="btn btn-round btn-primary btn-large"
-            routerLink="/sign-up" routerDirection="forward"
+            routerLink="/sign-up"
+            routerDirection="forward"
           >
             <ion-icon class="btn-icon" name="arrow-forward-circle"></ion-icon>
 

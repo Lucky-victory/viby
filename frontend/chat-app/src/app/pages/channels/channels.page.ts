@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
 import { IChannel, IChannelToView } from 'src/app/interfaces/channel.interface';
@@ -13,7 +13,7 @@ import {
   IMessageToView,
   INewMessage,
 } from 'src/app/interfaces/message.interface';
-import { IResponse } from 'src/app/interfaces/response.interface';
+
 import { IRoom } from 'src/app/interfaces/room.interface';
 
 import { ApiService } from 'src/app/services/api/api.service';
@@ -47,7 +47,6 @@ export class ChannelsPage implements OnInit, AfterViewInit, OnDestroy {
       this.channels = result.data;
       this.chatService.setChannelsForUser(this.channels);
     });
-
   }
   ngAfterViewInit(): void {}
   ngOnDestroy(): void {}

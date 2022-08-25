@@ -29,6 +29,7 @@ export class ChannelsEntity extends Entity {
   removeMemberId(memberId: string) {
     this.members = this.members.filter((_memberId) => _memberId !== memberId);
   }
+
   async getRooms() {
     return await Promise.all(
       this.rooms.map(async (roomId) => {

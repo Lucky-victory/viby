@@ -3,7 +3,7 @@ $padding: 12px;
 
 .single-chat {
   --avatar-width: 2.5rem;
-  padding: 10px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
@@ -17,10 +17,14 @@ $padding: 12px;
       padding: $padding;
       padding-left: $padding-start;
       margin-left: 0;
+      margin-right: var(--avatar-width);
     }
     .single-chat-user {
       align-self: flex-end;
+      display: flex;
+      align-items: center;
     }
+
     .single-chat-timestamp {
       align-self: flex-end;
       text-align: right;
@@ -63,7 +67,7 @@ $padding: 12px;
   gap: 0.75rem;
   margin-bottom: 5px;
   .single-chat-user-name {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     font-family: inherit;
   }
@@ -73,6 +77,7 @@ $padding: 12px;
   height: var(--avatar-width);
   border-radius: 50%;
   background: #000;
+  align-self: center;
 }
 
 ion-img.single-chat-user-avatar {
@@ -87,7 +92,7 @@ ion-img.single-chat-user-avatar {
 .wrapper {
   position: relative;
   align-self: flex-start;
-  max-width: 87.5%;
+  max-width: 95%;
   &:hover {
     ion-buttons {
       &.action-btn {
