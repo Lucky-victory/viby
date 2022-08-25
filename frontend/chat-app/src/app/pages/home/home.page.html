@@ -37,7 +37,9 @@
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
+  <user-profile-pic></user-profile-pic>
   <div id="container">
     <div class="banner">
       <div class="banner-image-wrapper">
@@ -55,7 +57,7 @@
         <ion-buttons>
           <ion-button
             class="btn btn-round btn-primary btn-large"
-            routerLink="/sign-up"
+            routerLink="/sign-up" routerDirection="forward"
           >
             <ion-icon class="btn-icon" name="arrow-forward-circle"></ion-icon>
 
