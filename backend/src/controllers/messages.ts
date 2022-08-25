@@ -11,7 +11,6 @@ import UsersController from "./users";
 import { UsersEntity } from "../models/users";
 import ChannelsController from "./channels";
 import RoomsController from "./rooms";
-import { RoomsRepo } from "../models/rooms";
 
 export default class MessagesController {
   static async createMessage(message: IMessageToDB) {
@@ -37,7 +36,6 @@ export default class MessagesController {
     const messageToDB = message;
 
     const messageToView: IMessageToView = Utils.merge(message, { user });
-    console.log(messageToView);
 
     return {
       messageToView,

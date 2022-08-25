@@ -17,6 +17,7 @@ export default class RoomsController {
     try {
       const { channel_id } = req.params;
       const user = Utils.getAuthenticatedUser(req);
+      const userId = user?.user_id;
       // check if the channel exist
       const channel = await ChannelsController.channelExist(channel_id);
       if (!channel) {
@@ -34,12 +35,12 @@ export default class RoomsController {
       }
 
       const { title, description, message_allowed = true } = req.body;
-      const { members = [] } = req.body;
-      // when creating a room , add the room creator as a member
-      // this is crucial to implement a direct message room between two users
-      members.push(user?.user_id) as string[];
+      // add channel members as room members
+      // in future this would be changed to implement rooms for users of specific roles
+      const members = channel.members;
+      
       const newRoom: INewRoom = {
-        owner_id: user?.user_id,
+        owner_id: userId,
         members,
         message_allowed,
         title,

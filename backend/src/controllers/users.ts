@@ -177,17 +177,70 @@ export default class UsersController {
     return user;
   }
   static async updateProfile(req: Request, res: Response) {
-    const user = Utils.getAuthenticatedUser(req);
+    try {
+      
+      const authUser = Utils.getAuthenticatedUser(req);
+      const { username, email, fullname,profile_picture,cover_picture,bio } = req.body;
+      const user = await UsersController.getUserById(authUser?.user_id);
+      if (!user) {
+        res.status(404).json({
+          message:'user does not exist',data:null
+        });
+        return;
+      }
+      const isAuthorized = UsersController.hasAccess(authUser, user);
+      if(!isAuthorized){
+        res.status(401).json({
+          message: 'Unauthorized'
+        });
+        return 
+      }
+
+      await user.update({ email, fullname, cover_picture, profile_picture, username, bio, });
+      await (await UsersRepo).save(user);
+
+      const userToView = Utils.omit(user, ['email', 'password', 'entityId', 'friends']);
+      res.status(200).json({
+        message:'Profile updated successfully',data:userToView
+      })
+    } catch (error) {
+      res.status(500).json({
+        message:'An occured, couldn\'t update profile'
+      })
+    }
+
   }
   static async getFriends() {
     //
   }
-  static async getDirectMessages() {
-    //
+  static async getDirectMessages(req:Request,res:Response) {
+    try {
+      
+      const user = Utils.getAuthenticatedUser(req);
+      const userId = user?.user_id;
+    // each user has a predefined channel
+    // get a channel where the channel_id is the same as the user_id
+    const userChannel = await ChannelsController.channelExist(userId);
+    if (!userChannel) {
+      res.status(404).json({
+        message: `channel with id '${userId}' does not exist`, data: null
+      });
+  return 
+}
+const roomsToView = await ChannelsController.getRoomsInChannel(userChannel);
+      res.status(200).json({
+  message:'direct messages retrieved successfully',data:roomsToView
+})
+      
+    } catch (error) {
+      res.status(500).json({message:'An error occured, couldn\'t fetch messages'})
+}
   }
   static async getUserProfile(req: Request, res: Response) {
     try {
       const user = Utils.getAuthenticatedUser(req);
+      const userDetails = await (await UsersRepo).search().where('user_id').equal(user?.user_id).returnFirst();
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       res.status(500).json({
@@ -205,5 +258,8 @@ export default class UsersController {
       .or("username")
       .matchesExactly(emailOrUsername)
       .returnFirst();
+  }
+  static hasAccess(authUser:IUserForToken,user:UsersEntity) {
+    return authUser?.user_id === user?.user_id;
   }
 }

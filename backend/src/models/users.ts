@@ -18,14 +18,23 @@ export interface UsersEntity {
 
 export class UsersEntity extends Entity {
   async update({
-    password,
+    email,
     fullname,
     cover_picture,
     profile_picture,
     username,
     bio,
   }: Partial<UsersEntity>) {
-    //
+    this.email = email || this.email;
+    this.bio = bio || this.bio;
+    this.username = username || this.username;
+    this.fullname = fullname || this.fullname;
+    this.cover_picture = cover_picture || this.cover_picture
+    this.profile_picture = profile_picture
+  || this.profile_picture
+  }
+  async updateCredentials({ password }: Partial<UsersEntity>) {
+    this.password = password || this.password;
   }
 }
 

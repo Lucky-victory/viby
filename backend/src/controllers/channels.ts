@@ -313,14 +313,7 @@ export default class ChannelsController {
         });
         return;
       }
-      const { rooms: roomIds } = channel;
-      const rooms = await Promise.all(
-        roomIds.map(async (roomId) => {
-          const room = await RoomsController.getRoomById(roomId);
-          return room;
-        })
-      );
-      const roomsToView = Utils.omit(rooms, ["entityId", "members"]) as IRoom[];
+      const roomsToView = await ChannelsController.getRoomsInChannel(channel);
       res.status(200).json({
         message: "rooms retrieved successfully",
         data: roomsToView,
@@ -332,6 +325,17 @@ export default class ChannelsController {
         message: "An error occurred, couldn't fetch rooms",
       });
     }
+  }
+  static async getRoomsInChannel(channel: ChannelsEntity) {
+   const { rooms: roomIds } = channel;
+      const rooms = await Promise.all(
+        roomIds.map(async (roomId) => {
+          const room = await RoomsController.getRoomById(roomId);
+          return room;
+        })
+      );
+      const roomsToView = Utils.omit(rooms, ["entityId", "members"]) as IRoom[];
+    return roomsToView; 
   }
   /**
    * Get public channels

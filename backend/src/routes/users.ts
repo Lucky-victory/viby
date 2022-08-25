@@ -6,13 +6,13 @@ import UsersController from "../controllers/users";
 const router = express.Router();
 
 router.use(AuthMiddleware.authenticate());
-router.get("/@me", UsersController.getUserProfile);
+router.get("/", UsersController.getUserProfile);
 router.get("/channels", asyncHandler(ChannelsController.getChannelsForUser));
 router.get("/friends", asyncHandler(UsersController.getFriends));
-router.post(
-  "/direct-messages",
+router.get(
+  "/messages",
   asyncHandler(UsersController.getDirectMessages)
 );
-router.post("/update-profile");
+router.post("/update-profile",asyncHandler(UsersController.updateProfile));
 
 export default router;

@@ -28,6 +28,7 @@ export class RoomsEntity extends Entity {
         ? message_allowed
         : this.message_allowed;
   }
+  
 }
 
 const RoomsSchema = new Schema(RoomsEntity, {
