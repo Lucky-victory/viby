@@ -5,6 +5,7 @@
   [routerLink]="['/channels', room?.channel_id, room?.room_id]"
   routerLinkActive="active"
   routerDirection="root"
+  (click)="selectRoom(room)"
 >
   <span class="room-item-title">
     <ion-icon name="chatbubble-ellipses-outline"></ion-icon> {{ room?.title }}

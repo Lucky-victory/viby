@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IRoom } from 'src/app/interfaces/room.interface';
 import { IUserToView } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { SeoService } from 'src/app/services/seo/seo.service';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class RoomItemComponent implements OnInit {
     private router: Router,
     private activeRoute: ActivatedRoute,
     private webSocketService: WebSocketService,
-    private authService: AuthService
+    private authService: AuthService,
+    private seoService: SeoService
   ) {}
 
   ngOnInit() {
@@ -34,5 +36,6 @@ export class RoomItemComponent implements OnInit {
   }
   selectRoom(room: IRoom) {
     this.roomTitleEv.emit(room?.title);
+    this.seoService.setTitle(room?.title);
   }
 }

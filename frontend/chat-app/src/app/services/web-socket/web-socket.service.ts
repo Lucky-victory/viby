@@ -23,6 +23,9 @@ export class WebSocketService {
     this.socket.emit('join_channel', channelId, user);
   }
   connect() {
+    return this.socket.connect();
+  }
+  onConnect() {
     return this.socket.fromEvent('connect');
   }
   onJoinChannel() {

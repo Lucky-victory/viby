@@ -18,14 +18,7 @@ const routes: Routes = [
             (m) => m.UserProfilePageModule
           ),
       },
-      {
-        path: ':channel_id',
 
-        loadChildren: () =>
-          import('../chat-room/chat-room.module').then(
-            (m) => m.ChatRoomPageModule
-          ),
-      },
       {
         path: ':channel_id/:room_id',
 

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { IChannel } from 'src/app/interfaces/channel.interface';
+import { IChannel, IChannelToView } from 'src/app/interfaces/channel.interface';
 import { IRoom } from 'src/app/interfaces/room.interface';
 import { delay, retry } from 'rxjs/operators';
 import {
@@ -17,7 +17,9 @@ import { IUserToView } from 'src/app/interfaces/user.interface';
 export class ChatService {
   private roomId: string;
   private channelId: string;
-  private channels$ = new Subject<IChannel[]>();
+  private channels$ = new Subject<IChannelToView[]>();
+  private channelsForUser = new Subject<IChannelToView[]>();
+  channelsForUser$=this.channelsForUser.asObservable();
   private rooms = new Subject<IRoom[]>();
   rooms$ = this.rooms.asObservable();
   private messageToEdit = new Subject<IMessageToDB>();
@@ -57,6 +59,9 @@ export class ChatService {
   }
   setRooms(rooms: IRoom[]) {
     this.rooms.next(rooms);
+  }
+  setChannelsForUser(channels:IChannelToView[]){
+this.channelsForUser.next(channels);
   }
   setMessageToEdit(message: IMessageToDB) {
     return this.messageToEdit.next(message);

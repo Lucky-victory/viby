@@ -59,10 +59,8 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.activeRoute.queryParamMap.subscribe((params) => {
-      this.roomId = params.get('room');
-    });
     this.activeRoute.paramMap.subscribe((params) => {
+      this.roomId = params.get('room_id');
       this.channelId = params.get('channel_id');
     });
     // this.webSocketService.onTyping().subscribe((users: IUserToView[]) => {
@@ -75,7 +73,6 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
         this.message = message;
         this.textMessageInputStatus = 'edit';
         this.textMessage = message.content;
-        // this.message=message
       }
     );
   }

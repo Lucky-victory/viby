@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
-import { IChannel } from 'src/app/interfaces/channel.interface';
+import { IChannel, IChannelToView } from 'src/app/interfaces/channel.interface';
 import {
   IMessageToView,
   INewMessage,
@@ -27,12 +27,11 @@ import { switchMap, tap } from 'rxjs/operators';
   styleUrls: ['./channels.page.scss'],
 })
 export class ChannelsPage implements OnInit, AfterViewInit, OnDestroy {
-  channels: IChannel[];
+  channels: IChannelToView[];
   roomTitle: string = 'no title';
   roomId: string;
   messages: IMessageToView[];
   channelId: string;
-  newMessage: INewMessage;
   rooms: IRoom[];
   rooms$: Observable<IRoom[]>;
   constructor(
@@ -45,22 +44,11 @@ export class ChannelsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.chatService.getChannelsForUser().subscribe((result: any) => {
-      console.log(result, 'here');
       this.channels = result.data;
+      this.chatService.setChannelsForUser(this.channels);
     });
-    this.activeRoute.paramMap.subscribe((params) => {
-      this.channelId = params.get('channel_id');
-      this.roomId = params.get('room_id');
-    });
+
   }
   ngAfterViewInit(): void {}
   ngOnDestroy(): void {}
-  getRoomTitle(title: string) {
-    this.roomTitle = title;
-  }
-  acceptNewMessage(message: INewMessage) {
-    this.newMessage = message;
-    this.saveMessage(message);
-  }
-  saveMessage(message: INewMessage) {}
 }

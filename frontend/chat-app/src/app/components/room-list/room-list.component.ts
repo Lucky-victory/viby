@@ -22,22 +22,13 @@ export class RoomListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private activeRoute: ActivatedRoute,
+
     private apiServcie: ApiService,
     private chatService: ChatService,
     private seoService: SeoService
   ) {}
 
   ngOnInit() {
-    this.activeRoute.paramMap.subscribe((params) => {
-      this.channelId = params.get('channel_id');
-      this.roomId = params.get('room_id');
-      console.log(this.roomId, this.channelId, 'in room list');
-
-      // this.chatService.getRooms(this.channelId).then((result) => {
-      //   // console.log(result, 'rooms result 2');
-      // });
-    });
     this.chatService.rooms$.subscribe((rooms) => {
       this.rooms = rooms;
       console.log(rooms, 'rooms in room list');

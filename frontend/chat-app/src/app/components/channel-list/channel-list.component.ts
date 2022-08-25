@@ -29,12 +29,9 @@ export class ChannelListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.chatService
-      .getChannelsForUser()
-      .subscribe((result: IResponse<IChannelToView[]>) => {
-        console.log(result, 'here');
-        this.channels = result.data;
-      });
+    this.chatService.channelsForUser$.subscribe((channels) => {
+      this.channels = channels;
+    });
 
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
