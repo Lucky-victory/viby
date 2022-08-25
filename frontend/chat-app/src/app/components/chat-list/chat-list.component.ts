@@ -1,3 +1,4 @@
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { IMessageToDB } from './../../interfaces/message.interface';
 import omit from 'just-omit';
 import {
@@ -11,7 +12,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fromEvent, Observable, Subscription } from 'rxjs';
-import { debounceTime, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, delay, retry, switchMap, tap } from 'rxjs/operators';
 import { IMessageToView } from 'src/app/interfaces/message.interface';
 import { IUser } from 'src/app/interfaces/user.interface';
 import { ApiService } from 'src/app/services/api/api.service';
@@ -30,29 +31,26 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() currentUser: IUser;
   @ViewChild('chatListContainer') chatListContainer: ElementRef;
   private roomId: string;
-  private channelId: Observable<string>;
+  private channelId: string;
   private newMessageSub: Subscription;
   private joinRoomSub: Subscription;
   private scrollEvent$: Observable<any>;
   private scrollEventSub: Subscription;
+  private connectErrorSub: Subscription;
   private debounceTimeout: number = 300;
   private isScrolledDown: boolean = true;
   constructor(
     private activeRoute: ActivatedRoute,
     private apiService: ApiService,
     private webSocketService: WebSocketService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private utilsService: UtilsService
   ) {}
 
   ngOnInit() {
-    this.channelId = this.activeRoute.paramMap.pipe(
-      switchMap((params) => params.get('channel_id'))
-    );
-    this.activeRoute.queryParamMap.subscribe((params) => {
-      this.roomId = params.get('room');
-      console.log(this.roomId);
-
-      //this.messages = this.roomMessages.filter((roomMessage) => roomMessage.room_id === this.roomId);
+    this.activeRoute.paramMap.subscribe((params) => {
+      this.channelId = params.get('channel_id');
+      this.roomId = params.get('room_id');
     });
 
     this.joinRoomSub = this.webSocketService
@@ -65,9 +63,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.newMessageSub = this.webSocketService
       .onReceiveMessage()
       .subscribe((message: IMessageToView) => {
-        console.log(message);
-
         this.messages.push(message);
+        console.log('recieve message');
       });
     this.webSocketService
       .onMessageEdit()
@@ -79,6 +76,37 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
           return prevMessage;
         });
       });
+    this.connectErrorSub = this.webSocketService
+      .onConnectError()
+      .subscribe(async (error) => {
+        await this.utilsService.showLoader({
+          message: 'Trying to Reconnect',
+          spinner: 'circles',
+          mode: 'ios',
+          duration: 4000,
+        });
+      });
+    // setTimeout(async () => {
+    //   this.connectErrorSub.unsubscribe();
+    //   await this.utilsService.showAlert({
+    //     header: 'Network Error',
+    //     mode: 'ios',
+    //     message: "Couldn't reconnect, check your connection or reload the page",
+    //     buttons: [
+    //       {
+    //         text: 'cancel',
+    //         role: 'cancel',
+    //       },
+    //       {
+    //         text: 'Reload',
+    //         role: 'reload',
+    //         handler: () => {
+    //           window.location.reload();
+    //         },
+    //       },
+    //     ],
+    //   });
+    // }, 15000);
   }
   ngAfterViewInit(): void {
     const elem = this.chatListContainer.nativeElement;
@@ -101,6 +129,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.joinRoomSub.unsubscribe();
     this.newMessageSub.unsubscribe();
     this.scrollEventSub.unsubscribe();
+    this.connectErrorSub.unsubscribe();
   }
 
   /**

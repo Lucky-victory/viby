@@ -7,6 +7,20 @@
           ><ion-icon name="log-out-outline" slot="start"></ion-icon>
           <ion-text class="ion-hide-sm-down">log out</ion-text>
         </ion-button>
+        <ion-chip
+          color="primary"
+          mode="ios"
+          outline="true"
+          [routerLink]="['/channels/@me']"
+        >
+          <ion-avatar>
+            <img [src]="currentUser?.profile_picture" />
+          </ion-avatar>
+
+          <ion-label class="ion-hide-sm-down">
+            {{currentUser?.fullname}}
+          </ion-label>
+        </ion-chip>
       </ng-container>
       <ng-container *ngIf="!isLoggedIn">
         <ion-button routerLink="/sign-up" class="sign-up-btn btn">

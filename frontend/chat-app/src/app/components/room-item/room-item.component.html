@@ -1,10 +1,13 @@
+<!-- <ion-menu-toggle autoHide="false"> -->
 <ion-item
-  class="room-item {{ room?.room_id === roomId ? 'active' : '' }}"
+  class="room-item"
   button
-  (click)="selectRoom(room)"
+  [routerLink]="['/channels', room?.channel_id, room?.room_id]"
+  routerLinkActive="active"
   routerDirection="root"
 >
   <span class="room-item-title">
     <ion-icon name="chatbubble-ellipses-outline"></ion-icon> {{ room?.title }}
   </span>
 </ion-item>
+<!-- </ion-menu-toggle> -->

@@ -15,7 +15,7 @@ export class RoomListComponent implements OnInit {
   channel: any;
   @Output() roomTitleEv: EventEmitter<string> = new EventEmitter<string>();
   @Input() activeChannel: IChannel;
-  @Input() rooms: IRoom[] = [];
+  rooms: IRoom[] = [];
   channelId: string;
   roomId: string;
   roomsSample: IRoom[];
@@ -31,21 +31,19 @@ export class RoomListComponent implements OnInit {
   ngOnInit() {
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
+      this.roomId = params.get('room_id');
+      console.log(this.roomId, this.channelId, 'in room list');
+
       // this.chatService.getRooms(this.channelId).then((result) => {
       //   // console.log(result, 'rooms result 2');
       // });
     });
-    if (this.rooms?.length) {
-      const firstRoom = this.rooms[0];
-      this.router.navigate([], {
-        queryParams: { room: firstRoom?.room_id },
-      });
-      this.seoService.setTitle(firstRoom.title);
-      this.roomTitleEv.emit(firstRoom.title);
-    }
-    this.activeRoute.queryParamMap.subscribe((params) => {
-      this.roomId = params.get('room');
+    this.chatService.rooms$.subscribe((rooms) => {
+      this.rooms = rooms;
+      console.log(rooms, 'rooms in room list');
     });
+    // this.seoService.setTitle(firstRoom.title);
+    // this.roomTitleEv.emit(firstRoom.title);
   }
 
   getRoomTitle(title: string) {

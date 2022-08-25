@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import {
   ActionSheetController,
   ActionSheetOptions,
+  AlertController,
+  AlertOptions,
+  LoadingController,
+  LoadingOptions,
   ModalController,
   ModalOptions,
   Platform,
@@ -19,19 +23,40 @@ export class UtilsService {
     private popoverCtrl: PopoverController,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
+    private alertController: AlertController,
     private actionSheetCtrl: ActionSheetController,
+    private loadingCtrl: LoadingController,
     private platform: Platform
   ) {}
 
   async showActionSheet(options?: ActionSheetOptions) {
-    const actionSheet = await this.actionSheetCtrl.create(options);
+    const actionSheet = await this.actionSheetCtrl.create({
+      ...options,
+      mode: 'ios',
+    });
     await actionSheet.present();
 
     const { data } = await actionSheet.onDidDismiss();
     return { data };
   }
+  async showLoader(options: LoadingOptions) {
+    const loader = await this.loadingCtrl.create({ ...options, mode: 'ios' });
+    await loader.present();
+
+    await loader.onDidDismiss();
+  }
+  async showAlert(options: AlertOptions) {
+    const alertCtrl = await this.alertController.create({
+      ...options,
+      mode: 'ios',
+    });
+    await alertCtrl.present();
+
+    const { role } = await alertCtrl.onDidDismiss();
+    return { role };
+  }
   async showPopover(options: PopoverOptions) {
-    const popover = await this.popoverCtrl.create(options);
+    const popover = await this.popoverCtrl.create({ ...options, mode: 'ios' });
     await popover.present();
     const { data } = await popover.onDidDismiss();
     return { data };
@@ -47,7 +72,7 @@ export class UtilsService {
     const defaultOpts = {
       duration: 3000,
       position: 'top',
-
+      mode: 'ios',
       buttons: [
         {
           text: 'Ok',
@@ -63,6 +88,8 @@ export class UtilsService {
     return role;
   }
   async showModal(options: ModalOptions) {
-    await this.modalCtrl.create(options);
+    const modal = await this.modalCtrl.create({ ...options, mode: 'ios' });
+    await modal.present();
+    const { role } = await modal.onDidDismiss();
   }
 }

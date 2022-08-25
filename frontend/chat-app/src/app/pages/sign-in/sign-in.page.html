@@ -54,7 +54,10 @@
               type="submit"
               size="large"
               expand="block"
-              ><ion-spinner name="bubbles" *ngIf="isSending"></ion-spinner>
+              ><ion-spinner
+                name="bubbles"
+                [ngClass]="{'ion-hide':!isSending}"
+              ></ion-spinner>
               {{isSending?'Signing in':'Sign In'}}</ion-button
             >
           </form>

@@ -286,6 +286,15 @@ export default class RoomsController {
   static async getRoomById(roomId: string) {
     return RoomsController.roomExist(roomId);
   }
+  static async getRoomByIdAndChannelId(channelId: string, roomId: string) {
+    return (await RoomsRepo)
+      .search()
+      .where("channel_id")
+      .equal(channelId)
+      .and("room_id")
+      .equal(roomId)
+      .returnFirst();
+  }
   private static async roomExist(roomId: string): Promise<RoomsEntity | null> {
     return (await RoomsRepo)
       .search()

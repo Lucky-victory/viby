@@ -50,14 +50,10 @@ export class ChannelsPage implements OnInit, AfterViewInit, OnDestroy {
     });
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
-    });
-    this.activeRoute.queryParamMap.subscribe((params) => {
-      this.roomId = params.get('room');
+      this.roomId = params.get('room_id');
     });
   }
-  ngAfterViewInit(): void {
-    this.webSocketService.connect();
-  }
+  ngAfterViewInit(): void {}
   ngOnDestroy(): void {}
   getRoomTitle(title: string) {
     this.roomTitle = title;

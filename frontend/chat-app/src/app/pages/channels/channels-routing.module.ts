@@ -8,12 +8,26 @@ import { ChannelsPage } from './channels.page';
 const routes: Routes = [
   {
     path: '',
-
     component: ChannelsPage,
-    // canActivate: [ChannelGuard],
     children: [
       {
+        path: '@me',
+
+        loadChildren: () =>
+          import('../user-profile/user-profile.module').then(
+            (m) => m.UserProfilePageModule
+          ),
+      },
+      {
         path: ':channel_id',
+
+        loadChildren: () =>
+          import('../chat-room/chat-room.module').then(
+            (m) => m.ChatRoomPageModule
+          ),
+      },
+      {
+        path: ':channel_id/:room_id',
 
         loadChildren: () =>
           import('../chat-room/chat-room.module').then(

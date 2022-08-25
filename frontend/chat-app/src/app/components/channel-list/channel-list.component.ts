@@ -34,11 +34,6 @@ export class ChannelListComponent implements OnInit {
       .subscribe((result: IResponse<IChannelToView[]>) => {
         console.log(result, 'here');
         this.channels = result.data;
-        if (this.channels?.length) {
-          this.activeChannel = this.channels[0];
-
-          this.rooms = this.activeChannel.rooms;
-        }
       });
 
     this.activeRoute.paramMap.subscribe((params) => {

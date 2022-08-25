@@ -6,8 +6,18 @@ import { UserProfilePage } from './user-profile.page';
 const routes: Routes = [
   {
     path: '',
-    component: UserProfilePage
-  }
+    component: UserProfilePage,
+    children: [
+      {
+        path: ':channel_id',
+
+        loadChildren: () =>
+          import('../chat-room/chat-room.module').then(
+            (m) => m.ChatRoomPageModule
+          ),
+      },
+    ],
+  },
 ];
 
 @NgModule({

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { ChannelGuard } from './guards/channel/channel.guard';
 
 const routes: Routes = [
   {
@@ -13,7 +14,12 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'user-profile',
+    path: 'channels',
+    redirectTo: 'channels/@me',
+    pathMatch: 'full',
+  },
+  {
+    path: '@me',
 
     loadChildren: () =>
       import('./pages/user-profile/user-profile.module').then(
@@ -33,6 +39,7 @@ const routes: Routes = [
 
   {
     path: 'channels',
+
     loadChildren: () =>
       import('./pages/channels/channels.module').then(
         (m) => m.ChannelsPageModule
@@ -40,9 +47,9 @@ const routes: Routes = [
   },
   {
     path: 'explore',
-    loadChildren: () => import('./pages/explore/explore.module').then( m => m.ExplorePageModule)
+    loadChildren: () =>
+      import('./pages/explore/explore.module').then((m) => m.ExplorePageModule),
   },
-
 
   {
     path: '**',

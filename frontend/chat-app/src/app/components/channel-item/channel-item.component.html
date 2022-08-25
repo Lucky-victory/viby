@@ -1,9 +1,10 @@
-<!-- <ion-menu-toggle auto-hide="false"> -->
 <div
   class="channel-item-container ion-activatable"
   [routerLink]="['/channels', channel?.channel_id]"
   routerDirection="root"
   routerLinkActive="active"
+  (click)="navigateToRoom(channel)"
+  
 >
   <ion-ripple-effect></ion-ripple-effect>
   <div class="channel-item-image-wrapper">
@@ -11,4 +12,3 @@
     </ion-img>
   </div>
 </div>
-<!-- </ion-menu-toggle> -->

@@ -390,8 +390,8 @@ export default class ChannelsController {
 
       const rooms = await Promise.all(
         channels.map(async (channel) => {
-          const c = await channel.getRooms();
-          return c;
+          const room = await channel.getRooms();
+          return room;
         })
       );
       const flattenRooms = Utils.flatten<RoomsEntity>(rooms);

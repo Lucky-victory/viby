@@ -76,7 +76,10 @@
         type="submit"
         class="btn-primary btn-round btn-large"
         expand="block"
-        ><ion-spinner name="bubbles" *ngIf="isSending"></ion-spinner>
+        ><ion-spinner
+          name="circles"
+          [ngClass]="{'ion-hide':!isSending}"
+        ></ion-spinner>
         {{isSending?'Signing up':'Sign Up'}}</ion-button
       >
     </form>

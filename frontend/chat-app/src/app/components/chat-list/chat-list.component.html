@@ -11,7 +11,7 @@
       <chat-single-chat-text
         (ondelete)="deleteFunc($event)"
         (onedit)="editFunc($event)"
-        *ngIf="chat.type === 'text'"
+        *ngIf="chat?.type === 'text'"
         [chat]="chat"
       ></chat-single-chat-text>
     </ng-container>

@@ -9,6 +9,9 @@ import { MessagesEntity, MessagesRepo } from "../models/messages";
 import Utils from "../utils";
 import UsersController from "./users";
 import { UsersEntity } from "../models/users";
+import ChannelsController from "./channels";
+import RoomsController from "./rooms";
+import { RoomsRepo } from "../models/rooms";
 
 export default class MessagesController {
   static async createMessage(message: IMessageToDB) {
@@ -59,7 +62,25 @@ export default class MessagesController {
       limit = +limit;
       page = +page;
       const offset = limit * (page - 1);
-
+      // check if the channel and room exist
+      const channel = await ChannelsController.channelExist(channelId);
+      if (!channel) {
+        return {
+          message: `channel with id '${channelId}' does not exist`,
+          data: null,
+        };
+      }
+      // check if the channel and room exist
+      const room = await RoomsController.getRoomByIdAndChannelId(
+        channelId,
+        roomId
+      );
+      if (!room) {
+        return {
+          message: `room with id '${roomId}' does not exist`,
+          data: null,
+        };
+      }
       let messages = await (await MessagesRepo)
         .search()
         .where("channel_id")
@@ -88,7 +109,6 @@ export default class MessagesController {
           return userToView;
         })
       );
-
       const messagesWithUser: IMessageToView[] = Utils.arrayMergeObject(
         messages,
         messageOwners
@@ -127,7 +147,6 @@ export default class MessagesController {
         prevMessage.content = message?.content;
         prevMessage.status = message?.status as IMessageStatus;
         await (await MessagesRepo).save(prevMessage);
-        console.log(prevMessage, "edittttt");
 
         return { success: true, error: null };
       }

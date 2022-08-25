@@ -23,7 +23,7 @@ export class WebSocketService {
     this.socket.emit('join_channel', channelId, user);
   }
   connect() {
-    return this.socket.connect();
+    return this.socket.fromEvent('connect');
   }
   onJoinChannel() {
     return this.socket.fromOneTimeEvent('join_channel');
@@ -62,5 +62,8 @@ export class WebSocketService {
   }
   onJoinRoom() {
     return this.socket.fromEvent('join_room');
+  }
+  onConnectError() {
+    return this.socket.fromEvent('connect_error');
   }
 }

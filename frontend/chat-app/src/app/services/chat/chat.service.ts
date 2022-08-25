@@ -10,6 +10,7 @@ import {
   IMessageToDB,
   IMessageToView,
 } from 'src/app/interfaces/message.interface';
+import { IUserToView } from 'src/app/interfaces/user.interface';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,13 +22,16 @@ export class ChatService {
   rooms$ = this.rooms.asObservable();
   private messageToEdit = new Subject<IMessageToDB>();
   messageToEdit$ = this.messageToEdit.asObservable();
+  private messageToDelete = new Subject<IMessageToDB>();
+  messageToDelete$ = this.messageToEdit.asObservable();
+  private membersInRoom = new Subject<IUserToView[]>();
+  membersInRoom$ = this.membersInRoom.asObservable();
   private readonly retryCount = 3;
   private readonly delayTime = 2000;
   constructor(private apiService: ApiService) {}
 
   setChannels(channels) {
     this.channels$.next(channels);
-    console.log(this.channels$);
   }
   getChannelsForUser() {
     return this.apiService.get('/user/channels');
@@ -45,10 +49,22 @@ export class ChatService {
   getRooms(channelId: string) {
     return this.apiService.get(`/channels/${channelId}/rooms`);
   }
+  getMembersInChannel(channelId: string) {
+    return this.apiService.get(`/channels/${channelId}/members`);
+  }
+  getMembersInRoom(roomId: string) {
+    return this.apiService.get(`/rooms/${roomId}/members`);
+  }
   setRooms(rooms: IRoom[]) {
     this.rooms.next(rooms);
   }
   setMessageToEdit(message: IMessageToDB) {
     return this.messageToEdit.next(message);
+  }
+  setMessageToDelete(message: IMessageToDB) {
+    return this.messageToDelete.next(message);
+  }
+  setMembersInRoom(members: IUserToView[]) {
+    return this.membersInRoom.next(members);
   }
 }

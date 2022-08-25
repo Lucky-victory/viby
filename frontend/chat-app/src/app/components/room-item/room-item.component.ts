@@ -28,31 +28,11 @@ export class RoomItemComponent implements OnInit {
     this.currentUser = this.authService.currentUser;
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
-
+      this.roomId = params.get('room_id');
       // this.webSocketService.joinChannel(this.channelId, this.currentUser);
-
-      this.activeRoute.queryParamMap.subscribe((params) => {
-        this.roomId = params.get('room');
-        this.webSocketService.joinRoom(
-          this.channelId,
-          this.roomId,
-          this.currentUser
-        );
-      });
     });
   }
   selectRoom(room: IRoom) {
-    this.clickCount++;
-    console.log('click', this.clickCount);
-
-    this.router.navigate([], {
-      queryParams: { room: room?.room_id },
-    });
-    this.roomTitleEv.emit(this.room?.title);
-    this.webSocketService.joinRoom(
-      room?.channel_id,
-      room?.room_id,
-      this.currentUser
-    );
+    this.roomTitleEv.emit(room?.title);
   }
 }

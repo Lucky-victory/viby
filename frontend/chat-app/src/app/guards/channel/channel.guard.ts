@@ -14,18 +14,13 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   providedIn: 'root',
 })
 export class ChannelGuard implements CanActivate {
-  
-  
-  constructor(private authService: AuthService,private router:Router) {
-    
+  constructor(private authService: AuthService, private router: Router) {}
+  canActivate():
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+    if (!this.authService.isLoggedIn) return this.router.navigate(['/sign-in']);
+    return true;
   }
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable < boolean | UrlTree > | Promise < boolean | UrlTree > | boolean | UrlTree {
-  
-    if (this.authService.isLoggedOut) return this.router.navigateByUrl('/sign-in');
-    
-  }
-
-
 }
