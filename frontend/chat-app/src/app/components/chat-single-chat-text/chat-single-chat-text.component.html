@@ -1,6 +1,6 @@
 <div
   class="single-chat {{ isCurrentUser ? 'current-user' : '' }}  ion-activatable"
-  longPress
+  longPress 
   (pressed)="mobilePress($event, chat)"
 >
   <ion-ripple-effect [ngClass]="{ 'ion-hide': isDesktop }"> </ion-ripple-effect>
@@ -29,7 +29,7 @@
   </div>
   <div class="wrapper">
     <div class="single-chat-text-wrapper">
-      <span class="single-chat-text" [innerHTML]="chat?.content | linkify">
+      <span class="single-chat-text" [innerHTML]="chat?.content | markdownify|linkify">
       </span>
       <ion-buttons
         class="action-btn"

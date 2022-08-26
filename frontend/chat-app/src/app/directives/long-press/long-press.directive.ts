@@ -17,7 +17,7 @@ export class LongPressDirective implements AfterViewInit, OnDestroy {
   @Input() panInterval: number = 0;
 
   //  hold time before emitting press end event
-  @Input() pressInterval: number = 500;
+  @Input() pressInterval: number = 800;
   // the event to call when the element gets long pressed
   @Output() pressed: EventEmitter<any> = new EventEmitter<any>();
   // whether to allow long press only on touchable devices

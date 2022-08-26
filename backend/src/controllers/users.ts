@@ -248,6 +248,36 @@ export default class UsersController {
   static async getFriends() {
     //
   }
+  static async addFriend(req: Request, res: Response) {
+    try{
+
+      const { user_id } = req.body;
+      const authUser = Utils.getAuthenticatedUser(req);
+      const sender = await UsersController.getUserById(user_id);
+      
+      const user = await UsersController.getUserById(authUser.user_id);
+      if (!user) {
+res.status(404).json({
+          message: `channel with id '${user_id}' does not exist`,
+          data: null,
+        });
+        return;
+
+      }
+        user?.friends.push(user_id);
+        await (await UsersRepo).save(user as UsersEntity);
+      res.status(200).json({
+  message:'You are now friends',data:null
+})
+      
+
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "An error occured, couldn't add friend" });
+    }
+    //
+  }
   static async getDirectMessages(req: Request, res: Response) {
     try {
       const user = Utils.getAuthenticatedUser(req);

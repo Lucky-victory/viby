@@ -16,6 +16,7 @@
     <textarea
       [(ngModel)]="textMessage"
       (keydown)="handleKeyDown($event)"
+      (paste)="checkInput()"
       placeholder="Type a message"
       name="message-textarea"
       class="message-textarea"

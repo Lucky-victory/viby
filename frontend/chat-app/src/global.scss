@@ -25,6 +25,7 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 @import "~@ctrl/ngx-emoji-mart/picker";
+@import "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css";
 @import "https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500&family=Pacifico&display=swap";
 
 * {
@@ -117,5 +118,20 @@ ion-button {
 @media all and(min-width:768px) {
   .user-profile-card {
     --width: 330px;
+  }
+}
+
+.hljs{
+  border-radius:5px;
+  white-space: wrap;
+  pre{
+ white-space: wrap;
+ word-wrap: break-word;
+ line-break: normal;
+  }
+  code{
+ white-space: wrap;
+ word-wrap: break-word;
+ line-break: normal
   }
 }

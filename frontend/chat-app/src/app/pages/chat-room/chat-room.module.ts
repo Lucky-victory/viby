@@ -20,6 +20,7 @@ import { PopoverActionsComponent } from 'src/app/components/popover-actions/popo
 import { DomMutationObserverModule } from 'src/app/directives/dom-mutation-observer/dom-mutation-observer.module';
 import { UserProfileCardComponent } from 'src/app/components/user-profile-card/user-profile-card.component';
 import { UserAvatarComponent } from 'src/app/components/user-avatar/user-avatar.component';
+import { MarkdownifyModule } from 'src/app/pipes/markdownify/markdownify.module';
 
 @NgModule({
   imports: [
@@ -30,7 +31,7 @@ import { UserAvatarComponent } from 'src/app/components/user-avatar/user-avatar.
     PickerModule,
     DateFormatterModule,
     LinkifyModule,
-    LongPressModule,
+    LongPressModule,MarkdownifyModule,
     DomMutationObserverModule,
   ],
   declarations: [

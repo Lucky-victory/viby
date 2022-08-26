@@ -72,4 +72,13 @@ this.channelsForUser.next(channels);
   setMembersInRoom(members: IUserToView[]) {
     return this.membersInRoom.next(members);
   }
+  addFriend(userId:string) {
+    return this.apiService.post('/user/friends', { user_id: userId })
+  }
+createRoom(channelId: string) {
+    return this.apiService.post(`/rooms/${channelId}`);
+}
+  createChannel(channelId: string) {
+    return this.apiService.post(`/rooms/${channelId}`);
+  }
 }

@@ -9,6 +9,7 @@ router.use(AuthMiddleware.authenticate());
 router.get("/", UsersController.getUserProfile);
 router.get("/others/:user_id", asyncHandler(UsersController.getUser));
 router.get("/channels", asyncHandler(ChannelsController.getChannelsForUser));
+router.post("/friends", asyncHandler(UsersController.addFriend));
 router.get("/friends", asyncHandler(UsersController.getFriends));
 router.get("/messages", asyncHandler(UsersController.getDirectMessages));
 router.post("/update-profile", asyncHandler(UsersController.updateProfile));
