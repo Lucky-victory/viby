@@ -29,6 +29,7 @@
     "just-omit": "^2.1.1",
     "linkify-html": "^3.0.5",
     "linkifyjs": "^3.0.5",
+    "marked": "^4.0.19",
     "moment": "^2.29.4",
     "nanoid": "^4.0.0",
     "ngx-socket-io": "^4.3.0",

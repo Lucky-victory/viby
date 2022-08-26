@@ -42,7 +42,8 @@
   --chat-bg: #fff;
   --current-user-chat-bg: var(--accent-colo, #293774);
   --message-textarea-height: 70px;
-  --text-color: #353839;
+  --text-color-reverse: #fff;
+  --text-color:#353839;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -52,7 +53,8 @@
     --secondary-bg: #505152;
     --chat-area-bg: transparent;
     --chat-bg: #2b3537;
-    --text-color: #fff;
+    --text-color-reverse: #353839;
+    --text-color:#fff;
   }
 }
 .ios {

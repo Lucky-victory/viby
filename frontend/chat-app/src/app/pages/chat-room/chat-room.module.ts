@@ -19,6 +19,7 @@ import { LongPressModule } from 'src/app/directives/long-press/long-press.module
 import { PopoverActionsComponent } from 'src/app/components/popover-actions/popover-actions.component';
 import { DomMutationObserverModule } from 'src/app/directives/dom-mutation-observer/dom-mutation-observer.module';
 import { UserProfileCardComponent } from 'src/app/components/user-profile-card/user-profile-card.component';
+import { UserAvatarComponent } from 'src/app/components/user-avatar/user-avatar.component';
 
 @NgModule({
   imports: [
@@ -39,7 +40,7 @@ import { UserProfileCardComponent } from 'src/app/components/user-profile-card/u
     ChatSingleChatAudioComponent,
     ChatSingleChatTextComponent,
     PopoverActionsComponent,
-    UserProfileCardComponent,
+    UserProfileCardComponent,UserAvatarComponent
   ],
 })
 export class ChatRoomPageModule {}

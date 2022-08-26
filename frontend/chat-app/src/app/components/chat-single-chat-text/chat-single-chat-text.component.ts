@@ -117,11 +117,11 @@ export class ChatSingleChatTextComponent implements OnInit {
   deleteFunc(chat: IMessageToView) {
     this.ondelete.emit(chat);
   }
-  showUserProfile = async (event, userId: string) => {
-    this.authService
-      .getUserProfile(userId)
-      .subscribe(async (result: IResponse<IUserToView>) => {
-        const user = result.data;
+  async onAvatarClick({ event, user }) {
+    await this.showUserProfile(event,user)
+  }
+  showUserProfile = async ( event, user ) => {
+    
         await this.utilsService.showModalOrPopover({
           component: UserProfileCardComponent,
           componentProps: { user },
@@ -131,6 +131,6 @@ export class ChatSingleChatTextComponent implements OnInit {
           event,
           cssClass: 'user-profile-card',
         });
-      });
+      
   };
 }

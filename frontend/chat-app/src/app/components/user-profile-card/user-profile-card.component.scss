@@ -19,40 +19,6 @@ ion-card {
     height: 100%;
   }
 }
-.card-user-image-wrapper {
-  width: $avatar-width;
-  height: $avatar-width;
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px var(--text-color);
-  position: absolute;
-  left: 15px;
-  bottom: calc($avatar-width / 4);
-  transform: translateY(($avatar-width / 4));
-  .card-user-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-  .card-user-status {
-    width: 14px;
-    height: 14px;
-    position: absolute;
-    right: 5px;
-    bottom: 8px;
-    transform: translateY(7px);
-    border-radius: 50%;
-    border: 3px solid transparent;
-    background-color: currentColor;
-    &.online {
-      background-color: #00a693;
-      border-color: var(--text-color);
-    }
-    &.offline {
-      border-color: var(--text-color);
-    }
-  }
-}
 
 .card-content {
   .card-content-user-details {
@@ -62,8 +28,7 @@ ion-card {
       text-transform: capitalize;
       color: var(--text-color);
     }
-    .card-user-username {
-    }
+    
   }
 }
 

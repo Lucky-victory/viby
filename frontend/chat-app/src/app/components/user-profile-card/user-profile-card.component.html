@@ -8,10 +8,8 @@
           class="card-header-image"
         />
       </div>
-      <div class="card-user-image-wrapper">
-        <img [src]="user?.profile_picture" alt="" class="card-user-image" />
-        <div class="card-user-status online"></div>
-      </div>
+      <user-avatar class="card-header-avatar" [user]="user" size="medium" position="abs"></user-avatar>
+  
     </div>
     <div class="card-content">
       <div class="card-content-user-details">

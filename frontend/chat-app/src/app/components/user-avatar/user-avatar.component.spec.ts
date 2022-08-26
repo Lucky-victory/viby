@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { UserCoverPicComponent } from './user-cover-pic.component';
+import { UserAvatarComponent } from './user-avatar.component';
 
-describe('UserCoverPicComponent', () => {
-  let component: UserCoverPicComponent;
-  let fixture: ComponentFixture<UserCoverPicComponent>;
+describe('UserAvatarComponent', () => {
+  let component: UserAvatarComponent;
+  let fixture: ComponentFixture<UserAvatarComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserCoverPicComponent ],
+      declarations: [ UserAvatarComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(UserCoverPicComponent);
+    fixture = TestBed.createComponent(UserAvatarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

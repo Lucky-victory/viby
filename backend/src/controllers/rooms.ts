@@ -34,10 +34,10 @@ export default class RoomsController {
         return;
       }
 
-      const { title, description, message_allowed = true } = req.body;
+      const { title, description, message_allowed = true,members=[] } = req.body;
       // add channel members as room members
-      // in future this would be changed to implement rooms for users of specific roles
-      const members = channel.members;
+      // in future this could be changed to implement rooms for users of specific roles
+      members.push(...channel.members);
       
       const newRoom: INewRoom = {
         owner_id: userId,

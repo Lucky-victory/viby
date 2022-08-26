@@ -22,11 +22,12 @@ $padding: 12px;
     .single-chat-user {
       align-self: flex-end;
       display: flex;
+      flex-direction: row-reverse;
       align-items: center;
     }
 
     .single-chat-timestamp {
-      align-self: flex-end;
+      align-self:center ;
       text-align: right;
     }
     .wrapper {
@@ -67,28 +68,13 @@ $padding: 12px;
   gap: 0.75rem;
   margin-bottom: 5px;
   .single-chat-user-name {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
+    text-transform: capitalize;
     font-family: inherit;
   }
 }
-.single-chat-user-avatar-wrapper {
-  width: var(--avatar-width);
-  height: var(--avatar-width);
-  border-radius: 50%;
-  background: #000;
-  align-self: center;
-}
 
-ion-img.single-chat-user-avatar {
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-  border-radius: inherit;
-  &::part(image) {
-    border-radius: inherit;
-  }
-}
 .wrapper {
   position: relative;
   align-self: flex-start;

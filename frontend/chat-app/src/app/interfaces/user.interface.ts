@@ -31,3 +31,4 @@ export interface IUserCredentials {
   expires_at: number;
   user: IUserToView;
 }
+export type IUserAvatarSize = "large" | "medium" | "small";

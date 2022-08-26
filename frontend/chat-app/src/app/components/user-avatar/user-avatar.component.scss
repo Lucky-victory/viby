@@ -1,0 +1,81 @@
+$avatar-width-sm:40px;
+$avatar-width-md:70px;
+$avatar-width-lg:90px;
+$avatar-width:$avatar-width-sm;
+$status-indicator-size:$avatar-width / 5;
+.user-avatar-wrapper {
+    &.small{
+        
+        width: $avatar-width;
+        height:$avatar-width;
+
+    }
+    &.medium{
+        $avatar-width:$avatar-width-md;
+    $status-indicator-size:$avatar-width / 5;
+
+        width: $avatar-width;
+        height:$avatar-width;
+        .user-status-indicator{
+
+    width: $status-indicator-size;
+    height:$status-indicator-size;
+        }
+    }
+    &.large{
+        $avatar-width:$avatar-width-lg;
+    $status-indicator-size:$avatar-width / 5;
+
+        width: $avatar-width;
+        height:$avatar-width;
+        .user-status-indicator{
+
+    width: $status-indicator-size;
+    height:$status-indicator-size;
+        }
+    }
+    &.rel{
+    position: relative;
+    }
+    
+    &.border{
+        box-shadow: 0 0 0 4px var(--text-color-reverse);
+
+    }
+&.abs{
+    position: absolute;
+    left: 15px;
+  bottom: calc($avatar-width / 4);
+  transform: translateY(($avatar-width / 4));
+}
+  .user-status-indicator {
+    position: absolute;
+    right: 5px;
+    bottom: 8px;
+    transform: translateY(7px);
+    border-radius: 50%;
+    border: 3px solid transparent;
+    background-color: currentColor;
+    &.online {
+      background-color: #00a693;
+      border-color: var(--text-color-reverse);
+    }
+    &.offline {
+      border-color: var(--text-color-reverse);
+    }
+  }
+    border-radius: 50%;
+  background: #0001;
+  align-self: center;
+}
+
+
+ion-img.user-avatar {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  &::part(image) {
+    border-radius: inherit;
+  }
+}
