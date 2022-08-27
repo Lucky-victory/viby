@@ -27,6 +27,7 @@
 @import "~@ctrl/ngx-emoji-mart/picker";
 @import "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css";
 @import "https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500&family=Pacifico&display=swap";
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
 
 * {
   font-family: "Josefin Sans", sans-serif;
@@ -44,7 +45,8 @@
   --current-user-chat-bg: var(--accent-colo, #293774);
   --message-textarea-height: 70px;
   --text-color-reverse: #fff;
-  --text-color:#353839;
+  --text-color: #353839;
+  --code-bg: #201920;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -55,7 +57,7 @@
     --chat-area-bg: transparent;
     --chat-bg: #2b3537;
     --text-color-reverse: #353839;
-    --text-color:#fff;
+    --text-color: #fff;
   }
 }
 .ios {
@@ -121,17 +123,20 @@ ion-button {
   }
 }
 
-.hljs{
-  border-radius:5px;
-  white-space: wrap;
-  pre{
- white-space: wrap;
- word-wrap: break-word;
- line-break: normal;
+.hljs {
+  background-color: var(--code-bg);
+  border-radius: 5px;
+  font-family: "Source Code Pro", monospace;
+}
+
+.single-chat-text-wrapper {
+  p {
+    margin: 0;
   }
-  code{
- white-space: wrap;
- word-wrap: break-word;
- line-break: normal
+  pre {
+    margin: 0;
+  }
+  code.hljs {
+    padding: 0.375em;
   }
 }

@@ -20,7 +20,7 @@ export class ChannelGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (!this.authService.isLoggedIn) return this.router.navigate(['/sign-in']);
+    if (!this.authService.isLoggedIn()) return this.router.navigate(['/sign-in']);
     return true;
   }
 }

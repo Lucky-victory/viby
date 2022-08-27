@@ -8,8 +8,13 @@
           class="card-header-image"
         />
       </div>
-      <user-avatar class="card-header-avatar" [user]="user" size="medium" position="abs"></user-avatar>
-  
+      <user-avatar
+        class="card-header-avatar"
+        [addEvent]="false"
+        [user]="user"
+        size="medium"
+        position="abs"
+      ></user-avatar>
     </div>
     <div class="card-content">
       <div class="card-content-user-details">
@@ -33,7 +38,7 @@
     <ion-icon slot="start" name="mail-outline"></ion-icon>
     message
   </ion-button>
-  <ion-button fill="outline" class="card-btn">
+  <ion-button fill="outline" class="card-btn" (click)="addFriend(user)">
     <ion-icon slot="start" name="person-add-outline"></ion-icon>
     Add friend
   </ion-button>

@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Request } from "express";
 import merge from "just-merge";
 /**
- * utilities class
+ * Utilities class
  */
 export default class Utils {
   static generateToken(user: IUserForToken, cb: SignCallback) {

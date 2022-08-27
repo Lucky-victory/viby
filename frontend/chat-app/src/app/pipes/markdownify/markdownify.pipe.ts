@@ -1,26 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {marked} from 'marked';
+import { marked } from 'marked';
 import hljs from 'highlight.js';
-
-import { decode } from 'html-entities';
+marked.setOptions({
+  highlight: function (code, lang) {
+    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+    return hljs.highlight(code, { language }).value;
+  },
+  langPrefix: 'hljs language-',
+});
 
 @Pipe({
-  name: 'markdownify'
+  name: 'markdownify',
 })
 export class MarkdownifyPipe implements PipeTransform {
-
-  transform(value: string,): string {
-    marked.setOptions({
-      highlight: function(code, lang) {
-  
-        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-        return hljs.highlight(code,{language}).value;
-      },
-      langPrefix: 'hljs language-'
-    });
-  
+  transform(value: string): string {
     const html = marked.parse(value);
     return html;
   }
-
 }

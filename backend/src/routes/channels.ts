@@ -18,6 +18,10 @@ router.post("/search", asyncHandler(ChannelsController.searchChannels));
 router.get("/", asyncHandler(ChannelsController.getPublicChannels));
 router.get("/:channel_id", asyncHandler(ChannelsController.getChannel));
 router.get("/:channel_id/members", asyncHandler(ChannelsController.getMembers));
+router.post(
+  "/:channel_id/member",
+  asyncHandler(ChannelsController.checkMember)
+);
 router.get("/:channel_id/rooms", asyncHandler(ChannelsController.getRooms));
 router.get(
   "/:channel_id/join",

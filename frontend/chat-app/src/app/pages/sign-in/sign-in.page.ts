@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ISignInForm } from 'src/app/interfaces/forms.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Location } from '@angular/common';
+import { UtilsService } from 'src/app/services/utils/utils.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.page.html',
@@ -13,14 +15,13 @@ export class SignInPage implements OnInit {
   passwordInputType = 'password';
   signInForm: FormGroup<ISignInForm>;
   isSending: boolean;
-  errorResult: any;
-  result: any;
-  infoMessage: string;
-  errorMessage: any;
+  errorMessage: string;
+  private redirectTimeout = 3000;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private location: Location
+    private router: Router,
+    private utilsService: UtilsService
   ) {
     this.signInForm = this.fb.group({
       usernameOrEmail: ['', [Validators.required]],
@@ -39,23 +40,33 @@ export class SignInPage implements OnInit {
   signIn(event: Event) {
     const username_or_email = this.signInForm.get('usernameOrEmail').value;
     const password = this.signInForm.get('password').value;
-
-    this.errorResult = null;
+    this.errorMessage = '';
     this.isSending = true;
     this.authService.signIn({ username_or_email, password }).subscribe(
       (res) => {
-        this.result = res;
         this.isSending = false;
-        this.infoMessage = 'Sign in successful';
+        this.utilsService.showToast({
+          message: 'Sign in successful',
+        });
+        this.utilsService.showLoader({
+          message: 'Redirecting to home',
+          duration: 2000,
+        });
+        this.resetPassword();
         setTimeout(() => {
-          this.location.historyGo(-1);
-        }, 2500);
+          this.router.navigate(['/home']);
+        }, this.redirectTimeout);
       },
       (error) => {
         this.isSending = false;
         this.errorMessage = error;
-        console.log(error);
+        this.resetPassword();
       }
     );
+  }
+  private resetPassword() {
+    this.signInForm.reset({
+      password: '',
+    });
   }
 }

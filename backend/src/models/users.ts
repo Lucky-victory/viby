@@ -1,6 +1,6 @@
-import { Entity, Schema, Repository, Client } from "redis-om";
+import { Entity, Schema, Repository } from "redis-om";
 
-import { redis } from "../db";
+import { client } from "../db";
 
 export interface UsersEntity {
   username: string;
@@ -29,12 +29,14 @@ export class UsersEntity extends Entity {
     this.bio = bio || this.bio;
     this.username = username || this.username;
     this.fullname = fullname || this.fullname;
-    this.cover_picture = cover_picture || this.cover_picture
-    this.profile_picture = profile_picture
-  || this.profile_picture
+    this.cover_picture = cover_picture || this.cover_picture;
+    this.profile_picture = profile_picture || this.profile_picture;
   }
   async updateCredentials({ password }: Partial<UsersEntity>) {
     this.password = password || this.password;
+  }
+  isFriend(userId: string) {
+    return this.friends.indexOf(userId) !== -1;
   }
 }
 
@@ -53,8 +55,8 @@ const UsersSchema = new Schema(UsersEntity, {
 });
 
 export const UsersRepo: Promise<Repository<UsersEntity>> = (async () => {
-  const clientOM = await new Client().use(redis);
-  const repo = clientOM.fetchRepository(UsersSchema);
+  const repo = await (await client).fetchRepository(UsersSchema);
+
   await repo.createIndex();
   return repo;
 })();

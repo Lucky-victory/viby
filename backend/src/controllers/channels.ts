@@ -149,7 +149,39 @@ export default class ChannelsController {
       });
     }
   }
+/**
+ * checks if a user a member of the channel
+ * @param req 
+ * @param res 
+ */
+  static async checkMember(req:Request,res:Response){
+try{
+const authUser=Utils.getAuthenticatedUser(req);
+const {channel_id}= req.params;
+  const channel = await ChannelsController.channelExist(channel_id);
+  if (!channel) {
+    res.status(404).json({
+      message: `channel with id '${channel_id}' does not exist`,
+    });
+    return;
+  }
+  const isMember=channel.isMember(authUser?.user_id);
+  res.status(200).json({
+    message:'member checked successfully',
+    data:{
+      is_member:isMember
+    }
+  })
 
+}
+catch(error){
+ res.status(500).json({
+        error,
+        message: "An error occurred, couldn't check member",
+      });
+    
+}
+  }
   /**
    * Add a member to a channel
    * @param req

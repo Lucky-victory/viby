@@ -223,54 +223,67 @@ export default class UsersController {
       });
     }
   }
+
   static async getUser(req: Request, res: Response) {
     try {
+      const authUser = Utils.getAuthenticatedUser(req);
       const { user_id } = req.params;
       const user = await UsersController.getUserById(user_id);
-      const userToView = Utils.omit(user as UsersEntity, [
+      const sender = await UsersController.getUserById(authUser?.user_id);
+
+      if (!user) {
+        res.status(404).json({
+          message: `user with id '${user_id}' does not exist`,
+          data: null,
+        });
+        return;
+      }
+      let userToView = Utils.omit(user as UsersEntity, [
         "entityId",
         "email",
         "password",
         "friends",
       ]);
-      if (user) {
-        res.status(200).json({
-          message: "user retrieved successfully",
-          data: userToView,
-        });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "An error occured, couldn't fetch messages" });
+
+      // check if they are friends
+      const is_friend = sender?.isFriend(user?.user_id);
+      userToView = Utils.merge(userToView, { is_friend });
+
+      res.status(200).json({
+        message: "user retrieved successfully",
+        data: userToView,
+      });
+    } catch (error: any) {
+      console.log(error);
+      res.status(500).json({
+        message: error?.message || "An error occured, couldn't fetch user",
+      });
     }
   }
   static async getFriends() {
     //
   }
   static async addFriend(req: Request, res: Response) {
-    try{
-
+    try {
       const { user_id } = req.body;
       const authUser = Utils.getAuthenticatedUser(req);
-      const sender = await UsersController.getUserById(user_id);
-      
+      // const sender = await UsersController.getUserById(user_id);
+
       const user = await UsersController.getUserById(authUser.user_id);
       if (!user) {
-res.status(404).json({
-          message: `channel with id '${user_id}' does not exist`,
+        res.status(404).json({
+          message: `user with id '${user_id}' does not exist`,
           data: null,
         });
         return;
-
       }
-        user?.friends.push(user_id);
-        await (await UsersRepo).save(user as UsersEntity);
-      res.status(200).json({
-  message:'You are now friends',data:null
-})
-      
 
+      user?.friends.push(user_id);
+      await (await UsersRepo).save(user as UsersEntity);
+      res.status(200).json({
+        message: "You are now friends",
+        data: null,
+      });
     } catch (error) {
       res
         .status(500)

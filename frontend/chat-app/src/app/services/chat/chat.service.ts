@@ -75,6 +75,9 @@ this.channelsForUser.next(channels);
   addFriend(userId:string) {
     return this.apiService.post('/user/friends', { user_id: userId })
   }
+  getUser(userId:string) {
+    return this.apiService.get(`/user/others/${userId}`)
+  }
 createRoom(channelId: string) {
     return this.apiService.post(`/rooms/${channelId}`);
 }

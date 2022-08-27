@@ -1,15 +1,5 @@
-import { createClient } from "redis";
+import { Client } from "redis-om";
 import config from "../config";
 
-const redis = createClient({
-  url: config.redis_db_url,
-});
-
-(async () => {
-  await redis.connect();
-})();
-redis.on("error", (err) => {
-  throw err;
-});
-
-export { redis };
+export const client = (async () =>
+  await new Client().open(config.redis_db_url))();

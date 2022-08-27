@@ -15,18 +15,7 @@ import { ApiService } from '../api/api.service';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiBaseUrl = environment.apiBaseUrl;
-  private readonly sampleUser: IUserToView = {
-    user_id: 'b23e3692-ee33-4f24-acad-2e743597a22a',
-    username: 'LuckyVictoryU5J6',
-    fullname: 'Lucky Victory',
-    profile_picture:
-      'https://www.gravatar.com/avatar/0f69cbedcf462f733c3458f3665e9d75.jpg?s=150',
-    cover_picture: null,
-    created_at: '2022-08-20T14:54:02.883Z',
-    bio: null,
-    status: null,
-  };
+  private readonly sampleUser: IUserToView;
   constructor(private apiService: ApiService) {}
 
   set setSession(result: IUserCredentials) {
@@ -51,7 +40,7 @@ export class AuthService {
         tap((res: IResponse<IUserCredentials>) => (this.setSession = res.data))
       );
   }
-  getUserProfile(userId:string){
+  getUserProfile(userId: string) {
     return this.apiService.get(`/user/others/${userId}`);
   }
   getToken(): string {
@@ -77,20 +66,17 @@ export class AuthService {
     localStorage.setItem('viby_user', JSON.stringify(user));
   }
   get currentUser(): IUserToView {
-    return (
-      (JSON.parse(localStorage.getItem('viby_user')) as IUserToView) ||
-      this.sampleUser
-    );
+    return JSON.parse(localStorage.getItem('viby_user') || '{}') as IUserToView;
   }
   logout() {
     localStorage.removeItem('viby_token');
     localStorage.removeItem('viby_user');
     localStorage.removeItem('viby_token_expiration');
   }
-  get isLoggedIn(): boolean {
+  isLoggedIn(): boolean {
     return moment().isBefore(this.getTokenExpiration());
   }
   get isLoggedOut() {
-    return !this.isLoggedIn;
+    return !this.isLoggedIn();
   }
 }

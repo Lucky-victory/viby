@@ -3,9 +3,9 @@ import {
   IMessageType,
 } from "./../interfaces/message.interface";
 import { UsersRepo } from "./users";
-import { Entity, Schema, Repository, Client } from "redis-om";
+import { Entity, Schema, Repository } from "redis-om";
 
-import { redis } from "../db";
+import { client } from "../db";
 
 export interface MessagesEntity {
   user_id: string;
@@ -42,8 +42,7 @@ const MessagesSchema = new Schema(MessagesEntity, {
 });
 
 export const MessagesRepo: Promise<Repository<MessagesEntity>> = (async () => {
-  const clientOM = await new Client().use(redis);
-  const repo = clientOM.fetchRepository(MessagesSchema);
+  const repo = await (await client).fetchRepository(MessagesSchema);
   await repo.createIndex();
   return repo;
 })();

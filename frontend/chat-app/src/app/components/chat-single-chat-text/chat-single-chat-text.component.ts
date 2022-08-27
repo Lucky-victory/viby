@@ -12,6 +12,7 @@ import { IUserToView } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { PopoverActionsComponent } from '../popover-actions/popover-actions.component';
+import { ChatService } from 'src/app/services/chat/chat.service';
 
 @Component({
   selector: 'chat-single-chat-text',
@@ -32,7 +33,8 @@ export class ChatSingleChatTextComponent implements OnInit {
   constructor(
     private platform: Platform,
     private authService: AuthService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private chatService: ChatService
   ) {
     this.currentUser = this.authService.currentUser;
     this.isMobile = this.platform.is('mobile');
@@ -118,19 +120,24 @@ export class ChatSingleChatTextComponent implements OnInit {
     this.ondelete.emit(chat);
   }
   async onAvatarClick({ event, user }) {
-    await this.showUserProfile(event,user)
+    await this.showUserProfile(event, user);
   }
-  showUserProfile = async ( event, user ) => {
-    
+  showUserProfile = async (event, user) => {
+    this.chatService
+      .getUser(user?.user_id)
+      .subscribe(async (result: IResponse<IUserToView>) => {
+        const userResult = result.data;
+        console.log(userResult);
+
         await this.utilsService.showModalOrPopover({
           component: UserProfileCardComponent,
-          componentProps: { user },
+          componentProps: { userResult },
           breakpoints: [0, 0.5, 1],
           initialBreakpoint: 0.5,
           canDismiss: true,
           event,
           cssClass: 'user-profile-card',
         });
-      
+      });
   };
 }

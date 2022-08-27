@@ -34,11 +34,16 @@ export default class RoomsController {
         return;
       }
 
-      const { title, description, message_allowed = true,members=[] } = req.body;
+      const {
+        title,
+        description,
+        message_allowed = true,
+        members = [],
+      } = req.body;
       // add channel members as room members
       // in future this could be changed to implement rooms for users of specific roles
       members.push(...channel.members);
-      
+
       const newRoom: INewRoom = {
         owner_id: userId,
         members,
@@ -282,6 +287,36 @@ export default class RoomsController {
       return roomSaved;
     } catch (error) {
       if (error) throw error;
+    }
+  }
+  /**
+   * checks if a user a member of the room
+   * @param req
+   * @param res
+   */
+  static async checkMember(req: Request, res: Response) {
+    try {
+      const authUser = Utils.getAuthenticatedUser(req);
+      const { room_id } = req.params;
+      const room = await RoomsController.roomExist(room_id);
+      if (!room) {
+        res.status(404).json({
+          message: `room with id '${room_id}' does not exist`,
+        });
+        return;
+      }
+      const isMember = room.isMember(authUser?.user_id);
+      res.status(200).json({
+        message: "member checked successfully",
+        data: {
+          is_member: isMember,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        error,
+        message: "An error occurred, couldn't check member",
+      });
     }
   }
   static async getRoomById(roomId: string) {

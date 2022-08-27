@@ -15,7 +15,7 @@ export default class SocketController {
     user: IUserToView
   ) {
     try {
-      console.log("socket id", socket.id);
+      console.log("socket id", socket.id, channelId, roomId);
       // get previous messages when a user joins a room
       const result = await MessagesController.getMessages(channelId, roomId);
 

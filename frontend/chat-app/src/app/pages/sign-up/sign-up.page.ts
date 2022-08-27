@@ -1,15 +1,17 @@
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ISignUpForm } from 'src/app/interfaces/forms.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.page.html',
   styleUrls: ['./sign-up.page.scss'],
 })
-export class SignUpPage implements OnInit {
+export class SignUpPage {
   @ViewChild('passwordInput') passwordInput: HTMLIonInputElement;
   @ViewChild('confirmPasswordInput') confirmPasswordInput: HTMLIonInputElement;
   passwordInputType = 'password';
@@ -18,14 +20,15 @@ export class SignUpPage implements OnInit {
   signUpForm: FormGroup<ISignUpForm>;
   isSending: boolean;
   errorMessage: string;
-  errorResult: any;
-  infoMessage: string;
   isText: boolean;
   isPasswordMatch: boolean;
+  private redirectTimeout = 3000;
   constructor(
     private fb: FormBuilder,
     private location: Location,
-    private authService: AuthService
+    private authService: AuthService,
+    private utilsService: UtilsService,
+    private router: Router
   ) {
     this.signUpForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -66,10 +69,6 @@ export class SignUpPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    // this.isValid=this.signUpForm.valid;
-  }
-
   toggleInputType(prevType: string) {
     const type = prevType === 'password' ? 'text' : 'password';
     this.confirmPasswordInput.type = type;
@@ -82,6 +81,7 @@ export class SignUpPage implements OnInit {
   }
   signUp(event: Event) {
     event.preventDefault();
+    this.errorMessage = '';
     const fullname = this.signUpForm.get('fullname').value;
     const username = this.signUpForm.get('username').value;
     const email = this.signUpForm.get('email').value;
@@ -104,17 +104,30 @@ export class SignUpPage implements OnInit {
       .subscribe(
         () => {
           this.isSending = false;
-          this.infoMessage = 'Sign up successful';
+          this.utilsService.showToast({
+            message: 'Sign up successful',
+          });
+          this.utilsService.showLoader({
+            message: 'Redirecting to home',
+            duration: 2000,
+          });
+          this.resetForm(true);
           setTimeout(() => {
-            this.location.historyGo(-1);
-          }, 2500);
+            this.router.navigate(['/home']);
+          }, this.redirectTimeout);
         },
         (error) => {
           this.isSending = false;
           this.errorMessage = error;
-          console.log(error);
+          this.resetForm();
         }
       );
+  }
+  private resetForm(all = false) {
+    if (all) {
+      this.signUpForm.reset();
+      return;
+    }
     this.signUpForm.reset({ password: '', confirmPassword: '' });
   }
 }

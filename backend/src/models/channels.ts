@@ -1,6 +1,6 @@
-import { Entity, Schema, Repository, Client } from "redis-om";
+import { Entity, Schema, Repository } from "redis-om";
 
-import { redis } from "../db";
+import { client } from "../db";
 import { RoomsRepo } from "./rooms";
 
 export interface ChannelsEntity {
@@ -29,7 +29,9 @@ export class ChannelsEntity extends Entity {
   removeMemberId(memberId: string) {
     this.members = this.members.filter((_memberId) => _memberId !== memberId);
   }
-
+  isMember(userId: string) {
+    return this.members.indexOf(userId) !== -1;
+  }
   async getRooms() {
     return await Promise.all(
       this.rooms.map(async (roomId) => {
@@ -76,8 +78,7 @@ const ChannelsSchema = new Schema(ChannelsEntity, {
 });
 
 export const ChannelsRepo: Promise<Repository<ChannelsEntity>> = (async () => {
-  const clientOM = await new Client().use(redis);
-  const repo = clientOM.fetchRepository(ChannelsSchema);
+  const repo = await (await client).fetchRepository(ChannelsSchema);
   await repo.createIndex();
   return repo;
 })();
