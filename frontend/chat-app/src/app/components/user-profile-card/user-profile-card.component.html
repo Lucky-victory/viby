@@ -38,7 +38,12 @@
     <ion-icon slot="start" name="mail-outline"></ion-icon>
     message
   </ion-button>
-  <ion-button fill="outline" class="card-btn" (click)="addFriend(user)">
+  <ion-button
+    *ngIf="!user?.is_friend"
+    fill="outline"
+    class="card-btn"
+    (click)="addFriend(user)"
+  >
     <ion-icon slot="start" name="person-add-outline"></ion-icon>
     Add friend
   </ion-button>

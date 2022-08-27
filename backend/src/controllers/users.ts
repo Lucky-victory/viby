@@ -158,6 +158,7 @@ export default class UsersController {
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      console.log(error);
       res.status(500).json({
         error,
         message: "An error occurred, couldn't login",
@@ -245,7 +246,7 @@ export default class UsersController {
         "friends",
       ]);
 
-      // check if they are friends
+      // check if they are friends,
       const is_friend = sender?.isFriend(user?.user_id);
       userToView = Utils.merge(userToView, { is_friend });
 
@@ -254,7 +255,6 @@ export default class UsersController {
         data: userToView,
       });
     } catch (error: any) {
-      console.log(error);
       res.status(500).json({
         message: error?.message || "An error occured, couldn't fetch user",
       });
@@ -267,19 +267,22 @@ export default class UsersController {
     try {
       const { user_id } = req.body;
       const authUser = Utils.getAuthenticatedUser(req);
-      // const sender = await UsersController.getUserById(user_id);
+      const reciever = await UsersController.getUserById(user_id);
 
-      const user = await UsersController.getUserById(authUser.user_id);
-      if (!user) {
+      const sender = await UsersController.getUserById(authUser?.user_id);
+      if (!reciever) {
         res.status(404).json({
           message: `user with id '${user_id}' does not exist`,
           data: null,
         });
         return;
       }
-
-      user?.friends.push(user_id);
-      await (await UsersRepo).save(user as UsersEntity);
+      // currently, they both become friends automatically without approval,
+      // this will be changed in future,
+      reciever?.addFriend(authUser?.user_id);
+      sender?.addFriend(user_id);
+      await (await UsersRepo).save(sender as UsersEntity);
+      await (await UsersRepo).save(reciever as UsersEntity);
       res.status(200).json({
         message: "You are now friends",
         data: null,

@@ -89,7 +89,10 @@ export default class MessagesController {
         .page(offset, limit);
 
       messages = JSON.parse(JSON.stringify(messages));
+    
+
       const userIds = pluck(messages, "user_id");
+      
 
       // get users by message userid and merge the message with the user
       // based on userid
@@ -103,10 +106,13 @@ export default class MessagesController {
             "friends",
             "entityId",
           ]) as IUserToView;
+          
 
           return userToView;
         })
       );
+
+    
       const messagesWithUser: IMessageToView[] = Utils.arrayMergeObject(
         messages,
         messageOwners

@@ -19,7 +19,7 @@ export class ChatService {
   private channelId: string;
   private channels$ = new Subject<IChannelToView[]>();
   private channelsForUser = new Subject<IChannelToView[]>();
-  channelsForUser$=this.channelsForUser.asObservable();
+  channelsForUser$ = this.channelsForUser.asObservable();
   private rooms = new Subject<IRoom[]>();
   rooms$ = this.rooms.asObservable();
   private messageToEdit = new Subject<IMessageToDB>();
@@ -31,7 +31,16 @@ export class ChatService {
   private readonly retryCount = 3;
   private readonly delayTime = 2000;
   constructor(private apiService: ApiService) {}
-
+  /**
+   * check if the user accessing a channel url is a member of that channel
+   * @param userId
+   * @returns
+   */
+  validateChannelMember(channelId: string, userId: string) {
+    return this.apiService.post(`/channels/${channelId}/member`, {
+      user_id: userId,
+    });
+  }
   setChannels(channels) {
     this.channels$.next(channels);
   }
@@ -49,19 +58,25 @@ export class ChatService {
       .pipe(retry(this.retryCount), delay(this.delayTime));
   }
   getRooms(channelId: string) {
-    return this.apiService.get(`/channels/${channelId}/rooms`);
+    return this.apiService
+      .get(`/channels/${channelId}/rooms`)
+      .pipe(retry(this.retryCount), delay(this.delayTime));
   }
   getMembersInChannel(channelId: string) {
-    return this.apiService.get(`/channels/${channelId}/members`);
+    return this.apiService
+      .get(`/channels/${channelId}/members`)
+      .pipe(retry(this.retryCount), delay(this.delayTime));
   }
   getMembersInRoom(roomId: string) {
-    return this.apiService.get(`/rooms/${roomId}/members`);
+    return this.apiService
+      .get(`/rooms/${roomId}/members`)
+      .pipe(retry(this.retryCount), delay(this.delayTime));
   }
   setRooms(rooms: IRoom[]) {
     this.rooms.next(rooms);
   }
-  setChannelsForUser(channels:IChannelToView[]){
-this.channelsForUser.next(channels);
+  setChannelsForUser(channels: IChannelToView[]) {
+    this.channelsForUser.next(channels);
   }
   setMessageToEdit(message: IMessageToDB) {
     return this.messageToEdit.next(message);
@@ -72,15 +87,15 @@ this.channelsForUser.next(channels);
   setMembersInRoom(members: IUserToView[]) {
     return this.membersInRoom.next(members);
   }
-  addFriend(userId:string) {
-    return this.apiService.post('/user/friends', { user_id: userId })
+  addFriend(userId: string) {
+    return this.apiService.post('/user/friends', { user_id: userId });
   }
-  getUser(userId:string) {
-    return this.apiService.get(`/user/others/${userId}`)
+  getUser(userId: string) {
+    return this.apiService.get(`/user/others/${userId}`);
   }
-createRoom(channelId: string) {
+  createRoom(channelId: string) {
     return this.apiService.post(`/rooms/${channelId}`);
-}
+  }
   createChannel(channelId: string) {
     return this.apiService.post(`/rooms/${channelId}`);
   }

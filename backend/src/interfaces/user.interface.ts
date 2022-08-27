@@ -12,6 +12,7 @@ export interface IUser {
   friends?: string[];
   email: string;
   created_at: DateType;
+  is_friend?: boolean;
 }
 export type IUserStatus = "online" | "away" | "offline";
 export type IUserToView = Omit<IUser, "email" | "password" | "friends">;

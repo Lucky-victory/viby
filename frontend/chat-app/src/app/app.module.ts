@@ -17,6 +17,7 @@ import { HttpErrorInterceptorService } from './services/http-error-interceptor/h
 import { UtilsService } from './services/utils/utils.service';
 import { WebSocketService } from './services/web-socket/web-socket.service';
 import { SeoService } from './services/seo/seo.service';
+import { ChatRoomGuard } from './guards/chat-room/chat-room.guard';
 
 const config: SocketIoConfig = {
   url: environment.socketUrl, // socket server url;
@@ -26,7 +27,7 @@ const config: SocketIoConfig = {
   },
 };
 @NgModule({
-  declarations: [AppComponent,],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -42,6 +43,7 @@ const config: SocketIoConfig = {
     ApiService,
     AuthService,
     SeoService,
+    ChatRoomGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpAuthInterceptorService,

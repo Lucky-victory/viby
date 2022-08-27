@@ -69,4 +69,7 @@ export class WebSocketService {
   onConnectError() {
     return this.socket.fromEvent('connect_error');
   }
+  off(eventName: string) {
+    return this.socket.removeListener(eventName);
+  }
 }

@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -19,6 +20,7 @@ export class ChatRoomPage implements OnInit {
   channelId: string;
   currentUser: IUserToView;
   pageTitle: string;
+  title$: Observable<string>;
   constructor(
     private utilsService: UtilsService,
     private authService: AuthService,
@@ -36,7 +38,7 @@ export class ChatRoomPage implements OnInit {
     });
     this.currentUser = this.authService.currentUser;
     this.seoService.title$.subscribe((title) => {
-      this.pageTitle = title;
+      console.log(title, 'page title');
     });
     this.webSocketService.connect();
   }
@@ -50,8 +52,6 @@ export class ChatRoomPage implements OnInit {
     this.chatService
       .getMembersInRoom(roomId)
       .subscribe((result: IResponse<IUserToView[]>) => {
-        console.log(result, 'members');
-
         this.chatService.setMembersInRoom(result.data);
       });
     // this.webSocketService.connect();
@@ -65,7 +65,4 @@ export class ChatRoomPage implements OnInit {
       this.currentUser
     );
   }
-  showAction = async () => {
-    await this.utilsService.showActionSheet();
-  };
 }

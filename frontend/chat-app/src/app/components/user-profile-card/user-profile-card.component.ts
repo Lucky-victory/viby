@@ -20,7 +20,7 @@ export class UserProfileCardComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this.authService.currentUser;
   }
-  addFriend = async (user: IUserToView) => {
+  addFriend(user: IUserToView){
     this.chatService
       .addFriend(user?.user_id)
       .subscribe((result: IResponse<{}>) => {

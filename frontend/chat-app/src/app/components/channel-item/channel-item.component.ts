@@ -8,6 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { IChannelToView } from 'src/app/interfaces/channel.interface';
 import { ChatService } from 'src/app/services/chat/chat.service';
+import { SeoService } from 'src/app/services/seo/seo.service';
 
 @Component({
   selector: 'channel-item',
@@ -22,7 +23,8 @@ export class ChannelItemComponent implements OnInit {
   constructor(
     private activeRoute: ActivatedRoute,
     private router: Router,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private seoService: SeoService
   ) {}
 
   ngOnInit() {
@@ -32,12 +34,13 @@ export class ChannelItemComponent implements OnInit {
   }
 
   navigateToRoom(channel: IChannelToView) {
+    const firstRoom = channel.rooms[0];
     this.router.navigate([
       '/channels',
       channel?.channel_id,
-      channel?.rooms[0]?.room_id,
+      firstRoom?.room_id,
     ]);
-
+    this.seoService.setTitle(firstRoom.title);
     this.chatService.setRooms(channel?.rooms);
   }
 }

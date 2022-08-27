@@ -17,6 +17,7 @@ import signInRouter from "./routes/sign-in";
 import channelsRouter from "./routes/channels";
 import usersRouter from "./routes/users";
 import roomsRouter from "./routes/rooms";
+import config from "./config";
 
 // express middleware for JSON body
 app.use(express.json());
@@ -26,20 +27,10 @@ app.use(
     extended: false,
   })
 );
-const whitelist: string[] = ["*"];
+
 app.use(
   cors({
-    origin: "*",
-    /*
-(origin, callback) => {
-      if (whitelist.indexOf(origin as string) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-
-    */
+    origin: config.origin || "*"
   })
 );
 // you can pass a prefix here, if you want, e.g /api/

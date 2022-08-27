@@ -21,6 +21,7 @@ import { DomMutationObserverModule } from 'src/app/directives/dom-mutation-obser
 import { UserProfileCardComponent } from 'src/app/components/user-profile-card/user-profile-card.component';
 import { UserAvatarComponent } from 'src/app/components/user-avatar/user-avatar.component';
 import { MarkdownifyModule } from 'src/app/pipes/markdownify/markdownify.module';
+import { ChatRoomGuard } from 'src/app/guards/chat-room/chat-room.guard';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { MarkdownifyModule } from 'src/app/pipes/markdownify/markdownify.module'
     PickerModule,
     DateFormatterModule,
     LinkifyModule,
-    LongPressModule,MarkdownifyModule,
+    LongPressModule,
+    MarkdownifyModule,
     DomMutationObserverModule,
   ],
   declarations: [
@@ -41,7 +43,8 @@ import { MarkdownifyModule } from 'src/app/pipes/markdownify/markdownify.module'
     ChatSingleChatAudioComponent,
     ChatSingleChatTextComponent,
     PopoverActionsComponent,
-    UserProfileCardComponent,UserAvatarComponent
+    UserProfileCardComponent,
+    UserAvatarComponent,
   ],
 })
 export class ChatRoomPageModule {}

@@ -105,12 +105,10 @@ export class SignUpPage {
         () => {
           this.isSending = false;
           this.utilsService.showToast({
-            message: 'Sign up successful',
+            header: 'Sign up successful',
+            message: 'Redirecting...',
           });
-          this.utilsService.showLoader({
-            message: 'Redirecting to home',
-            duration: 2000,
-          });
+
           this.resetForm(true);
           setTimeout(() => {
             this.router.navigate(['/home']);

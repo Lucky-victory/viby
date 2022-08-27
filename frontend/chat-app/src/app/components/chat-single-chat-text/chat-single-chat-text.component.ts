@@ -131,10 +131,10 @@ export class ChatSingleChatTextComponent implements OnInit {
 
         await this.utilsService.showModalOrPopover({
           component: UserProfileCardComponent,
-          componentProps: { userResult },
+          componentProps: { user: userResult },
           breakpoints: [0, 0.5, 1],
           initialBreakpoint: 0.5,
-          canDismiss: true,
+
           event,
           cssClass: 'user-profile-card',
         });

@@ -39,6 +39,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
   private connectErrorSub: Subscription;
   private debounceTimeout: number = 300;
   private isScrolledDown: boolean = true;
+  private loaderDuration = 4000;
   constructor(
     private activeRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -62,10 +63,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     this.newMessageSub = this.webSocketService
       .onReceiveMessage()
-      .subscribe((message: IMessageToView) => {
-        this.messages.push(message);
-        console.log('recieve message');
-      });
+      .subscribe((message: IMessageToView) => {});
     this.webSocketService
       .onMessageEdit()
       .subscribe((message: IMessageToView) => {
@@ -80,10 +78,9 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
       .onConnectError()
       .subscribe(async (error) => {
         await this.utilsService.showLoader({
-          message: 'Trying to Reconnect',
+          message: 'Reconnecting...',
           spinner: 'circles',
-          mode: 'ios',
-          duration: 4000,
+          duration: this.loaderDuration,
         });
       });
     // setTimeout(async () => {
@@ -91,14 +88,14 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
     //   await this.utilsService.showAlert({
     //     header: 'Network Error',
     //     mode: 'ios',
-    //     message: "Couldn't reconnect, check your connection or reload the page",
+    //     message: "Couldn't reconnect, check your connection and refresh the page",
     //     buttons: [
     //       {
-    //         text: 'cancel',
+    //         text: 'Cancel',
     //         role: 'cancel',
     //       },
     //       {
-    //         text: 'Reload',
+    //         text: 'Refresh',
     //         role: 'reload',
     //         handler: () => {
     //           window.location.reload();

@@ -38,6 +38,10 @@ export class UsersEntity extends Entity {
   isFriend(userId: string) {
     return this.friends.indexOf(userId) !== -1;
   }
+  addFriend(userId: string) {
+    if (!userId) return;
+    this.friends.push(userId);
+  }
 }
 
 const UsersSchema = new Schema(UsersEntity, {

@@ -10,10 +10,11 @@ const routes: Routes = [
   {
     path: '',
     component: ChannelsPage,
+    canActivate: [ChannelGuard],
+
     children: [
       {
         path: '@me',
-
         loadChildren: () =>
           import('../user-profile/user-profile.module').then(
             (m) => m.UserProfilePageModule
@@ -32,14 +33,6 @@ const routes: Routes = [
         path: '',
         redirectTo: '@me',
         pathMatch: 'full',
-      },
-      {
-        path: '@me',
-
-        loadChildren: () =>
-          import('../user-profile/user-profile.module').then(
-            (m) => m.UserProfilePageModule
-          ),
       },
     ],
   },

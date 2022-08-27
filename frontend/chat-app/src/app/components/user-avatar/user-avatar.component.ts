@@ -29,11 +29,14 @@ export class UserAvatarComponent implements AfterViewInit {
    */
   @Input() border: boolean = true;
   @Input() addEvent: boolean = true;
+  hasEvent: boolean;
   @Input() user: IUserToView;
   @Input() showStatus: boolean = true;
   @Output() avatarClick = new EventEmitter();
   @ViewChild('userAvatar') userAvatar: ElementRef<HTMLDivElement>;
-  constructor() {}
+  constructor() {
+    this.hasEvent = this.addEvent;
+  }
 
   ngAfterViewInit(): void {
     if (this.addEvent) {
@@ -44,8 +47,6 @@ export class UserAvatarComponent implements AfterViewInit {
     }
   }
   onAvatarClick(event: Event, user: IUserToView) {
-    console.log(user, 'in avatar');
-
     this.avatarClick.emit({ event, user });
   }
 }

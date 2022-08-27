@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
+  CanActivateChild,
   Router,
   RouterStateSnapshot,
   UrlTree,
@@ -15,12 +16,17 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class ChannelGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
-  canActivate():
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
+  canActivate(
+    childRoute: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ):
     | boolean
-    | UrlTree {
-    if (!this.authService.isLoggedIn()) return this.router.navigate(['/sign-in']);
-    return true;
+    | UrlTree
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree> {
+    if (this.authService.isLoggedIn()) {
+      return of(true);
+    }
+    return this.router.navigate(['/sign-in']);
   }
 }

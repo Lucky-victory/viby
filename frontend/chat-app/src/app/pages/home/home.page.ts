@@ -16,9 +16,6 @@ export class HomePage implements OnInit {
   ionViewWillEnter() {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.currentUser = this.authService.currentUser;
-    if (this.isLoggedIn) {
-      this.router.navigate(['/channels/@me']);
-    }
   }
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();

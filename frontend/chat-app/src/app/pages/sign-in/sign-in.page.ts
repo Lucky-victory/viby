@@ -46,12 +46,10 @@ export class SignInPage implements OnInit {
       (res) => {
         this.isSending = false;
         this.utilsService.showToast({
-          message: 'Sign in successful',
+          header: 'Sign in successful',
+          message: 'Redirecting...',
         });
-        this.utilsService.showLoader({
-          message: 'Redirecting to home',
-          duration: 2000,
-        });
+
         this.resetPassword();
         setTimeout(() => {
           this.router.navigate(['/home']);
@@ -64,8 +62,11 @@ export class SignInPage implements OnInit {
       }
     );
   }
+
   private resetPassword() {
+    const prevValue = this.signInForm.get('usernameOrEmail').value;
     this.signInForm.reset({
+      usernameOrEmail: prevValue,
       password: '',
     });
   }
