@@ -329,7 +329,11 @@ export default class UsersController {
         .where("user_id")
         .equal(user?.user_id)
         .returnFirst();
-
+      const userToView = Utils.omit(userDetails as UsersEntity, ["password"]);
+      res.status(200).json({
+        data: userToView,
+        message: "profile retrieved successfully",
+      });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       res.status(500).json({

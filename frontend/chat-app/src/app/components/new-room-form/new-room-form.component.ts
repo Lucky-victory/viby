@@ -6,15 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-room-form.component.scss'],
 })
 export class NewRoomFormComponent implements OnInit {
-  roomName: string;
-  messageAllowed: boolean;
-  constructor() { }
+  roomName: string = '';
+  messageAllowed: boolean = true;
+  constructor() {}
 
   ngOnInit() {}
-  createRoom() {
-  
-  }
-  dismiss() {
-    
-  }
+  createRoom() {}
+  dismiss() {}
 }

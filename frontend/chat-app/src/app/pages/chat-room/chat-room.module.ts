@@ -23,6 +23,9 @@ import { UserAvatarComponent } from 'src/app/components/user-avatar/user-avatar.
 import { MarkdownifyModule } from 'src/app/pipes/markdownify/markdownify.module';
 import { ChatRoomGuard } from 'src/app/guards/chat-room/chat-room.guard';
 import { UserAvatarModule } from 'src/app/components/user-avatar/user-avatar.module';
+import { NewChannelFormComponent } from 'src/app/components/new-channel-form/new-channel-form.component';
+import { NewRoomFormModule } from 'src/app/components/new-room-form/new-room-form.module';
+import { NewChannelFormModule } from 'src/app/components/new-channel-form/new-channel-form.module';
 
 @NgModule({
   imports: [
@@ -37,6 +40,8 @@ import { UserAvatarModule } from 'src/app/components/user-avatar/user-avatar.mod
     MarkdownifyModule,
     DomMutationObserverModule,
     UserAvatarModule,
+    NewRoomFormModule,
+    NewChannelFormModule,
   ],
   declarations: [
     ChatRoomPage,

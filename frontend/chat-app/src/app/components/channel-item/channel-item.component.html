@@ -3,7 +3,7 @@
   [routerLink]="['/channels', channel?.channel_id]"
   routerDirection="root"
   routerLinkActive="active"
-  (click)="navigateToRoom(channel)"
+  (click)="navigateToRoom(channel)" [title]="channel?.title"
   
 >
   <ion-ripple-effect></ion-ripple-effect>

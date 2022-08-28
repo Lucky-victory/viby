@@ -1,0 +1,13 @@
+.container {
+  padding: 16px;
+}
+.btns-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+ion-item {
+  &.input-wrapper {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+  }
+}

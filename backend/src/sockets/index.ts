@@ -7,10 +7,10 @@ export default (io: Server) => {
   const channelsNamespace = io.of("/socket");
 
   const channelsManager = channelsNamespace.on("connection", (socket) => {
-    // emitted when a user joins a channel
-    socket.on("join_channel", async (channelId: string, user: IUserToView) => {
-      await SocketController.onJoinChannel(channelId, user);
-    });
+    // // emitted when a user joins a channel
+    // socket.on("join_channel", async (channelId: string, user: IUserToView) => {
+    //   await SocketController.onJoinChannel(channelId, user);
+    // });
 
     // emitted when a user joins a room
     socket.on(

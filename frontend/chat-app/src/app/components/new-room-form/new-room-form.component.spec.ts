@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NewChannelFormComponent } from './new-channel-form.component';
+import { NewRoomFormComponent } from './new-room-form.component';
 
-describe('NewChannelFormComponent', () => {
-  let component: NewChannelFormComponent;
-  let fixture: ComponentFixture<NewChannelFormComponent>;
+describe('NewRoomFormComponent', () => {
+  let component: NewRoomFormComponent;
+  let fixture: ComponentFixture<NewRoomFormComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewChannelFormComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [NewRoomFormComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NewChannelFormComponent);
+    fixture = TestBed.createComponent(NewRoomFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

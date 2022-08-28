@@ -31,3 +31,15 @@ ion-content.channel-main-menu-content::part(scroll) {
   display: flex;
   width: 100%;
 }
+
+ion-button.explore-btn {
+  --border-radius: 50%;
+}
+ion-button.explore-btn::part(native) {
+  width: 3rem;
+  padding: 0;
+  height: 3rem;
+  overflow: visible;
+  color: var(--accent-color);
+  background-color: var(--primary-bg-light);
+}

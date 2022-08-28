@@ -1,12 +1,12 @@
 import { Socket, Namespace } from "socket.io";
-import { IMessageToDB, IMessageToView } from "../interfaces/message.interface";
+import { IMessageToDB } from "../interfaces/message.interface";
 import { IUserToView } from "../interfaces/user.interface";
 import MessagesController from "./messages";
 
 export default class SocketController {
-  static async onJoinChannel(channelId: string, user: IUserToView) {
-    //
-  }
+  // static async onJoinChannel(channelId: string, user: IUserToView) {
+  //   //
+  // }
   static async onJoinRoom(
     channelsManager: Namespace,
     socket: Socket,
