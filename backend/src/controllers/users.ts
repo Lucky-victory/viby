@@ -165,9 +165,7 @@ export default class UsersController {
       });
     }
   }
-  // static async getUsername(req: Request, res: Response) {
-  //   //
-  // }
+
   static async getUserById(userId: string) {
     const user = await (await UsersRepo)
       .search()
@@ -254,9 +252,9 @@ export default class UsersController {
         message: "user retrieved successfully",
         data: userToView,
       });
-    } catch (error: any) {
+    } catch (error) {
       res.status(500).json({
-        message: error?.message || "An error occured, couldn't fetch user",
+        message: "An error occured, couldn't fetch user",
       });
     }
   }

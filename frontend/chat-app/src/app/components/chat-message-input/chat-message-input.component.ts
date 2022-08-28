@@ -35,9 +35,7 @@ import { IRoom } from 'src/app/interfaces/room.interface';
 })
 export class ChatMessageInputComponent implements OnInit, OnDestroy {
   textMessage: string = '';
-  // audioMessage:string|Blob|ArrayBuffer=''
   isEmpty: boolean = true;
-  // isRecording: boolean = false;
   private roomId: string;
   private message: IMessageToDB;
   private messageType: IMessageType = 'text';
@@ -111,20 +109,20 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     this.textMessageInputStatus = 'create';
   }
   createMessageObj() {
-    //     if (this.messageType === 'audio') {
+    if (this.messageType === 'audio') {
+      this.message = {
+        message_id: uuidV4(),
+        content: this.audioMessage as string,
+        room_id: this.roomId,
+        attachments: null,
+        channel_id: this.channelId,
+        created_at: null,
+        type: this.messageType,
+        user_id: this.currentUser?.user_id,
+      };
 
-    //     this.message = {
-    //       message_id: uuidV4(),
-    //       content: this.audioMessage,
-    //       room_id: this.roomId,
-    //       attachments:null,
-    //       channel_id:this.channelId,
-    //       created_at: new Date().getTime(),
-    //       type:this.messageType
-    //     }
-
-    //       return
-    // }
+      return;
+    }
     if (this.textMessageInputStatus === 'edit') {
       this.message.content = this.textMessage;
       this.webSocketService.messageEdit(
@@ -180,25 +178,23 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     this.checkInput();
     this.showEmoji = false;
   }
-  // startRecorder() {
-  //   this.isRecording = true;
-  //   this.messageType = 'audio';
-  //   this.recoderService.start();
-  //   setTimeout(async () => {
-  //     this.recoderService.stop().then((blob) => {
-  //       this.recoderService.getBlobOrBase64(blob, (data) => {
-  //         const src = data as string;
-  //         console.log(src, 'from src');
-  //         this.audioPlayer.create(src);
+  startRecorder(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.isRecording = true;
+    this.messageType = 'audio';
+    if (file) {
+      this.recoderService.getBlobOrBase64(file, (data) => {
+        const src = data as string;
+        console.log(src, 'from src');
+        this.audioPlayer.create(src);
 
-  //         this.audioMessage = data;
-  //       });
-  //     });
-  //   }, 4000);
-  // }
-  // playAndPause() {
-  //   this.audioPlayer.play();
-  // }
+        this.audioMessage = data;
+      });
+    }
+  }
+  playAndPause() {
+    this.audioPlayer.play();
+  }
 
   ngOnDestroy(): void {
     this.messageToEditSub.unsubscribe();
