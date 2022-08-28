@@ -1,26 +1,42 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title >Explore</ion-title>
-    <ion-searchbar></ion-searchbar>
+    <ion-title>Explore</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-grid>
-<ion-row >
-
-  <ion-card class="card" *ngFor="let channel of channels">
-    <div class="card-image-wrapper">
-      <ion-img class="card-image" [src]="channel?.channel_cover||'https://images.pexels.com/photos/4038866/pexels-photo-4038866.jpeg?auto=compress&cs=tinysrgb&w=600'"></ion-img>
+  <div class="container">
+    <div class="banner">
+      <ion-searchbar></ion-searchbar>
     </div>
-    <div class="wrapper">
+    <ion-grid>
+      <ion-row class="ion-justify-content-center">
+        <ion-card class="card" *ngFor="let channel of channels">
+          <div class="card-image-wrapper">
+            <ion-img
+              class="card-image"
+              [src]="channel?.channel_cover||'assets/images/viby-image-md.png'"
+            ></ion-img>
+            <ion-img
+              class="card-mini-image"
+              [src]="channel?.channel_picture||'assets/images/viby-image-sm.png'"
+            ></ion-img>
+          </div>
+          <div class="wrapper">
+            <ion-card-title class="card-title ion-text-capitalize"
+              >{{channel?.title || 'no title'}}</ion-card-title
+            >
 
-      <ion-card-title class="card-title ion-text-capitalize">{{channel?.title || 'no title'}}</ion-card-title>
-      
-      <ion-button expand="block"  class="btn btn-primary" (click)="joinChannel(channel)">Join</ion-button>
-      
-    </div>
-  </ion-card>
-</ion-row>
-  </ion-grid>
+            <ion-button
+              expand="block"
+              class="btn btn-primary"
+              (click)="joinChannel(channel)"
+              [disabled]="channel?.is_member"
+              >{{channel?.is_member?'joined': 'Join'}}</ion-button
+            >
+          </div>
+        </ion-card>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

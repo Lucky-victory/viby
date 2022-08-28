@@ -3,12 +3,15 @@
   [routerLink]="['/channels', channel?.channel_id]"
   routerDirection="root"
   routerLinkActive="active"
-  (click)="navigateToRoom(channel)" [title]="channel?.title"
-  
+  (click)="navigateToRoom(channel)"
+  [title]="channel?.title"
 >
   <ion-ripple-effect></ion-ripple-effect>
   <div class="channel-item-image-wrapper">
-    <ion-img class="channel-item-image" src="{{ channel?.channel_picture }}">
+    <ion-img
+      class="channel-item-image"
+      [src]="channel?.channel_picture || 'assets/images/viby-image-md.png'"
+    >
     </ion-img>
   </div>
 </div>

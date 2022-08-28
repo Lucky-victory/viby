@@ -11,4 +11,4 @@ export interface IRoom {
   message_allowed: boolean;
   owner_id: string;
 }
-export type INewRoom = Pick<IRoom, 'channel_id' | 'description' | 'title'>;
+export type INewRoom = Pick<IRoom, 'description' | 'title' | 'message_allowed'>;

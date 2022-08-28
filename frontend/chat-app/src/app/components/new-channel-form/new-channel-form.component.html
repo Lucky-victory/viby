@@ -25,12 +25,14 @@
           autofocus="true"
           clearInput="true"
           type="text"
+          (ionChange)="checkInput()"
           id="channel-name"
           name="channel-name"
           class="channel-name"
           [(ngModel)]="channelName"
         >
         </ion-input>
+        <ion-note>min: 3 characters</ion-note>
       </ion-item>
 
       <ion-item>
@@ -55,8 +57,15 @@
     <ion-button (click)="dismiss()" fill="clear" class="btn-clear"
       >cancel</ion-button
     >
-    <ion-button (click)="createChannel()" class="btn btn-primary"
-      >create</ion-button
+    <ion-button
+      [disabled]="!isValid || isSending"
+      (click)="createChannel()"
+      class="btn btn-primary"
+      ><ion-spinner
+        name="circles"
+        [ngClass]="{ 'ion-hide': !isSending }"
+      ></ion-spinner>
+      create</ion-button
     >
   </div>
 </div>

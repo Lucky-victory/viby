@@ -3,8 +3,12 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { IChannel, IChannelToView } from 'src/app/interfaces/channel.interface';
-import { IRoom } from 'src/app/interfaces/room.interface';
+import {
+  IChannel,
+  IChannelToView,
+  INewChannel,
+} from 'src/app/interfaces/channel.interface';
+import { INewRoom, IRoom } from 'src/app/interfaces/room.interface';
 import { delay, retry } from 'rxjs/operators';
 import {
   IMessageToDB,
@@ -109,10 +113,10 @@ export class ChatService {
   getUser(userId: string) {
     return this.apiService.get(`/user/others/${userId}`);
   }
-  createRoom(channelId: string) {
-    return this.apiService.post(`/rooms/${channelId}`);
+  createRoom(channelId: string, newRoom: INewRoom) {
+    return this.apiService.post(`/rooms/${channelId}`, newRoom);
   }
-  createChannel(channelId: string) {
-    return this.apiService.post(`/rooms/${channelId}`);
+  createChannel(channel: INewChannel) {
+    return this.apiService.post(`/channels`, channel);
   }
 }

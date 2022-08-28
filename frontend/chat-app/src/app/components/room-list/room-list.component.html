@@ -13,14 +13,18 @@
     <div class="room-list-channel-cover-image-wrapper">
       <ion-img
         class="room-list-channel-cover-image"
-        [src]="activeChannel?.channel_cover"
+        [src]="
+          activeChannel?.channel_cover || 'assets/images/viby-image-large.png'
+        "
       >
       </ion-img>
     </div>
     <div class="room-list-channel-image-wrapper">
       <ion-img
         class="room-list-channel-image"
-        [src]="activeChannel?.channel_picture"
+        [src]="
+          activeChannel?.channel_picture || 'assets/images/viby-image-sm.png'
+        "
       >
       </ion-img>
     </div>
@@ -32,6 +36,7 @@
       *ngIf="isOwner"
       detail="false"
       button
+      (click)="showModal()"
       lines="none"
       class="ion-text-capitalize"
       ><ion-icon name="add" slot="start"></ion-icon> add new room</ion-item

@@ -149,38 +149,35 @@ export default class ChannelsController {
       });
     }
   }
-/**
- * checks if a user a member of the channel
- * @param req 
- * @param res 
- */
-  static async checkMember(req:Request,res:Response){
-try{
-const authUser=Utils.getAuthenticatedUser(req);
-const {channel_id}= req.params;
-  const channel = await ChannelsController.channelExist(channel_id);
-  if (!channel) {
-    res.status(404).json({
-      message: `channel with id '${channel_id}' does not exist`,
-    });
-    return;
-  }
-  const isMember=channel.isMember(authUser?.user_id);
-  res.status(200).json({
-    message:'member checked successfully',
-    data:{
-      is_member:isMember
-    }
-  })
-
-}
-catch(error){
- res.status(500).json({
+  /**
+   * checks if a user a member of the channel
+   * @param req
+   * @param res
+   */
+  static async checkMember(req: Request, res: Response) {
+    try {
+      const authUser = Utils.getAuthenticatedUser(req);
+      const { channel_id } = req.params;
+      const channel = await ChannelsController.channelExist(channel_id);
+      if (!channel) {
+        res.status(404).json({
+          message: `channel with id '${channel_id}' does not exist`,
+        });
+        return;
+      }
+      const isMember = channel.isMember(authUser?.user_id);
+      res.status(200).json({
+        message: "member checked successfully",
+        data: {
+          is_member: isMember,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
         error,
         message: "An error occurred, couldn't check member",
       });
-    
-}
+    }
   }
   /**
    * Add a member to a channel
@@ -359,21 +356,22 @@ catch(error){
     }
   }
   static async getRoomsInChannel(channel: ChannelsEntity) {
-   const { rooms: roomIds } = channel;
-      const rooms = await Promise.all(
-        roomIds.map(async (roomId) => {
-          const room = await RoomsController.getRoomById(roomId);
-          return room;
-        })
-      );
-      const roomsToView = Utils.omit(rooms, ["entityId", "members"]) as IRoom[];
-    return roomsToView; 
+    const { rooms: roomIds } = channel;
+    const rooms = await Promise.all(
+      roomIds.map(async (roomId) => {
+        const room = await RoomsController.getRoomById(roomId);
+        return room;
+      })
+    );
+    const roomsToView = Utils.omit(rooms, ["entityId", "members"]) as IRoom[];
+    return roomsToView;
   }
   /**
    * Get public channels
    */
   static async getPublicChannels(req: Request, res: Response) {
     try {
+      const authUser = Utils.getAuthenticatedUser(req);
       let { limit = 100, page = 1 } = req.query;
       limit = +limit;
       page = +page;
@@ -390,8 +388,8 @@ catch(error){
         });
         return;
       }
-
-      const channelsToView = Utils.omit(channels, [
+      const _channels = ChannelsController.isAMember(channels, authUser);
+      const channelsToView = Utils.omit(_channels, [
         "rooms",
         "members",
         "entityId",
@@ -484,6 +482,7 @@ catch(error){
   }
   static async searchChannels(req: Request, res: Response) {
     try {
+      const authUser = Utils.getAuthenticatedUser(req);
       const { q } = req.query;
       if (!q) {
         res.status(400).json({
@@ -501,7 +500,8 @@ catch(error){
         .or("description")
         .matches(q as string)
         .returnAll();
-      const channelsToView = Utils.omit(channels, [
+      const _channels = ChannelsController.isAMember(channels, authUser);
+      const channelsToView = Utils.omit(_channels, [
         "rooms",
         "members",
         "entityId",
@@ -548,5 +548,34 @@ catch(error){
     user: IUserForToken
   ): boolean {
     return channel?.owner_id === user?.user_id;
+  }
+  /**
+   * checks if the authenticated user is a member of a channel/channels
+   * @param channels
+   */
+  static isAMember(
+    channels: ChannelsEntity | ChannelsEntity[],
+    user: IUserForToken
+  ) {
+    if (Array.isArray(channels)) {
+      const _channels: IChannel[] = JSON.parse(JSON.stringify(channels));
+      // checks if a user has already a member of the channel
+      return _channels.map((channel) => {
+        if (channel?.members?.includes(user?.user_id)) {
+          channel.is_member = true;
+        } else {
+          channel.is_member = false;
+        }
+        return channel;
+      });
+    }
+    const _channels: IChannel = JSON.parse(JSON.stringify(channels));
+    if (_channels?.members?.includes(user?.user_id)) {
+      _channels.is_member = true;
+
+      return _channels;
+    }
+    _channels.is_member = false;
+    return _channels;
   }
 }

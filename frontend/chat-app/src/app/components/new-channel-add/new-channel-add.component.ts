@@ -1,4 +1,3 @@
-import { ModalController } from '@ionic/angular';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { Component, OnInit } from '@angular/core';
 import { NewChannelFormComponent } from '../new-channel-form/new-channel-form.component';
@@ -10,10 +9,7 @@ import { NewChannelFormComponent } from '../new-channel-form/new-channel-form.co
 })
 export class NewChannelAddComponent implements OnInit {
   private canDismiss = false;
-  constructor(
-    private utilsService: UtilsService,
-    private modalCtrl: ModalController
-  ) {}
+  constructor(private utilsService: UtilsService) {}
 
   ngOnInit() {}
   showModal = async () => {
