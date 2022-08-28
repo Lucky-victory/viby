@@ -27,9 +27,7 @@ export default class SocketController {
       //
     }
   }
-  static async onLeaveRoom() {
-    //
-  }
+ 
   static async onNewMessage(
     channelsManager: Namespace,
     socket: Socket,
@@ -51,6 +49,7 @@ export default class SocketController {
       channelsManager.to(socket.id).emit("new_message", messageToView);
       return;
     }
+
     // broadcast the message to everyone, sender inclusive
     channelsManager.to(roomId).emit("new_message", messageToView);
   }
@@ -96,5 +95,39 @@ export default class SocketController {
     channelsManager
       .to(roomId)
       .emit("edit_message", messageToView, result?.success);
+  }
+  static async onDeleteMessage(
+    channelsManager: Namespace,
+    socket: Socket,
+    message: IMessageToDB,
+    roomId: string,
+    user: IUserToView
+  ) {
+    // delete the message from database
+
+    const { messageToDB, messageToView } = MessagesController.addUserToMessage(
+      message,
+      user,
+      false
+    );
+    const result = await MessagesController.deleteMessage(messageToDB, user);
+
+    if (!result?.success) {
+      // if there was an error deleting the message
+      // change the status back to sent,
+      console.log("not deleted");
+
+      messageToView["status"] = "sent";
+      //then  emit it to only the user that sent it.
+      channelsManager
+        .to(socket.id)
+        .emit("delete_message", messageToView, result?.success);
+      return;
+    }
+
+    // broadcast the message to everyone, sender inclusive
+    channelsManager
+      .to(roomId)
+      .emit("delete_message", messageToView, result?.success);
   }
 }

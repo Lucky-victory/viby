@@ -1,16 +1,15 @@
-<ion-item button lines="none" detail="false">
+<ion-item
+  button
+  lines="none"
+  detail="false"
+  (click)="showUserProfile($event, member)"
+>
   <div class="channel-active-user">
-    <div class="channel-active-user-image-wrapper">
-      <img
-        [src]="
-          member?.profile_picture ||
-          'https://randomuser.me/api/portraits/men/75.jpg'
-        "
-        alt=""
-        class="channel-active-user-image"
-      />
-      <!-- <span class="channel-active-user-status-indicator"></span> -->
-    </div>
+    <user-avatar
+      [user]="member"
+      [addEvent]="false"
+      [showStatus]="true"
+    ></user-avatar>
     <div class="channel-active-user-name">
       <span>{{ member?.fullname }} </span>
     </div>

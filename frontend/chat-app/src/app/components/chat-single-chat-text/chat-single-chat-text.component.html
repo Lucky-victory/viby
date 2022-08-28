@@ -1,21 +1,26 @@
 <div
   class="single-chat {{ isCurrentUser ? 'current-user' : '' }}  ion-activatable"
-  longPress 
+  longPress
   (pressed)="mobilePress($event, chat)"
 >
   <ion-ripple-effect [ngClass]="{ 'ion-hide': isDesktop }"> </ion-ripple-effect>
   <div class="single-chat-user">
-<user-avatar [border]="false" [showStatus]="false" [user]="chat?.user" (avatarClick)="onAvatarClick($event)"></user-avatar>
-      <div class="single-chat-user-name">
-        <span>{{ isCurrentUser ? 'you': chat?.user?.fullname }}</span>
-      </div>
-    
+    <user-avatar
+      [border]="false"
+      [showStatus]="false"
+      [user]="chat?.user"
+      (avatarClick)="onAvatarClick($event)"
+    ></user-avatar>
+    <div class="single-chat-user-name">
+      <span>{{ isCurrentUser ? "you" : chat?.user?.fullname }}</span>
+    </div>
+
     <div class="single-chat-timestamp">
       <time attr.datetime="{{ chat?.created_at }}">{{
         chat?.created_at | dateFormatter
       }}</time>
     </div>
-   <!-- <div
+    <!-- <div
       *ngIf="isCurrentUser"
       class="single-chat-user-avatar-wrapper"
       (click)="showUserProfile($event, chat?.user)"
@@ -29,7 +34,15 @@
   </div>
   <div class="wrapper">
     <div class="single-chat-text-wrapper">
-      <span class="single-chat-text" [innerHTML]="chat?.content | markdownify|linkify">
+      <span>
+        <span
+          class="single-chat-text"
+          [innerHTML]="chat?.content | markdownify | linkify"
+        >
+        </span>
+        <ion-note class="message-edit-info" *ngIf="chat?.status === 'edited'"
+          >(edited)</ion-note
+        >
       </span>
       <ion-buttons
         class="action-btn"

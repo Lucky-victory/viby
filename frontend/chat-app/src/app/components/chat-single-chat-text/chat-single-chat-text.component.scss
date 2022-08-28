@@ -60,6 +60,7 @@ $padding: 12px;
   align-self: flex-start;
   min-width: 150px;
   margin-left: calc(var(--avatar-width) + 10px);
+  position: relative;
 }
 
 .single-chat-user {
@@ -94,5 +95,10 @@ ion-buttons {
     top: 50%;
     transform: translateY(-50%);
     visibility: hidden;
+  }
+}
+ion-note {
+  &.message-edit-info {
+    font-size: 10px;
   }
 }

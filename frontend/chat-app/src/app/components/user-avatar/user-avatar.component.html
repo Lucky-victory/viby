@@ -1,11 +1,12 @@
-
-    <div #userAvatar
-        class="user-avatar-wrapper " [ngClass]="[position,size,border?'border':'',hasEvent?'cursor':'']">
-   
-       <ion-img
-          [src]="user?.profile_picture"
-          alt=""
-          class="user-avatar"
-        ></ion-img>
-        <span class="user-status-indicator {{user?.status==='online'?'online':'offline'}}" [ngClass]="{'ion-hide':!showStatus}"></span>
-      </div>
+<div
+  #userAvatar
+  class="user-avatar-wrapper"
+  [ngClass]="[position, size, border ? 'border' : '', hasEvent ? 'cursor' : '']"
+>
+  <ion-img [src]="user?.profile_picture" alt="" class="user-avatar"></ion-img>
+  <span
+    class="user-status-indicator {{
+      user?.status === 'online' ? 'online' : 'offline'
+    }}" [ngClass]="{'ion-hide':!showStatus}"
+  ></span>
+</div>

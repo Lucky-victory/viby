@@ -39,7 +39,6 @@
   --accent-color: #00a693;
   --secondary-bg: #dee0e0;
   --secondary-color: #b3b5b8;
-  --active-room-bg: #6f636f;
   --chat-area-bg: #dedfdf;
   --chat-bg: #fff;
   --current-user-chat-bg: var(--accent-colo, #293774);
@@ -47,6 +46,7 @@
   --text-color-reverse: #fff;
   --text-color: #353839;
   --code-bg: #201920;
+  --textarea-wrapper-bg: #b3b5b8;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -58,6 +58,7 @@
     --chat-bg: #2b3537;
     --text-color-reverse: #353839;
     --text-color: #fff;
+    --textarea-wrapper-bg: #505152;
   }
 }
 .ios {

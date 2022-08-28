@@ -47,7 +47,7 @@ export default (io: Server) => {
         );
       }
     );
-    // emiited when a new message is sent
+    // emiited when a new message is edited
     socket.on(
       "edit_message",
       async (message: IMessageToDB, roomId: string, user: IUserToView) => {
@@ -60,6 +60,20 @@ export default (io: Server) => {
         );
       }
     );
+    // emiited when a new message is deleted
+    socket.on(
+      "delete_message",
+      async (message: IMessageToDB, roomId: string, user: IUserToView) => {
+        await SocketController.onDeleteMessage(
+          channelsManager,
+          socket,
+          message,
+          roomId,
+          user
+        );
+      }
+    );
+
     socket.on("disconnect", (roomId: string) => {
       console.log("disconnected");
 

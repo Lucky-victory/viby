@@ -9,7 +9,7 @@ import createError from "http-errors";
 const PORT = process.env.PORT || 3300;
 
 const io = new Server(server);
-import socket from "./sockets/channels";
+import socket from "./sockets";
 socket(io);
 
 import signUpRouter from "./routes/sign-up";
@@ -30,7 +30,7 @@ app.use(
 
 app.use(
   cors({
-    origin: config.origin || "*"
+    origin: config.origin || "*",
   })
 );
 // you can pass a prefix here, if you want, e.g /api/

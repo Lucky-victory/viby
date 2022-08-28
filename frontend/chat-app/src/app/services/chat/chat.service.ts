@@ -17,11 +17,16 @@ import { IUserToView } from 'src/app/interfaces/user.interface';
 export class ChatService {
   private roomId: string;
   private channelId: string;
-  private channels$ = new Subject<IChannelToView[]>();
+  private channels = new Subject<IChannelToView[]>();
+  channels$ = this.channels.asObservable();
+  private channel = new Subject<IChannelToView>();
+  channel$ = this.channel.asObservable();
   private channelsForUser = new Subject<IChannelToView[]>();
   channelsForUser$ = this.channelsForUser.asObservable();
   private rooms = new Subject<IRoom[]>();
   rooms$ = this.rooms.asObservable();
+  private room = new Subject<IRoom>();
+  room$ = this.room.asObservable();
   private messageToEdit = new Subject<IMessageToDB>();
   messageToEdit$ = this.messageToEdit.asObservable();
   private messageToDelete = new Subject<IMessageToDB>();
@@ -42,7 +47,7 @@ export class ChatService {
     });
   }
   setChannels(channels) {
-    this.channels$.next(channels);
+    this.channels.next(channels);
   }
   getChannelsForUser() {
     return this.apiService.get('/user/channels');
@@ -52,6 +57,9 @@ export class ChatService {
       .get(`/channels`)
       .pipe(retry(this.retryCount), delay(this.delayTime));
   }
+  setChannel(channel: IChannelToView) {
+    this.channel.next(channel);
+  }
   getChannel(channelId: string) {
     return this.apiService
       .get(`/channels/${channelId}`)
@@ -60,6 +68,11 @@ export class ChatService {
   getRooms(channelId: string) {
     return this.apiService
       .get(`/channels/${channelId}/rooms`)
+      .pipe(retry(this.retryCount), delay(this.delayTime));
+  }
+  getRoom(roomId: string) {
+    return this.apiService
+      .get(`/rooms/${roomId}`)
       .pipe(retry(this.retryCount), delay(this.delayTime));
   }
   getMembersInChannel(channelId: string) {
@@ -74,6 +87,9 @@ export class ChatService {
   }
   setRooms(rooms: IRoom[]) {
     this.rooms.next(rooms);
+  }
+  setRoom(room: IRoom) {
+    this.room.next(room);
   }
   setChannelsForUser(channels: IChannelToView[]) {
     this.channelsForUser.next(channels);

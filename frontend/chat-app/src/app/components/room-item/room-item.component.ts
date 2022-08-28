@@ -15,7 +15,7 @@ export class RoomItemComponent implements OnInit {
   @Input() room: IRoom;
   roomId: string;
   currentUser: IUserToView;
-  @Output() roomTitleEv: EventEmitter<string> = new EventEmitter<string>();
+
   channelId: string;
   clickCount: number = 0;
   constructor(
@@ -31,11 +31,9 @@ export class RoomItemComponent implements OnInit {
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
       this.roomId = params.get('room_id');
-      // this.webSocketService.joinChannel(this.channelId, this.currentUser);
     });
   }
   selectRoom(room: IRoom) {
-    this.roomTitleEv.emit(room?.title);
     this.seoService.setTitle(room?.title);
   }
 }

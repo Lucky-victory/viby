@@ -26,6 +26,7 @@ import { ChatService } from 'src/app/services/chat/chat.service';
 import { Subscription } from 'rxjs';
 import { AudioRecorderService } from 'src/app/services/recorder/recorder.service';
 import { AudioPlayer } from 'src/app/services/audio/audio.service';
+import { IRoom } from 'src/app/interfaces/room.interface';
 
 @Component({
   selector: 'chat-message-input',
@@ -40,24 +41,27 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
   private roomId: string;
   private message: IMessageToDB;
   private messageType: IMessageType = 'text';
+  messageNotAllowed: boolean = true;
+  activeRoom: IRoom;
   private textMessageInputStatus: MessageInputStatus = 'create';
-  // private  readonly audioPlayer:AudioPlayer=new AudioPlayer()
-  @Output() onMessageSend = new EventEmitter<INewMessage>();
+  private readonly audioPlayer: AudioPlayer = new AudioPlayer();
+
   @ViewChild('textAreaContainer') textAreaContainer: ElementRef<HTMLDivElement>;
   private channelId: string;
   typingUsers: IUserToView[];
   currentUser: IUserToView;
   showEmoji: boolean = false;
-  audioPlayer = new AudioPlayer();
   private isMobile: boolean;
   private messageToEditSub: Subscription;
   isRecording: boolean;
+  isOwner: boolean;
   audioMessage: string | Blob | ArrayBuffer;
   constructor(
     private activeRoute: ActivatedRoute,
     private webSocketService: WebSocketService,
     private chatService: ChatService,
     private authService: AuthService,
+
     private platform: Platform,
     private recoderService: AudioRecorderService
   ) {
@@ -65,15 +69,20 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.currentUser = this.authService?.currentUser;
     this.activeRoute.paramMap.subscribe((params) => {
       this.roomId = params.get('room_id');
       this.channelId = params.get('channel_id');
+    });
+    this.chatService.room$.subscribe((room) => {
+      this.activeRoom = room;
+      this.isOwner = this.currentUser.user_id === room?.owner_id;
+      this.messageNotAllowed = !room?.message_allowed && !this.isOwner;
     });
     // this.webSocketService.onTyping().subscribe((users: IUserToView[]) => {
     //   this.typingUsers = users;
     //   console.log('typing');
     // });
-    this.currentUser = this.authService?.currentUser;
     this.messageToEditSub = this.chatService.messageToEdit$.subscribe(
       (message) => {
         this.message = message;
@@ -93,8 +102,8 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     // this.webSocketService.typing(this.currentUser, this.roomId);
   }
   checkInput() {
-    this.isEmpty = this.textMessage === '' && !this.isRecording;
-    // this.isEmpty = this.textMessage === '';
+    // this.isEmpty = this.textMessage === '' && !this.isRecording;
+    this.isEmpty = this.textMessage === '';
   }
   clearInput() {
     this.textMessage = ''.replace(/\n/g, '');
@@ -171,25 +180,25 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     this.checkInput();
     this.showEmoji = false;
   }
-  startRecorder() {
-    this.isRecording = true;
-    this.messageType = 'audio';
-    this.recoderService.start();
-    setTimeout(async () => {
-      this.recoderService.stop().then((blob) => {
-        this.recoderService.getBlobOrBase64(blob, (data) => {
-          const src = data as string;
-          console.log(src, 'from src');
-          this.audioPlayer.create(src);
+  // startRecorder() {
+  //   this.isRecording = true;
+  //   this.messageType = 'audio';
+  //   this.recoderService.start();
+  //   setTimeout(async () => {
+  //     this.recoderService.stop().then((blob) => {
+  //       this.recoderService.getBlobOrBase64(blob, (data) => {
+  //         const src = data as string;
+  //         console.log(src, 'from src');
+  //         this.audioPlayer.create(src);
 
-          this.audioMessage = data;
-        });
-      });
-    }, 4000);
-  }
-  playAndPause() {
-    this.audioPlayer.play();
-  }
+  //         this.audioMessage = data;
+  //       });
+  //     });
+  //   }, 4000);
+  // }
+  // playAndPause() {
+  //   this.audioPlayer.play();
+  // }
 
   ngOnDestroy(): void {
     this.messageToEditSub.unsubscribe();

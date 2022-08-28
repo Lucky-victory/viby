@@ -62,8 +62,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.messages = messages;
       });
     this.newMessageSub = this.webSocketService
-      .onReceiveMessage()
-      .subscribe((message: IMessageToView) => {});
+      .onNewMessage()
+      .subscribe((message: IMessageToView) => {
+        this.messages.push(message)
+      });
     this.webSocketService
       .onMessageEdit()
       .subscribe((message: IMessageToView) => {
@@ -74,9 +76,17 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
           return prevMessage;
         });
       });
+    this.webSocketService
+      .onMessageDelete()
+      .subscribe((message: IMessageToView) => {
+        this.messages = this.messages.filter((prevMessage) => {
+          return prevMessage.message_id !== message?.message_id;
+        });
+      });
+
     this.connectErrorSub = this.webSocketService
       .onConnectError()
-      .subscribe(async (error) => {
+      .subscribe(async () => {
         await this.utilsService.showLoader({
           message: 'Reconnecting...',
           spinner: 'circles',
@@ -138,13 +148,41 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
       elem.scrollTop = elem.scrollHeight;
     }
   }
-  editFunc(chat) {
+  editFunc(chat: IMessageToView) {
     // remove the user property from the object
     const messageToEdit = omit(chat, ['user']) as IMessageToDB;
-    console.log(messageToEdit, 'from edit');
+
     this.chatService.setMessageToEdit(messageToEdit);
   }
-  deleteFunc(chat) {
+  deleteFunc = async (chat: IMessageToView) => {
     console.log(chat, 'from delete');
-  }
+    const { role } = await this.utilsService.showAlert({
+      header: 'Delete Message',
+      message: 'Are you sure you want to delete this message?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          role: 'destructive',
+          handler: () => {
+            const user = chat?.user;
+            // remove the user property from the message
+            const messageToDelete = omit(chat, ['user']) as IMessageToDB;
+
+            this.webSocketService.messageDelete(
+              messageToDelete,
+              this.roomId,
+              user
+            );
+          },
+        },
+      ],
+    });
+    console.log(role);
+    if (role === 'destructive') {
+    }
+  };
 }

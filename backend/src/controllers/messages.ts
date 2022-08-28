@@ -89,10 +89,8 @@ export default class MessagesController {
         .page(offset, limit);
 
       messages = JSON.parse(JSON.stringify(messages));
-    
 
       const userIds = pluck(messages, "user_id");
-      
 
       // get users by message userid and merge the message with the user
       // based on userid
@@ -106,13 +104,11 @@ export default class MessagesController {
             "friends",
             "entityId",
           ]) as IUserToView;
-          
 
           return userToView;
         })
       );
 
-    
       const messagesWithUser: IMessageToView[] = Utils.arrayMergeObject(
         messages,
         messageOwners
@@ -162,12 +158,16 @@ export default class MessagesController {
   static async deleteMessage(message: IMessageToDB, user: IUserToView) {
     try {
       const isAuthorized = MessagesController.hasAccess(message, user);
+      
+
       if (!isAuthorized) {
+
         return { success: false, error: null };
       }
       const prevMessage = (await MessagesController.messageExist(
         message?.message_id
       )) as MessagesEntity;
+
       if (prevMessage) {
         await (await MessagesRepo).remove(prevMessage?.entityId);
         return { success: true, error: null };

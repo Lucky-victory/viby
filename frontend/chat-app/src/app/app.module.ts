@@ -43,7 +43,7 @@ const config: SocketIoConfig = {
     ApiService,
     AuthService,
     SeoService,
-    ChatRoomGuard,
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpAuthInterceptorService,

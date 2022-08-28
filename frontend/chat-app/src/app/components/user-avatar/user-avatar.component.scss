@@ -10,6 +10,13 @@ $status-indicator-size: $avatar-width / 5;
   &.small {
     width: $avatar-width;
     height: $avatar-width;
+    .user-status-indicator {
+      $status-indicator-size: $status-indicator-size + 2;
+      width: $status-indicator-size;
+      height: $status-indicator-size;
+      bottom: ($status-indicator-size / 2);
+      transform: translateY(($status-indicator-size / 2) - 1);
+    }
   }
   &.medium {
     $avatar-width: $avatar-width-md;
@@ -20,6 +27,8 @@ $status-indicator-size: $avatar-width / 5;
     .user-status-indicator {
       width: $status-indicator-size;
       height: $status-indicator-size;
+      bottom: ($status-indicator-size / 2);
+      transform: translateY(($status-indicator-size / 2));
     }
   }
   &.large {
@@ -31,6 +40,8 @@ $status-indicator-size: $avatar-width / 5;
     .user-status-indicator {
       width: $status-indicator-size;
       height: $status-indicator-size;
+      bottom: ($status-indicator-size / 2);
+      transform: translateY(($status-indicator-size / 2));
     }
   }
   &.rel {
@@ -49,8 +60,7 @@ $status-indicator-size: $avatar-width / 5;
   .user-status-indicator {
     position: absolute;
     right: 5px;
-    bottom: 8px;
-    transform: translateY(7px);
+
     border-radius: 50%;
     border: 3px solid transparent;
     background-color: currentColor;

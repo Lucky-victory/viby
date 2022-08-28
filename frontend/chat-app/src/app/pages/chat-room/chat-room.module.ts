@@ -22,6 +22,7 @@ import { UserProfileCardComponent } from 'src/app/components/user-profile-card/u
 import { UserAvatarComponent } from 'src/app/components/user-avatar/user-avatar.component';
 import { MarkdownifyModule } from 'src/app/pipes/markdownify/markdownify.module';
 import { ChatRoomGuard } from 'src/app/guards/chat-room/chat-room.guard';
+import { UserAvatarModule } from 'src/app/components/user-avatar/user-avatar.module';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { ChatRoomGuard } from 'src/app/guards/chat-room/chat-room.guard';
     LongPressModule,
     MarkdownifyModule,
     DomMutationObserverModule,
+    UserAvatarModule,
   ],
   declarations: [
     ChatRoomPage,
@@ -44,7 +46,7 @@ import { ChatRoomGuard } from 'src/app/guards/chat-room/chat-room.guard';
     ChatSingleChatTextComponent,
     PopoverActionsComponent,
     UserProfileCardComponent,
-    UserAvatarComponent,
   ],
+  providers: [ChatRoomGuard],
 })
 export class ChatRoomPageModule {}

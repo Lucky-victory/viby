@@ -12,6 +12,7 @@ export class SeoService {
 
   setTitle(title: string) {
     this.title.next(title);
+    console.log(this.title$, 'pppppppp');
     this.pageTitle.setTitle(title);
   }
   setMetaTag(tag: MetaDefinition, forceCreation = true) {

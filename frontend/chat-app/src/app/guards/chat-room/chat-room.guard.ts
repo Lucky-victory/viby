@@ -23,30 +23,21 @@ export class ChatRoomGuard implements CanActivate {
     private router: Router,
     private chatService: ChatService
   ) {}
-  canActivate(
+  async canActivate(
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+  ): Promise<boolean | UrlTree> {
     const channelId = childRoute.paramMap.get('channel_id');
     console.log(channelId);
 
     const userId = this.authService.currentUser.user_id;
-    this.chatService
+    const result = (await this.chatService
       .validateChannelMember(channelId, userId)
-      .pipe(
-        tap(
-          (result: IResponse<{ is_member: boolean }>) =>
-            (this.isValidMember = result?.data?.is_member)
-        )
-      )
-      .subscribe((result) => {
-        console.log(this.isValidMember);
-      });
-
+      .toPromise()) as IResponse<{ is_member: boolean }>;
+    this.isValidMember = result?.data?.is_member;
     if (this.isValidMember) {
+      return true;
     }
-    return true;
-    // return this.router.navigate(['/not-found']);
+    return this.router.navigate(['/not-found']);
   }
-  validate(channelId: string) {}
 }

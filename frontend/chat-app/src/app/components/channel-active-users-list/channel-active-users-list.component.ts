@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IResponse } from 'src/app/interfaces/common.interface';
+import { IRoom } from 'src/app/interfaces/room.interface';
 import { IUser, IUserToView } from 'src/app/interfaces/user.interface';
 import { ChatService } from 'src/app/services/chat/chat.service';
 
@@ -12,6 +14,7 @@ export class ChannelActiveUsersListComponent implements OnInit {
   private currentUser: IUserToView;
   members: IUserToView[] = [];
   channelId: string;
+  activeRoom: IRoom;
   constructor(
     private activeRoute: ActivatedRoute,
     private chatService: ChatService
@@ -19,9 +22,9 @@ export class ChannelActiveUsersListComponent implements OnInit {
 
   ngOnInit() {
     this.chatService.membersInRoom$.subscribe((members) => {
-      console.log('mebers', this.members);
-
       this.members = members;
     });
+
+    // this.chatService.getRoom()
   }
 }

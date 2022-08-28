@@ -1,3 +1,4 @@
+import { UserAvatarModule } from './../../components/user-avatar/user-avatar.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -30,7 +31,7 @@ import { ChannelGuard } from 'src/app/guards/channel/channel.guard';
     IonicModule,
     ChannelsPageRoutingModule,
     DomMutationObserverModule,
-
+    UserAvatarModule,
     LinkifyModule,
     PickerModule,
   ],

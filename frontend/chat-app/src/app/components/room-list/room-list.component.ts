@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IChannel } from 'src/app/interfaces/channel.interface';
+import { IChannel, IChannelToView } from 'src/app/interfaces/channel.interface';
 import { IRoom } from 'src/app/interfaces/room.interface';
+import { IUserToView } from 'src/app/interfaces/user.interface';
 import { ApiService } from 'src/app/services/api/api.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { SeoService } from 'src/app/services/seo/seo.service';
 
@@ -12,32 +14,26 @@ import { SeoService } from 'src/app/services/seo/seo.service';
   styleUrls: ['./room-list.component.scss'],
 })
 export class RoomListComponent implements OnInit {
-  channel: any;
-  @Output() roomTitleEv: EventEmitter<string> = new EventEmitter<string>();
-  @Input() activeChannel: IChannel;
+  activeChannel: IChannelToView;
   rooms: IRoom[] = [];
   channelId: string;
   roomId: string;
-  roomsSample: IRoom[];
-
+isOwner:boolean=false;
+currentUser:IUserToView;
   constructor(
-    private router: Router,
-
-    private apiServcie: ApiService,
     private chatService: ChatService,
-    private seoService: SeoService
+    private seoService: SeoService,private authService:AuthService
   ) {}
 
   ngOnInit() {
+    this.currentUser=this.authService.currentUser;
     this.chatService.rooms$.subscribe((rooms) => {
       this.rooms = rooms;
-      console.log(rooms, 'rooms in room list');
+     
     });
-    // this.seoService.setTitle(firstRoom.title);
-    // this.roomTitleEv.emit(firstRoom.title);
-  }
-
-  getRoomTitle(title: string) {
-    this.roomTitleEv.emit(title);
+    this.chatService.channel$.subscribe((channel) => {
+      this.activeChannel = channel;
+      this.isOwner=channel?.owner_id==this.currentUser?.user_id;
+    });
   }
 }

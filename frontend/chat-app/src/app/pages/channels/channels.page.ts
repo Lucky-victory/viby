@@ -25,6 +25,7 @@ export class ChannelsPage implements OnInit, AfterViewInit, OnDestroy {
   channelId: string;
   rooms: IRoom[];
   rooms$: Observable<IRoom[]>;
+  activeRoom: IRoom;
   constructor(
     private chatService: ChatService,
     private activeRoute: ActivatedRoute,
@@ -35,6 +36,9 @@ export class ChannelsPage implements OnInit, AfterViewInit, OnDestroy {
     this.chatService.getChannelsForUser().subscribe((result: any) => {
       this.channels = result.data;
       this.chatService.setChannelsForUser(this.channels);
+    });
+    this.chatService.room$.subscribe((room) => {
+      this.activeRoom = room;
     });
   }
   ngAfterViewInit(): void {}

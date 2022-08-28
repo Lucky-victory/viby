@@ -2,12 +2,12 @@
   display: flex;
   align-items: center;
   width: 100%;
-  background: var(--secondary-bg);
+  background: var(--textarea-wrapper-bg);
   padding: 0.5rem;
   position: absolute;
   bottom: 0;
   max-height: var(--message-textarea-height, 70px);
-  
+
   z-index: 5;
 }
 
@@ -18,11 +18,10 @@
   border-radius: 5px;
   padding: 5px;
   padding-right: 10px;
-  background: var(--background);
+
   font-size: 16px;
   font-family: sans-serif;
   min-height: 50px;
-
 }
 .message-textarea {
   resize: none;
@@ -37,8 +36,8 @@
   border-radius: inherit;
   width: auto;
   min-width: 0;
-  background:var(--primary-bg)
-  
+
+  background: var(--primary-bg);
 }
 
 .message-textarea-container .btn {
@@ -88,16 +87,19 @@ ion-button.message-send-btn {
 
 emoji-mart.emoji-box {
   position: absolute;
-  bottom: calc(var(--message-textarea-height,80px) + 10px);
+  bottom: calc(var(--message-textarea-height, 80px) + 10px);
   right: 0;
-  transform:scale(0);
+  transform: scale(0);
+  transition: 0.5s;
+  transform-origin: bottom;
+  visibility: hidden;
+  &.show {
+    transform: scale(1);
     transition: 0.5s;
-transform-origin: bottom;
-visibility: hidden;
-  &.show{
-    transform:scale(1);
-    transition: 0.5s;
-visibility: visible;
-
+    visibility: visible;
   }
+}
+.not-allowed-info-wrapper {
+  text-align: center;
+  width: inherit;
 }

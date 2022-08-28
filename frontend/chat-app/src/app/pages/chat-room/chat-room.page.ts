@@ -9,6 +9,7 @@ import { ChatService } from 'src/app/services/chat/chat.service';
 import { IResponse } from 'src/app/interfaces/common.interface';
 import { IRoom } from 'src/app/interfaces/room.interface';
 import { SeoService } from 'src/app/services/seo/seo.service';
+import { IChannelToView } from 'src/app/interfaces/channel.interface';
 
 @Component({
   selector: 'app-chat-room',
@@ -21,6 +22,7 @@ export class ChatRoomPage implements OnInit {
   currentUser: IUserToView;
   pageTitle: string;
   title$: Observable<string>;
+  activeRoom: IRoom;
   constructor(
     private utilsService: UtilsService,
     private authService: AuthService,
@@ -40,29 +42,53 @@ export class ChatRoomPage implements OnInit {
     this.seoService.title$.subscribe((title) => {
       console.log(title, 'page title');
     });
-    this.webSocketService.connect();
+    this.chatService.room$.subscribe((room) => {
+      this.activeRoom = room;
+    });
   }
 
   routeChange(channelId: string, roomId: string) {
+    this.getRooms(channelId);
+    this.getMembersInRoom(roomId);
+    this.getRoom(roomId);
+    this.getChannel(channelId);
+    this.connectToSocket();
+  }
+  private getRooms(channelId: string) {
     this.chatService
       .getRooms(channelId)
       .subscribe((result: IResponse<IRoom[]>) => {
         this.chatService.setRooms(result.data);
       });
+  }
+  private getMembersInRoom(roomId: string) {
     this.chatService
       .getMembersInRoom(roomId)
       .subscribe((result: IResponse<IUserToView[]>) => {
         this.chatService.setMembersInRoom(result.data);
       });
-    // this.webSocketService.connect();
+  }
+  private getRoom(roomId: string) {
+    this.chatService.getRoom(roomId).subscribe((result: IResponse<IRoom>) => {
+      this.chatService.setRoom(result.data);
+    });
+  }
+  private connectToSocket() {
+    this.webSocketService.connect();
     this.webSocketService.onConnect().subscribe(() => {
       console.log('connected');
     });
-
     this.webSocketService.joinRoom(
       this.channelId,
       this.roomId,
       this.currentUser
     );
+  }
+  private getChannel(channelId: string) {
+    this.chatService
+      .getChannel(channelId)
+      .subscribe((result: IResponse<IChannelToView>) => {
+        this.chatService.setChannel(result.data);
+      });
   }
 }

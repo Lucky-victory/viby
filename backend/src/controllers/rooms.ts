@@ -227,7 +227,29 @@ export default class RoomsController {
       });
     }
   }
-
+  static async getRoom(req: Request, res: Response) {
+    try {
+      const { room_id } = req.params;
+      //  const user = Utils.getAuthenticatedUser(req);
+      const room = await RoomsController.roomExist(room_id);
+      if (!room) {
+        res.status(404).json({
+          message: `room with id '${room_id}' does not exist`,
+        });
+        return;
+      }
+      const roomToView = Utils.omit(room, ["entityId"]);
+      res.status(200).json({
+        message: "room  retrieved successfully",
+        data: roomToView,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error,
+        message: "An error occurred, couldn't fetch room",
+      });
+    }
+  }
   /**
    * Get members in a room
    * @param req

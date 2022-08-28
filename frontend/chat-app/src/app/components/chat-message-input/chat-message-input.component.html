@@ -7,17 +7,20 @@
         </div> -->
   <!--<div class="attachment-btn-container">
           </div>-->
-  <ion-buttons>
-    <ion-button slot="icon-only">
+  <!-- <ion-buttons>
+     <ion-button slot="icon-only">
       <ion-icon name="add" class="icon"></ion-icon>
-    </ion-button>
-  </ion-buttons>
-  <div class="message-textarea-wrapper">
+    </ion-button> 
+  </ion-buttons> -->
+  <div
+    class="message-textarea-wrapper"
+    *ngIf="!messageNotAllowed; else notAllowed"
+  >
     <textarea
       [(ngModel)]="textMessage"
       (keydown)="handleKeyDown($event)"
-      (paste)="checkInput()"
-      placeholder="Type a message"
+      
+      placeholder="Message #{{ activeRoom?.title }} "
       name="message-textarea"
       class="message-textarea"
     ></textarea>
@@ -28,34 +31,36 @@
     </ion-buttons>
     <div class="message-btns-container">
       <ion-button
-        *ngIf="!isEmpty"
         class="message-send-btn"
         [disabled]="isEmpty"
         (click)="sendMessage()"
       >
         <ion-icon name="send" class="icon"></ion-icon>
       </ion-button>
-      <input type="file" hidden accept="audio/*" capture #hid />
-      <ion-button
-        class="message-send-btn"
-        *ngIf="isEmpty"
-        (click)="hid.click()"
-      >
-        <ion-icon name="mic" class="icon"></ion-icon>
-      </ion-button>
+      <!-- <ion-button class="message-send-btn" *ngIf="isEmpty" (click)="startRecorder()">
+              
+              <ion-icon name="mic" class="icon"></ion-icon>
+            </ion-button> -->
     </div>
   </div>
-  <div class="record-area-container" *ngIf="isRecording">
-    <ion-button (click)="playAndPause()">
-      <ion-icon slot="icon-only" name="play"></ion-icon>
-    </ion-button>
-    <ion-button class="message-send-btn" (click)="sendMessage()">
-      <ion-icon name="send" class="icon"></ion-icon>
-    </ion-button>
-  </div>
+  <!-- <div class="record-area-container" *ngIf="isRecording">
+          <ion-button (click)="playAndPause()">
+            <ion-icon slot="icon-only" name="play"></ion-icon>
+          </ion-button>
+              <ion-button class="message-send-btn" (click)="sendMessage()">
+            <ion-icon name="send" class="icon"></ion-icon>
+            
+          </ion-button>
+        </div> -->
   <emoji-mart
     [ngClass]="{ show: showEmoji }"
     class="emoji-box"
     (emojiClick)="addEmoji($event)"
   ></emoji-mart>
 </div>
+
+<ng-template #notAllowed>
+  <div class="not-allowed-info-wrapper">
+    <p>You do not have permissions to send messages in this room</p>
+  </div>
+</ng-template>

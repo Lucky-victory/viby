@@ -18,10 +18,14 @@
   >
     <ion-header class="channel-users-menu-header">
       <ion-toolbar>
-        <ion-title>MEMBERS</ion-title>
+        <ion-title># {{activeRoom?.title}}</ion-title>
       </ion-toolbar>
     </ion-header>
+
     <ion-content class="ion-no-padding channel-users-menu-content">
+      <div class="room-desc" *ngIf="activeRoom?.description">
+        {{activeRoom?.description}}
+      </div>
       <channel-active-users-list></channel-active-users-list>
     </ion-content>
   </ion-menu>

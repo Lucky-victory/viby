@@ -127,7 +127,6 @@ export class ChatSingleChatTextComponent implements OnInit {
       .getUser(user?.user_id)
       .subscribe(async (result: IResponse<IUserToView>) => {
         const userResult = result.data;
-        console.log(userResult);
 
         await this.utilsService.showModalOrPopover({
           component: UserProfileCardComponent,

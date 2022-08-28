@@ -1,4 +1,10 @@
 <ion-list lines="none" class="channel-active-users-container">
+  <ion-list-header>
+    <ion-label class="ion-text-uppercase"
+      >Members <ion-icon name="remove"></ion-icon>
+      {{ members?.length }}</ion-label
+    >
+  </ion-list-header>
   <channel-active-users-item
     *ngFor="let member of members"
     [member]="member"

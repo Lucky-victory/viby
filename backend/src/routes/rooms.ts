@@ -19,6 +19,7 @@ router.post(
 router.get("/:room_id/members", asyncHandler(RoomsController.getMembers));
 router.post("/:room_id/member", asyncHandler(RoomsController.checkMember));
 router.get("/:room_id/join", asyncHandler(RoomsController.addMemberToRoom));
+router.get("/:room_id", asyncHandler(RoomsController.getRoom));
 router.post(
   "/:room_id/leave",
   asyncHandler(RoomsController.removeMemberFromRoom)

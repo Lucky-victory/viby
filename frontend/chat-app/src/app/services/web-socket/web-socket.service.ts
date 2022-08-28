@@ -35,19 +35,21 @@ export class WebSocketService {
   newMessage(roomId: string, message: INewMessage, user: IUserToView) {
     this.socket.emit('new_message', message, roomId, user);
   }
-  onReceiveMessage() {
+  onNewMessage() {
     return this.socket.fromEvent('new_message');
   }
+
   messageEdit(message: IMessageToDB, roomId: string, user: IUserToView) {
-    console.log({
-      message,
-      roomId,
-      user,
-    });
     this.socket.emit('edit_message', message, roomId, user);
+  }
+  messageDelete(message: IMessageToDB, roomId: string, user: IUserToView) {
+    this.socket.emit('delete_message', message, roomId, user);
   }
   onMessageEdit() {
     return this.socket.fromEvent('edit_message');
+  }
+  onMessageDelete() {
+    return this.socket.fromEvent('delete_message');
   }
   typing(user: IUserToView, roomId: string) {
     this.socket.emit('typing', user, roomId);
