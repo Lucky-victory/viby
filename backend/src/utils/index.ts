@@ -163,9 +163,9 @@ export default class Utils {
       
       const cldUploadStream = cloudinary.uploader.upload_stream({
       public_id:'audio_'+id,
-        resource_type:'raw'
+        resource_type:'raw',
       }, (error, result) => {
-        console.log(error,'error')
+       
          if (result) return resolve(result);
          else return reject(error);
       });
@@ -198,4 +198,3 @@ interface ImagePresetOptions{
   radius?: 'max' | string;
   public_id: string;
 }
-// export type jetpackReturnType = 'json' | 'jsonWithDates' | 'utf8' | 'buffer';

@@ -1,4 +1,8 @@
+$padding-start: 25px;
+$padding: 12px;
+
 .single-chat {
+    --avatar-width: 2.5rem;
   display: flex;
   padding: 10px;
   flex-direction: column;
@@ -9,14 +13,35 @@
   align-self: flex-end;
   background-color: var(--current-user-chat-bg);
   color: #fff;
+   margin-left: 0;
+      margin-right: var(--avatar-width);
 } 
+.single-chat-user {
+      align-self: flex-end;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+    }
 ion-icon.icon{
   color:#fff;
   }  
   ion-range.single-chat-audio-range{
     --bar-background-active: currentColor
   }
+    .wrapper {
+      position: relative;
+      align-self: flex-end;
+    }
+     ion-buttons {
+      &.action-btn {
+        position: absolute;
+        left: -$padding-start;
+        right: unset;
+        color: var(--current-user-chat-bg);
+      }
+    }
 }
+
 }
 
 .single-chat-audio {
@@ -24,9 +49,10 @@ ion-icon.icon{
   padding-bottom: 10px;
   border-radius: 5px;
   background-color:var(--chat-bg);
-  max-width: 400px;
-  width: 90%;
+  width: 400px;
+  max-width: 95%;
   position: relative;
+  margin-left: calc(var(--avatar-width));
 }
 .single-chat-audio-meta {
   display: flex;
@@ -58,30 +84,20 @@ ion-icon.icon{
   align-items: center;
   gap:1rem;
 }
-.single-chat-user .single-chat-user-name {
+.single-chat-user-name {
   font-weight: 500;
   font-family: inherit;
   font-size: 16px;
 }
-.single-chat-user-avatar-wrapper {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #000;
-}
+
 .single-chat.current-user .single-chat-user {
   align-self: flex-end;
   flex-direction: row-reverse;
 }
 .single-chat-user {
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
-.single-chat-user-avatar {
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-  border-radius: inherit;
-}
+
 
 ion-range.single-chat-audio-range{
   --height:8px;
@@ -94,3 +110,24 @@ ion-range.single-chat-audio-range{
 ion-icon.icon{
   color:var(--accent-color);
   }
+  .wrapper {
+  position: relative;
+  align-self: flex-start;
+  max-width: 95%;
+  &:hover {
+    ion-buttons {
+      &.action-btn {
+        visibility: visible;
+      }
+    }
+  }
+}
+ion-buttons {
+  &.action-btn {
+    position: absolute;
+    right: -$padding-start;
+    top: 50%;
+    transform: translateY(-50%);
+    visibility: hidden;
+  }
+}

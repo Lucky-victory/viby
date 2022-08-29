@@ -8,7 +8,7 @@
   bottom: 0;
   max-height: var(--message-textarea-height, 70px);
 
-  z-index: 5;
+  z-index: 2;
 }
 
 .message-textarea-wrapper {
@@ -82,7 +82,18 @@ ion-button.message-send-btn {
   left: 0;
   bottom: 0;
   z-index: 10;
-  background-color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-bg);
+  z-index:5;
+  .record-area-inner{
+     display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  max-width: 500px;
+  margin: auto;
+  width: 100%;
+  }
 }
 
 emoji-mart.emoji-box {

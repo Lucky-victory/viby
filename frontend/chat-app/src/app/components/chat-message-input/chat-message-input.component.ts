@@ -41,7 +41,6 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
   activeRoom: IRoom;
   private textMessageInputStatus: MessageInputStatus = 'create';
   private readonly audioPlayer: AudioPlayer = new AudioPlayer();
-
   @ViewChild('textAreaContainer') textAreaContainer: ElementRef<HTMLDivElement>;
   private channelId: string;
   typingUsers: IUserToView[];
@@ -52,6 +51,7 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
   isRecording: boolean;
   isOwner: boolean;
   audioMessage: File | Blob ;
+  isPlaying: boolean;
   constructor(
     private activeRoute: ActivatedRoute,
     private webSocketService: WebSocketService,
@@ -98,7 +98,7 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     // this.webSocketService.typing(this.currentUser, this.roomId);
   }
   checkInput() {
-    this.isEmpty = this.textMessage === '' || !this.isRecording;
+    this.isEmpty = (this.textMessage === '' && !this.isRecording);
     // this.isEmpty = this.textMessage === '';
   }
   clearInput() {
@@ -167,7 +167,11 @@ this.webSocketService.audioMessage(
       this.sendMessage();
     }
   }
-
+  dropRecord() {
+    this.isRecording = false;
+    this.audioPlayer.stop();
+    this.clearInput()
+}
   addEmoji(event) {
     this.textMessage += event?.emoji?.native;
     this.checkInput();
@@ -176,34 +180,42 @@ this.webSocketService.audioMessage(
     this.showEmoji = !this.showEmoji;
   }
   sendMessage() {
-    console.log('message sent');
+   
     this.isRecording = false;
-    console.log('message sent');
+    this.checkInput();
     
     // if (this.isEmpty) return;
     this.createMessageObj();
     this.clearInput();
-    this.checkInput();
+    this.dropRecord();
     this.showEmoji = false;
   }
   startRecorder(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
     this.isRecording = true;
     this.messageType = 'audio';
-    console.log(file,'file');
-  
+    const file = (event.target as HTMLInputElement).files[0];
+    if (file) {
+      
+      console.log(file);
+      
       this.audioMessage = file;
-      // this.recoderService.getBlobOrBase64(file, (data) => {
-      //   const src = data as string;
-      //   console.log(src, 'from src');
-      //   this.audioPlayer.create(src);
-
-      //   this.audioMessage = data;
-      // });
-    
+      this.recoderService.getBlobOrBase64(file, (data) => {
+          const src = data as string;
+          this.audioPlayer.create(src);
+        
+        
+        });
+        
+      }
   }
   playAndPause() {
+    if (this.isPlaying) {
+      this.audioPlayer.pause();
+      this.isPlaying = false;
+      return
+    }
     this.audioPlayer.play();
+    this.isPlaying = true;
   }
 
   ngOnDestroy(): void {
