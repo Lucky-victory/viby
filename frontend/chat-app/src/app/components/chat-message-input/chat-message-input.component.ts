@@ -9,8 +9,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-// import { AudioPlayer } from 'src/app/services/audio/audio.service';
-// import { AudioRecorderService } from 'src/app/services/recorder/recorder.service';
 import { v4 as uuidV4 } from 'uuid';
 import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -53,7 +51,7 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
   private messageToEditSub: Subscription;
   isRecording: boolean;
   isOwner: boolean;
-  audioMessage: string | Blob | ArrayBuffer;
+  audioMessage: File | Blob ;
   constructor(
     private activeRoute: ActivatedRoute,
     private webSocketService: WebSocketService,
@@ -100,8 +98,8 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     // this.webSocketService.typing(this.currentUser, this.roomId);
   }
   checkInput() {
-    // this.isEmpty = this.textMessage === '' && !this.isRecording;
-    this.isEmpty = this.textMessage === '';
+    this.isEmpty = this.textMessage === '' || !this.isRecording;
+    // this.isEmpty = this.textMessage === '';
   }
   clearInput() {
     this.textMessage = ''.replace(/\n/g, '');
@@ -112,7 +110,7 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     if (this.messageType === 'audio') {
       this.message = {
         message_id: uuidV4(),
-        content: this.audioMessage as string,
+        content: null,
         room_id: this.roomId,
         attachments: null,
         channel_id: this.channelId,
@@ -120,7 +118,14 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
         type: this.messageType,
         user_id: this.currentUser?.user_id,
       };
-
+      console.log(this.message);
+      
+this.webSocketService.audioMessage(
+  this.message,
+  this.audioMessage,
+  this.roomId,
+      this.currentUser
+    );
       return;
     }
     if (this.textMessageInputStatus === 'edit') {
@@ -171,8 +176,11 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     this.showEmoji = !this.showEmoji;
   }
   sendMessage() {
+    console.log('message sent');
     this.isRecording = false;
-    if (this.isEmpty) return;
+    console.log('message sent');
+    
+    // if (this.isEmpty) return;
     this.createMessageObj();
     this.clearInput();
     this.checkInput();
@@ -182,15 +190,17 @@ export class ChatMessageInputComponent implements OnInit, OnDestroy {
     const file = (event.target as HTMLInputElement).files[0];
     this.isRecording = true;
     this.messageType = 'audio';
-    if (file) {
-      this.recoderService.getBlobOrBase64(file, (data) => {
-        const src = data as string;
-        console.log(src, 'from src');
-        this.audioPlayer.create(src);
+    console.log(file,'file');
+  
+      this.audioMessage = file;
+      // this.recoderService.getBlobOrBase64(file, (data) => {
+      //   const src = data as string;
+      //   console.log(src, 'from src');
+      //   this.audioPlayer.create(src);
 
-        this.audioMessage = data;
-      });
-    }
+      //   this.audioMessage = data;
+      // });
+    
   }
   playAndPause() {
     this.audioPlayer.play();

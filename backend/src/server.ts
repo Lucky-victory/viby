@@ -8,7 +8,11 @@ import cors from "cors";
 import createError from "http-errors";
 const PORT = process.env.PORT || 3300;
 
-const io = new Server(server);
+
+
+const io = new Server(server, {
+  maxHttpBufferSize:1e8
+});
 import socket from "./sockets";
 socket(io);
 

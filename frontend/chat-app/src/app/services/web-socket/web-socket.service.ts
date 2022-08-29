@@ -4,17 +4,15 @@ import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import {
   IMessageToDB,
-  IMessageToView,
   INewMessage,
 } from 'src/app/interfaces/message.interface';
-import { Subject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketService {
-  private newMessage$ = new Subject<IMessageToView>();
-  private joinRoom$ = new Subject<IMessageToView[]>();
+
   constructor(private socket: Socket) {}
   joinRoom(channelId: string, roomId: string, user: IUserToView) {
     this.socket.emit('join_room', channelId, roomId, user);
@@ -37,6 +35,12 @@ export class WebSocketService {
   }
   onNewMessage() {
     return this.socket.fromEvent('new_message');
+  }
+  audioMessage( message: INewMessage,file:File|Blob,roomId: string, user: IUserToView) {
+    this.socket.emit('audio_message', message,file, roomId, user);
+  }
+  onAudioMessage() {
+    return this.socket.fromEvent('audio_message');
   }
 
   messageEdit(message: IMessageToDB, roomId: string, user: IUserToView) {

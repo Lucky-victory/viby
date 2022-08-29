@@ -28,7 +28,7 @@ export class ChatRoomGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Promise<boolean | UrlTree> {
     const channelId = childRoute.paramMap.get('channel_id');
-    console.log(channelId);
+ 
 
     const userId = this.authService.currentUser.user_id;
     const result = (await this.chatService

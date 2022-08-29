@@ -4,11 +4,15 @@ import config from "../config";
 import omit from "just-omit";
 import pick from "just-pick";
 import flatten from "just-flatten-it";
-
+import { UploadApiResponse, v2 as cloudinary} from 'cloudinary';
+import { v4 as uuid } from 'uuid';
 import ShortId from "short-unique-id";
 import { v4 as uuidv4 } from "uuid";
 import { Request } from "express";
 import merge from "just-merge";
+import fsJetpack from 'fs-jetpack';
+import fs from 'fs';
+import streamifier from 'streamifier';
 /**
  * Utilities class
  */
@@ -152,9 +156,46 @@ export default class Utils {
     });
     return result as unknown as R;
   }
+
+  static async audioUploadToCloudinary(file:Buffer,id:string=uuid()):Promise<UploadApiResponse> {
+
+    return new Promise((resolve, reject) => {
+      
+      const cldUploadStream = cloudinary.uploader.upload_stream({
+      public_id:'audio_'+id,
+        resource_type:'raw'
+      }, (error, result) => {
+        console.log(error,'error')
+         if (result) return resolve(result);
+         else return reject(error);
+      });
+    
+    
+      streamifier.createReadStream(file).pipe(cldUploadStream)
+    })
+  }
+  static photoUploadToCloudinary(options:ImagePresetOptions={public_id:`${uuid()}`}) {
+    return cloudinary.uploader.upload_stream(options as ImagePresetOptions, (err, result) => {
+      console.log(err,result)
+    });
+    
+    
+    // return result;
+  }
 }
+
+
 interface IArrayMergeOptions {
   outerProp: string;
   innerProp: string;
   innerTitle: string;
 }
+interface ImagePresetOptions{
+  width?: number;
+  height?: number,
+  crop?: 'fill' | 'fit',
+  gravity?: 'faces' | string;
+  radius?: 'max' | string;
+  public_id: string;
+}
+// export type jetpackReturnType = 'json' | 'jsonWithDates' | 'utf8' | 'buffer';

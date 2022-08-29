@@ -47,6 +47,22 @@ export default (io: Server) => {
         );
       }
     );
+    // emiited when a an audio message is sent
+    socket.on(
+      "audio_message",
+      async (message: IMessageToDB, file: Buffer, roomId: string, user: IUserToView) => {
+    
+        
+        await SocketController.onAudioMessage(
+          channelsManager,
+          socket,
+          message,
+          file,
+          roomId,
+          user
+        );
+      }
+    );
     // emiited when a new message is edited
     socket.on(
       "edit_message",

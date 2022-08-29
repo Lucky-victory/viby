@@ -40,6 +40,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
   private debounceTimeout: number = 300;
   private isScrolledDown: boolean = true;
   private loaderDuration = 4000;
+  newAudioMessageSub: Subscription;
   constructor(
     private activeRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -63,6 +64,11 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     this.newMessageSub = this.webSocketService
       .onNewMessage()
+      .subscribe((message: IMessageToView) => {
+        this.messages.push(message)
+      });
+    this.newAudioMessageSub = this.webSocketService
+      .onAudioMessage()
       .subscribe((message: IMessageToView) => {
         this.messages.push(message)
       });
@@ -137,6 +143,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.newMessageSub.unsubscribe();
     this.scrollEventSub.unsubscribe();
     this.connectErrorSub.unsubscribe();
+    this.newAudioMessageSub.unsubscribe()
   }
 
   /**

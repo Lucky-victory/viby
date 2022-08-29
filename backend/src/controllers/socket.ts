@@ -1,6 +1,7 @@
 import { Socket, Namespace } from "socket.io";
 import { IMessageToDB } from "../interfaces/message.interface";
 import { IUserToView } from "../interfaces/user.interface";
+import Utils from "../utils";
 import MessagesController from "./messages";
 
 export default class SocketController {
@@ -53,9 +54,39 @@ export default class SocketController {
     // broadcast the message to everyone, sender inclusive
     channelsManager.to(roomId).emit("new_message", messageToView);
   }
-  static async privateMessage() {
-    //
+  static async onAudioMessage(
+    channelsManager: Namespace,
+    socket: Socket,
+    message: IMessageToDB,
+    file:Buffer,
+    roomId: string,
+    user: IUserToView
+  ) {
+  
+    
+    const cldResult = await Utils.audioUploadToCloudinary(file);
+    
+    message.content = cldResult.secure_url;
+    //merge the user with the message
+    const { messageToDB, messageToView } = MessagesController.addUserToMessage(
+      message,
+      user
+    );
+
+
+    // save the message to database
+    const result = await MessagesController.createMessage(messageToDB);
+
+    if (!result?.success) {
+      messageToView["status"] = "error";
+      channelsManager.to(socket.id).emit("audio_message", messageToView);
+      return;
+    }
+
+    // broadcast the message to everyone, sender inclusive
+    channelsManager.to(roomId).emit("audio_message", messageToView);
   }
+
   static onTyping(socket: Socket, roomId: string, user: IUserToView) {
     socket.to(roomId).emit("typing", user, roomId);
   }

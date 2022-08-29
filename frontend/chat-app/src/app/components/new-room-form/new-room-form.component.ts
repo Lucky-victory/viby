@@ -34,7 +34,7 @@ export class NewRoomFormComponent implements OnInit {
     if (this.isSending) {
       this.utilsService.showLoader({
         message: 'Creating room',
-        spinner: 'circles',
+        spinner: 'circles', duration: 3000
       });
     }
     this.chatService
