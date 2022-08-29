@@ -14,8 +14,9 @@ import { ProfileGuard } from 'src/app/guards/profile/profile.guard';
     CommonModule,
     FormsModule,
     IonicModule,
-    UserProfilePageRoutingModule
-  ],providers:[ProfileGuard],
-  declarations: [UserProfilePage]
+    UserProfilePageRoutingModule,
+  ],
+  providers: [ProfileGuard],
+  declarations: [UserProfilePage],
 })
 export class UserProfilePageModule {}

@@ -1,17 +1,11 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IChannel, IChannelToView } from 'src/app/interfaces/channel.interface';
-import { IResponse } from 'src/app/interfaces/common.interface';
+
 import { IRoom } from 'src/app/interfaces/room.interface';
-import { IUser } from 'src/app/interfaces/user.interface';
+import { IUserToView } from 'src/app/interfaces/user.interface';
 import { ChatService } from 'src/app/services/chat/chat.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'channel-list',
@@ -23,12 +17,15 @@ export class ChannelListComponent implements OnInit {
   channelId: string;
   activeChannel: IChannelToView;
   rooms: IRoom[];
+  currentUser: IUserToView;
   constructor(
     private activeRoute: ActivatedRoute,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.currentUser = this.authService.currentUser;
     this.chatService.channelsForUser$.subscribe((channels) => {
       this.channels = channels;
     });

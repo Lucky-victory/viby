@@ -1,14 +1,34 @@
 <div class="wrapper">
   <div class="channel-list-container">
+    <div
+  class="channel-item-container ion-activatable"
+  [routerLink]="['/channels/@me']"
+  routerDirection="root"
+  routerLinkActive="active"
+>
+  <ion-ripple-effect></ion-ripple-effect>
+  <div class="channel-item-image-wrapper">
+    <ion-img
+      class="channel-item-image"
+      [src]="currentUser?.profile_picture"
+    >
+    </ion-img>
+  </div>
+</div>
+
     <channel-item
       *ngFor="let channel of channels"
       [channel]="channel"
     ></channel-item>
 
     <new-channel-add></new-channel-add>
-    <ion-button routerLink="/explore" routerLinkActive="active"  class="explore-btn" title="Explore public channels">
+    <ion-button
+      routerLink="/explore"
+      routerLinkActive="active"
+      class="explore-btn"
+      title="Explore public channels"
+    >
       <ion-icon name="compass"></ion-icon>
-      
     </ion-button>
   </div>
   <room-list></room-list>

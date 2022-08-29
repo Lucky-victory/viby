@@ -23,6 +23,7 @@ import { DomMutationObserverModule } from '../../directives/dom-mutation-observe
 import { LinkifyModule } from 'src/app/pipes/linkify/linkify.module';
 import { ChatRoomGuard } from 'src/app/guards/chat-room/chat-room.guard';
 import { ChannelGuard } from 'src/app/guards/channel/channel.guard';
+import { ProfileGuard } from 'src/app/guards/profile/profile.guard';
 
 @NgModule({
   imports: [
@@ -45,6 +46,6 @@ import { ChannelGuard } from 'src/app/guards/channel/channel.guard';
     RoomListComponent,
     RoomItemComponent,
   ],
-  providers: [ChannelGuard, ChatRoomGuard],
+  providers: [ChannelGuard, ChatRoomGuard, ProfileGuard],
 })
 export class ChannelsPageModule {}
