@@ -36,6 +36,11 @@ you can play your audio message before sending
 you can edit, copy and delete a message
 ![chat  preview](assets/images/image-6.png)
 
+### Redis insight
+
+showing some data
+![chat  preview](assets/images/redis-insight.png)
+
 # Overview video (Optional)
 
 Here's a short video that explains the project and how to use it:
@@ -224,7 +229,7 @@ cp .env.example .env
 you will need to set up the following environment variables
 **REQUIRED**
 
-- REDIS_DB_URL: a valid redis url for your redis instance, _Note: it should contain username and password parts_.
+- REDIS*DB_URL: a valid redis url for your redis instance, \_Note: it should contain username and password parts*.
 
 - JWT_SECRET: this could be a string of any value, it is used as a secret to generate a JWT token
 
