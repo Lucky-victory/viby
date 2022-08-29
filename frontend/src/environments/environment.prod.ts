@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'http://localhost:3300',
-  socketUrl: 'http://localhost:3300/socket',
+  apiBaseUrl: 'https://viby-api.herokuapp.com/api',
+  socketUrl: 'https://viby-api.herokuapp.com/socket',
 };
