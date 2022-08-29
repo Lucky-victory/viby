@@ -21,7 +21,9 @@ export class NewChannelFormComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private platform: Platform,
-    private chatService: ChatService,private utilsService:UtilsService,private router:Router
+    private chatService: ChatService,
+    private utilsService: UtilsService,
+    private router: Router
   ) {
     this.isMobile = this.platform.is('mobile');
   }
@@ -36,22 +38,26 @@ export class NewChannelFormComponent implements OnInit {
         title: this.channelName,
         is_public: this.isPublic,
       })
-      .subscribe(async (result: IResponse<IChannelToView>) => {
-        if (result.data) {
-          this.utilsService.showToast({
-            message: 'Channel created successfully'
-       ,duration:1000   });
-          await this.dismiss();
-          setTimeout(() => {
-            
-            this.router.navigate(['/channels', result.data?.channel_id]);
-          },1500)
-      }
-      }, (error) => {
-        this.utilsService.showAlert({
-          message:error,header:"Error:"
-        })
-      });
+      .subscribe(
+        async (result: IResponse<IChannelToView>) => {
+          if (result.data) {
+            this.utilsService.showToast({
+              message: 'Channel created successfully',
+              duration: 1000,
+            });
+            await this.dismiss();
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          }
+        },
+        (error) => {
+          this.utilsService.showAlert({
+            message: error,
+            header: 'Error:',
+          });
+        }
+      );
   }
   dismiss = async () => {
     this.modalCtrl.dismiss();

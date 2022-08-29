@@ -1,3 +1,13 @@
+<ion-header class="main-view-header" slot="fixed">
+  <ion-toolbar>
+    <ion-menu-button menu="first" slot="start"> </ion-menu-button>
+    <ion-title># {{currentUser?.fullname}}'s Profile</ion-title>
+
+    <ion-menu-button menu="second" slot="end">
+      <ion-icon name="people"></ion-icon>
+    </ion-menu-button>
+  </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
   <h1 class="ion-margin-bottom">Welcome to your Profile</h1>
   <p>You can access your channels and more from here.</p>
