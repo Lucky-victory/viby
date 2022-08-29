@@ -37,8 +37,8 @@ app.use(
     origin: config.origin || "*",
   })
 );
-// you can pass a prefix here, if you want, e.g /api/
-const routesPrefix = "";
+// you can pass a prefix here, if you want, e.g /api
+const routesPrefix = "/api";
 app.use(`${routesPrefix}/sign-up`, signUpRouter);
 app.use(`${routesPrefix}/sign-in`, signInRouter);
 app.use(`${routesPrefix}/channels`, channelsRouter);
