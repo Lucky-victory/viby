@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { UserProfilePageRoutingModule } from './user-profile-routing.module';
 
 import { UserProfilePage } from './user-profile.page';
+import { ProfileGuard } from 'src/app/guards/profile/profile.guard';
 
 @NgModule({
   imports: [
@@ -14,7 +15,7 @@ import { UserProfilePage } from './user-profile.page';
     FormsModule,
     IonicModule,
     UserProfilePageRoutingModule
-  ],
+  ],providers:[ProfileGuard],
   declarations: [UserProfilePage]
 })
 export class UserProfilePageModule {}

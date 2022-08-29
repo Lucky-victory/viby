@@ -1,5 +1,15 @@
-<div class="channel-list-container">
-  <channel-item *ngFor="let channel of channels" [channel]="channel" ></channel-item>
-  
-  <new-channel-add></new-channel-add>
+<div class="wrapper">
+  <div class="channel-list-container">
+    <channel-item
+      *ngFor="let channel of channels"
+      [channel]="channel"
+    ></channel-item>
+
+    <new-channel-add></new-channel-add>
+    <ion-button routerLink="/explore" routerLinkActive="active"  class="explore-btn" title="Explore public channels">
+      <ion-icon name="compass"></ion-icon>
+      
+    </ion-button>
+  </div>
+  <room-list></room-list>
 </div>

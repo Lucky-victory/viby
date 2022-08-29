@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IRoom } from 'src/app/interfaces/room.interface';
+import { IUserToView } from 'src/app/interfaces/user.interface';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { SeoService } from 'src/app/services/seo/seo.service';
+import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
   selector: 'room-item',
@@ -7,28 +12,28 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./room-item.component.scss'],
 })
 export class RoomItemComponent implements OnInit {
-  @Input() room: any;
+  @Input() room: IRoom;
   roomId: string;
-  @Output() roomTitleEv: EventEmitter<string> = new EventEmitter<string>();
+  currentUser: IUserToView;
+
   channelId: string;
-  constructor(private router:Router,private activeRoute:ActivatedRoute) { }
+  clickCount: number = 0;
+  constructor(
+    private router: Router,
+    private activeRoute: ActivatedRoute,
+    private webSocketService: WebSocketService,
+    private authService: AuthService,
+    private seoService: SeoService
+  ) {}
 
   ngOnInit() {
-    this.channelId = this.activeRoute.snapshot.paramMap.get('channel_id');
-    
-    
-  this.activeRoute.queryParamMap.subscribe((params) => {
-      this.roomId = params.get('room');
-        
-      })
-    
+    this.currentUser = this.authService.currentUser;
+    this.activeRoute.paramMap.subscribe((params) => {
+      this.channelId = params.get('channel_id');
+      this.roomId = params.get('room_id');
+    });
   }
-  selectRoom(roomId) {
-    this.router.navigate([], {
-      relativeTo:this.activeRoute,
-      queryParams:{room:roomId}
-    })
-    this.roomTitleEv.emit(this.room?.title)
-  
-}
+  selectRoom(room: IRoom) {
+    this.seoService.setTitle(room?.title);
+  }
 }

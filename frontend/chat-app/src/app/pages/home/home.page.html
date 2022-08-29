@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="app-name"> Viby</ion-title>
+    <ion-buttons class="btns-container" slot="end">
+      <ng-container *ngIf="isLoggedIn">
+        <ion-button class="" (click)="logout()"
+          ><ion-icon name="log-out-outline" slot="start"></ion-icon>
+          <ion-text class="ion-hide-sm-down">log out</ion-text>
+        </ion-button>
+        <ion-chip color="primary" class="" [routerLink]="['/channels/@me']">
+          <ion-avatar>
+            <img [src]="currentUser?.profile_picture" />
+          </ion-avatar>
+
+          <ion-label
+            class="ion-hide-sm-down"
+            [ngStyle]="{'color':'var(--accent-color)'}"
+          >
+            {{currentUser?.fullname}}
+          </ion-label>
+        </ion-chip>
+      </ng-container>
+      <ng-container *ngIf="!isLoggedIn">
+        <ion-button routerLink="/sign-up" class="sign-up-btn btn">
+          Sign Up
+        </ion-button>
+        <ion-button
+          routerLink="/sign-in"
+          class="sign-in-btn btn-round btn-primary"
+        >
+          Sign In
+        </ion-button>
+      </ng-container>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- <user-profile-card></user-profile-card> -->
+  <div id="container">
+    <div class="banner">
+      <div class="banner-image-wrapper">
+        <div class="overlay"></div>
+        <img
+          src="https://images.pexels.com/photos/4353618/pexels-photo-4353618.jpeg?auto=compress&cs=tinysrgb&w=600"
+          alt=""
+          class="banner-image"
+        />
+      </div>
+      <div class="banner-text-wrapper">
+        <h1 class="banner-text-heading">
+          connect, grow and inspire with <span class="app-name">viby</span>
+        </h1>
+        <ion-buttons>
+          <ion-button
+            class="btn btn-round btn-primary btn-large"
+            routerLink="/sign-up"
+            routerDirection="forward"
+          >
+            <ion-icon class="btn-icon" name="arrow-forward-circle"></ion-icon>
+
+            Get started
+          </ion-button>
+        </ion-buttons>
+      </div>
+    </div>
+  </div>
+</ion-content>

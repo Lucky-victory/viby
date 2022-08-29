@@ -16,7 +16,7 @@
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
 @import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "~@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "~@ionic/angular/css/padding.css";
@@ -24,25 +24,128 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+@import "~@ctrl/ngx-emoji-mart/picker";
+@import "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css";
+@import "https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500&family=Pacifico&display=swap";
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
 
-:root{
-    --primary-bg:#fefefe;
-    --primary-bg-light:#fefefeaa;
-    --primary-color:#7204da;
-    --accent-color:#024591;
-    --secondary-bg:#e9ecec;
-    --secondary-color:#b3b5b8;
-    --active-room-bg:#6f636f;
-    --chat-area-bg:#a3a3a3;
-    --message-textarea-height:60px;
+* {
+  font-family: "Josefin Sans", sans-serif;
 }
-@media(prefers-color-scheme: dark) {
-    :root {
-        --secondary-color:#c2bfbf;
-        --primary-bg:#201920;
-        --primary-bg-light:#201920aa;
-        --secondary-bg:#505152;
-        --chat-area-bg:transparent;
-        
+:root {
+  --primary-bg: #fefefe;
+  --primary-bg-light: #fefefeaa;
+  --primary-color: #7204da;
+  --accent-color: #00a693;
+  --secondary-bg: #dee0e0;
+  --secondary-color: #b3b5b8;
+  --chat-area-bg: #dedfdf;
+  --chat-bg: #fff;
+  --current-user-chat-bg: var(--accent-colo, #293774);
+  --message-textarea-height: 70px;
+  --text-color-reverse: #fff;
+  --text-color: #353839;
+  --code-bg: #201920;
+  --textarea-wrapper-bg: #b3b5b8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --secondary-color: #c2bfbf;
+    --primary-bg: #201920;
+    --primary-bg-light: #201920aa;
+    --secondary-bg: #505152;
+    --chat-area-bg: transparent;
+    --chat-bg: #2b3537;
+    --text-color-reverse: #353839;
+    --text-color: #fff;
+    --textarea-wrapper-bg: #505152;
+  }
+}
+.ios {
+  --color: inherit;
+}
+.link-in-chat {
+  text-decoration: none;
+}
+ion-buttons {
+  &.btns-container {
+    padding-right: 1rem;
+  }
+}
+ion-button {
+  &.sign-up-btn,
+  &.logout-btn {
+    color: var(--accent-color);
+  }
+  &.btn-clear {
+    color: var(--accent-color);
+  }
+  &.btn {
+    border-radius: 5px;
+    &::part(native) {
+      border-radius: 5px;
     }
+  }
+
+  &.btn-round {
+    border-radius: 30px;
+    &::part(native) {
+      border-radius: 30px;
+    }
+  }
+  &.btn-primary {
+    --padding-start: 0.875rem;
+    --padding-end: 0.875rem;
+    background-color: var(--accent-color);
+    color: #fff;
+    &::part(native) {
+      --padding-start: 0.875rem;
+      --padding-end: 0.875rem;
+      background-color: var(--accent-color);
+      color: #fff;
+    }
+  }
+  &.btn-large {
+    --padding-top: 0.75rem;
+    --padding-bottom: 0.75rem;
+    height: auto;
+    font-size: 20px;
+    &::part(native) {
+      --padding-top: 0.875rem;
+      --padding-bottom: 0.875rem;
+      height: auto;
+      font-size: 20px;
+    }
+  }
+}
+.user-profile-card {
+  max-width: 100%;
+}
+@media all and(min-width:768px) {
+  .user-profile-card {
+    --width: 330px;
+  }
+}
+
+.hljs {
+  background-color: var(--code-bg);
+  border-radius: 5px;
+  font-family: "Source Code Pro", monospace;
+}
+
+.single-chat-text-wrapper {
+  p {
+    margin: 0;
+  }
+  pre {
+    margin: 0;
+  }
+  code.hljs {
+    padding: 0.375em;
+  }
+}
+
+ion-toggle {
+  // --background-checked: var(--accent-color);
+  --handle-background-checked: var(--accent-color);
 }

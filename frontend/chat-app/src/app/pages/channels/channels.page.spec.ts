@@ -9,8 +9,8 @@ describe('ChannelsPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChannelsPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ChannelsPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ChannelsPage);

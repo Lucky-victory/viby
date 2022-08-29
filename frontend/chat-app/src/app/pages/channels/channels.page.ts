@@ -1,61 +1,46 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ChatListComponent } from 'src/app/components/chat-list/chat-list.component';
-import { IChannel } from 'src/app/interfaces/channel.interface';
-import { IMessage, IMessageToDB, INewMessage } from 'src/app/interfaces/message.interface';
-import { IResponse } from 'src/app/interfaces/response.interface';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, of } from 'rxjs';
+
+import { IChannel, IChannelToView } from 'src/app/interfaces/channel.interface';
+import { IMessageToView } from 'src/app/interfaces/message.interface';
+
 import { IRoom } from 'src/app/interfaces/room.interface';
-import { IUser } from 'src/app/interfaces/user.interface';
+
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { ChatService } from 'src/app/services/chat/chat.service';
+import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
   selector: 'app-channels',
   templateUrl: './channels.page.html',
   styleUrls: ['./channels.page.scss'],
 })
-export class ChannelsPage implements OnInit {
-  private storeUrl: string = '../../../assets/store.json'
-  channels: IChannel[];
-  roomTitle: string;
+export class ChannelsPage implements OnInit, AfterViewInit, OnDestroy {
+  channels: IChannelToView[];
+  roomTitle: string = 'no title';
   roomId: string;
-  rooms: IRoom[];
+  messages: IMessageToView[];
   channelId: string;
-  newMessage: INewMessage;
-  @ViewChild(ChatListComponent) ChatListComponent: ChatListComponent;
-
-  constructor(private apiService :ApiService,private activeRoute:ActivatedRoute,private authservice:AuthService) { }
+  rooms: IRoom[];
+  rooms$: Observable<IRoom[]>;
+  activeRoom: IRoom;
+  constructor(
+    private chatService: ChatService,
+    private activeRoute: ActivatedRoute,
+    private authservice: AuthService
+  ) {}
 
   ngOnInit() {
-    this.apiService.get(this.storeUrl).subscribe((result: IResponse) => {
-      this.channels = result.channels;
-      
-      this.activeRoute.paramMap.subscribe((params) => {
-        this.channelId = params.get('channel_id')
-        
-      });
-      this.activeRoute.queryParamMap.subscribe((params) => {
-        this.roomId = params.get('room');
-    
-      })
-      
+    this.chatService.getChannelsForUser().subscribe((result: any) => {
+      this.channels = result.data;
+      this.chatService.setChannelsForUser(this.channels);
     });
-    }
-  getRoomTitle(title: string){
-    this.roomTitle = title;
+    this.chatService.room$.subscribe((room) => {
+      this.activeRoom = room;
+    });
   }
-  acceptNewMessage(message: INewMessage) {
-    this.newMessage = message;
-    this.saveMessage(message);
-    this.ChatListComponent.addNewMessage(message);
-  }
-  saveMessage(message: INewMessage) {
-    const user_id = this.authservice.currentUser?.user_id;
-    const messageToSave = {
-      ...message,user_id
-    }
-   
-  
-  }
- 
+  ngAfterViewInit(): void {}
+  ngOnDestroy(): void {}
 }

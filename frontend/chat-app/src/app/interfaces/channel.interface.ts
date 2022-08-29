@@ -1,30 +1,23 @@
-import { IRoom } from "./room.interface";
-import { IUser } from "./user.interface";
+import { DateType } from './common.interface';
+import { IRoom } from './room.interface';
 
-
-export interface IChannel{
-    created_at:string;
-    owner_id: string;
-    is_owner?: boolean;
-    title:string;
-    description?: string;
-    is_public: boolean;
-    channel_picture: string;
-    channel_cover?: string;
-    members:IUser[],
-    channel_id: string;
+export interface IChannel {
+  created_at: DateType;
+  title: string;
+  description?: string;
+  owner_id: string;
+  is_public: boolean;
+  channel_picture?: string;
+  channel_cover?: string;
+  channel_id: string;
+  members: string[];
+  rooms: string[];
+  is_member?:boolean
 }
-export interface IChannelToDB{
-    created_at:string;
-    owner_id: string;
-    is_owner?: boolean;
-    title:string;
-    description?: string;
-    is_public: boolean;
-    channel_picture: string;
-    channel_cover?: string;
-    members: string[];
-    rooms: [];
-    channel_id: string;
-}
-export type INewChannel = Partial<IChannel>;
+export type IChannelToView = Omit<IChannel, 'members' | 'rooms'> & {
+  rooms?: IRoom[];
+};
+export type INewChannel = Omit<
+  IChannel,
+  'owner_id' | 'rooms' | 'members' | 'channel_id' | 'created_at'
+>;

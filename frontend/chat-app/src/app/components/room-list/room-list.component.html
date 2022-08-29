@@ -1,35 +1,46 @@
 <div class="room-list-container">
-  
-  <!-- only show this if the current user is the channel owner -->
-<ion-item button lines="none"><ion-icon name="add" slot="start"></ion-icon> add new room</ion-item>
-
-      <div class="room-list-header">
-        <div class="room-list-header-inner">
-          <!-- <strong class="room-list-header-inner-title">
-            {{channel?.title}}
-          </strong>
-          <ion-buttons>
-            <ion-button slot="icon-only">
+  <div class="room-list-header">
+    <div class="room-list-header-inner">
+      <strong class="room-list-header-inner-title">
+        {{ activeChannel?.title }}
+      </strong>
+      <ion-buttons>
+        <ion-button slot="icon-only">
           <ion-icon name="ellipsis-vertical"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </div>
+        </ion-button>
+      </ion-buttons>
+    </div>
     <div class="room-list-channel-cover-image-wrapper">
-      <ion-img class="room-list-channel-cover-image" [src]="channel?.channel_cover">
-        
+      <ion-img
+        class="room-list-channel-cover-image"
+        [src]="
+          activeChannel?.channel_cover || 'assets/images/viby-image-large.png'
+        "
+      >
       </ion-img>
     </div>
     <div class="room-list-channel-image-wrapper">
-      <ion-img class="room-list-channel-image" [src]="channel?.channel_picture">
-        
+      <ion-img
+        class="room-list-channel-image"
+        [src]="
+          activeChannel?.channel_picture || 'assets/images/viby-image-sm.png'
+        "
+      >
       </ion-img>
-    -->
-    </div> 
+    </div>
   </div>
-  
-  
-  <ion-list class="room-list" lines="none" >
-  <room-item (roomTitleEv)="getRoomTitle($event)" *ngFor="let room of rooms" [room]="room"></room-item>
-    
+
+  <ion-list class="room-list" lines="none">
+    <!-- only show this if the current user is the channel owner -->
+    <ion-item
+      *ngIf="isOwner"
+      detail="false"
+      button
+      (click)="showModal()"
+      lines="none"
+      class="ion-text-capitalize"
+      ><ion-icon name="add" slot="start"></ion-icon> add new room</ion-item
+    >
+    <room-item *ngFor="let room of rooms" [room]="room"></room-item>
   </ion-list>
 </div>

@@ -1,23 +1,32 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable,of} from 'rxjs';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  CanActivateChild,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
+import { Observable, of } from 'rxjs';
+
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChannelGuard implements CanActivate {
-  constructor(private router:Router) {
-    
+  constructor(private authService: AuthService, private router: Router) {}
+  canActivate(
+    childRoute: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ):
+    | boolean
+    | UrlTree
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree> {
+    if (this.authService.isLoggedIn()) {
+      return of(true);
+    }
+    return this.router.navigate(['/sign-in']);
   }
-  canActivate(): Observable<boolean> {
-    this.getChannelId().subscribe((id) => {
-      this.router.navigate(['channels/'+id])
-    })
-    // this.router.navigate(['channels'])
-    return of(false);
-  }
-  getChannelId():Observable<number> {
-    return of(2)
-  }
-  
 }

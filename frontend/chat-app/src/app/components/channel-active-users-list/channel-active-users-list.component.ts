@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IUser } from 'src/app/interfaces/user.interface';
+import { IResponse } from 'src/app/interfaces/common.interface';
+import { IRoom } from 'src/app/interfaces/room.interface';
+import { IUser, IUserToView } from 'src/app/interfaces/user.interface';
+import { ChatService } from 'src/app/services/chat/chat.service';
 
 @Component({
   selector: 'channel-active-users-list',
@@ -8,19 +11,20 @@ import { IUser } from 'src/app/interfaces/user.interface';
   styleUrls: ['./channel-active-users-list.component.scss'],
 })
 export class ChannelActiveUsersListComponent implements OnInit {
-  @Input() currentUser:IUser;
-  @Input() members: IUser[];
+  private currentUser: IUserToView;
+  members: IUserToView[] = [];
   channelId: string;
-  constructor(private activeRoute: ActivatedRoute) {
-    
-   }
+  activeRoom: IRoom;
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private chatService: ChatService
+  ) {}
 
   ngOnInit() {
-    // use the current active channelId to fetch members
-    this.activeRoute.paramMap.subscribe((params) => {
-      this.channelId = params.get('channel_id');
-      // fetch members with channelId  
-    })
-  }
+    this.chatService.membersInRoom$.subscribe((members) => {
+      this.members = members;
+    });
 
+    // this.chatService.getRoom()
+  }
 }

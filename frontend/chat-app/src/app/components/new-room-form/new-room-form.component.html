@@ -1,0 +1,61 @@
+<div class="container">
+  <ion-buttons>
+    <ion-button (click)="dismiss()">
+      <ion-icon slot="icon-only" name="close"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Create A Room</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item class="input-wrapper">
+        <ion-label position="stacked" class="ion-text-uppercase" for="room-name"
+          >room name</ion-label
+        >
+        <ion-input
+          autofocus="true"
+          clearInput="true"
+          type="text"
+          id="room-name"
+          class="room-name"
+          (ionChange)="checkInput()"
+          [(ngModel)]="roomName"
+        >
+        </ion-input>
+        <ion-note>min 3 characters</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Allow Messages</ion-label>
+        <ion-toggle
+          id="message-allowed"
+          slot="end"
+          [(ngModel)]="messageAllowed"
+        ></ion-toggle>
+        <ion-note
+          >{{
+            messageAllowed
+              ? "Everyone can send a message"
+              : "only admin can send a message"
+          }}
+        </ion-note>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <div class="btns-wrapper">
+    <ion-button (click)="dismiss()" fill="clear" class="btn-clear"
+      >cancel</ion-button
+    >
+    <ion-button
+      (click)="createRoom()"
+      [disabled]="!isValid || isSending"
+      class="btn btn-primary"
+    >
+      <ion-spinner
+        name="circles"
+        [ngClass]="{ 'ion-hide': !isSending }"
+      ></ion-spinner>
+      create</ion-button
+    >
+  </div>
+</div>

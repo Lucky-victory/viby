@@ -1,5 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IChannelToView } from 'src/app/interfaces/channel.interface';
+import { ChatService } from 'src/app/services/chat/chat.service';
+import { SeoService } from 'src/app/services/seo/seo.service';
 
 @Component({
   selector: 'channel-item',
@@ -8,19 +17,30 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ChannelItemComponent implements OnInit {
   isActive: boolean;
-  @Input() channel: any;
+  @Input() channel: IChannelToView;
   channelId: string;
-  constructor(private activeRoute:ActivatedRoute,private router:Router) { }
+
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private router: Router,
+    private chatService: ChatService,
+    private seoService: SeoService
+  ) {}
 
   ngOnInit() {
     this.activeRoute.paramMap.subscribe((params) => {
       this.channelId = params.get('channel_id');
-       this.isActive = this.channel?.channel_id === this.channelId; 
     });
   }
 
-  selectChannel(channelId: string) {
-    this.router.navigate(['channels/' + channelId], );
-    this.isActive = this.channel?.channel_id === channelId;
-}
+  navigateToRoom(channel: IChannelToView) {
+    const firstRoom = channel.rooms[0];
+    this.router.navigate([
+      '/channels',
+      channel?.channel_id,
+      firstRoom?.room_id,
+    ]);
+    this.seoService.setTitle(firstRoom.title);
+    this.chatService.setRooms(channel?.rooms);
+  }
 }

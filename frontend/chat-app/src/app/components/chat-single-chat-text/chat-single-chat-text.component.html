@@ -1,28 +1,57 @@
- <div class="single-chat {{isCurrentUser ? 'current-user':''}} ion-activatable">
-  <ion-ripple-effect *ngIf="isMobile">
-    
-  </ion-ripple-effect>
-          <div class="single-chat-text-wrapper">
-            <span  class="single-chat-text">
+<div
+  class="single-chat {{ isCurrentUser ? 'current-user' : '' }}  ion-activatable"
+  longPress
+  (pressed)="mobilePress($event, chat)"
+>
+  <ion-ripple-effect [ngClass]="{ 'ion-hide': isDesktop }"> </ion-ripple-effect>
+  <div class="single-chat-user">
+    <user-avatar
+      [border]="false"
+      [showStatus]="false"
+      [user]="chat?.user"
+      (avatarClick)="onAvatarClick($event)"
+    ></user-avatar>
+    <div class="single-chat-user-name">
+      <span>{{ isCurrentUser ? "you" : chat?.user?.fullname }}</span>
+    </div>
 
-              {{chat?.content}}
-            </span>
-            
-            <div class="single-chat-timestamp">
-              <time>{{chat?.created_at|dateFormatter}}</time>
-            </div>
-          </div>
-          <div class="single-chat-user" *ngIf="!isCurrentUser">
-            <div class="single-chat-user-avatar-wrapper">
-              <img
-                src="{{chat?.user?.profile_picture}}"
-                alt=""
-                class="single-chat-user-avatar"
-              />
-            </div>
-            <div class="single-chat-user-name">
-              <span>{{chat?.user?.fullname}}</span>
-            </div>
-          </div>
-        </div>
-       
+    <div class="single-chat-timestamp">
+      <time attr.datetime="{{ chat?.created_at }}">{{
+        chat?.created_at | dateFormatter
+      }}</time>
+    </div>
+    <!-- <div
+      *ngIf="isCurrentUser"
+      class="single-chat-user-avatar-wrapper"
+      (click)="showUserProfile($event, chat?.user)"
+    >
+      <ion-img
+        [src]="chat?.user?.profile_picture"
+        alt=""
+        class="single-chat-user-avatar"
+      ></ion-img>
+    </div>-->
+  </div>
+  <div class="wrapper">
+    <div class="single-chat-text-wrapper">
+      <span>
+        <span
+          class="single-chat-text"
+          [innerHTML]="chat?.content | markdownify | linkify"
+        >
+        </span>
+        <ion-note class="message-edit-info" *ngIf="chat?.status === 'edited'"
+          >(edited)</ion-note
+        >
+      </span>
+      <ion-buttons
+        class="action-btn"
+        [ngClass]="{ 'ion-hide': !isDesktop, 'current-user': isCurrentUser }"
+      >
+        <ion-button (click)="showActions($event, chat)">
+          <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+  </div>
+</div>

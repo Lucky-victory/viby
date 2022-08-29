@@ -2,27 +2,31 @@ import { Pipe, PipeTransform } from '@angular/core';
 import moment from 'moment';
 
 @Pipe({
-  name: 'dateFormatter'
+  name: 'dateFormatter',
 })
 export class DateFormatterPipe implements PipeTransform {
-
-  transform(value: string | number, timeFormat: string = 'hh:mm A', dateFormat: string='MMM D, YYYY'): string{
+  transform(
+    value: string | number | Date,
+    timeFormat: string = 'hh:mm A',
+    dateFormat: string = 'MMM D, YYYY'
+  ): string {
     const dateVal = moment(value);
-    const dateDiff = moment().diff(dateVal, 'days');
+    // in other to get an accurate comparison, set both times to midnight
+    const currentDate = moment(new Date().setHours(0, 0, 0, 0));
+    const recievedDate = moment(new Date(value).setHours(0, 0, 0, 0));
+    // compare the days difference
+    const dateDiff = currentDate.diff(recievedDate, 'days');
     const time = moment(value).format(timeFormat);
-    
+
     let transformedDate = '';
     if (dateDiff < 1) {
-      transformedDate = 'Today at '+time;
+      transformedDate = `Today ${time}`;
+    } else if (dateDiff >= 1 && dateDiff < 2) {
+      transformedDate = 'Yesterday ' + time;
+    } else {
+      transformedDate = dateVal.format(`${dateFormat} ${timeFormat}`);
     }
-    else if (dateDiff >= 1 && dateDiff < 2) {
-      transformedDate = 'Yesterday at ' + '' + time
-    }
-    else {
-      transformedDate=dateVal.format(`${dateFormat} ${timeFormat}`)
-    }
-    
-    return transformedDate
-  }
 
+    return transformedDate;
+  }
 }

@@ -1,0 +1,9 @@
+<ion-list lines="none">
+  <ng-container *ngFor="let button of buttons">
+    <ion-item button (click)="onClick(button)" [detail]="false">
+      <ion-icon [name]="button?.icon" class="icon"></ion-icon>
+
+      {{ button?.text }}</ion-item
+    >
+  </ng-container>
+</ion-list>

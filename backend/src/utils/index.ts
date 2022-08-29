@@ -1,111 +1,200 @@
-import _ from "lodash";
+import { IUserForToken } from "./../interfaces/user.interface";
+import jwt, { SignCallback } from "jsonwebtoken";
+import config from "../config";
+import omit from "just-omit";
+import pick from "just-pick";
+import flatten from "just-flatten-it";
+import { UploadApiResponse, v2 as cloudinary} from 'cloudinary';
+import { v4 as uuid } from 'uuid';
+import ShortId from "short-unique-id";
+import { v4 as uuidv4 } from "uuid";
+import { Request } from "express";
+import merge from "just-merge";
+import fsJetpack from 'fs-jetpack';
+import fs from 'fs';
+import streamifier from 'streamifier';
+/**
+ * Utilities class
+ */
+export default class Utils {
+  static generateToken(user: IUserForToken, cb: SignCallback) {
+    jwt.sign(
+      user,
+      config.jwt_secret as string,
+      {
+        expiresIn: config.jwt_expiration,
+      },
+      cb
+    );
+  }
+  static merge<T extends object,O extends object[],R extends object>(obj:T, ...objs:O):R{
+   return merge(obj,...objs) as unknown as R;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static flatten<R>(arr: any): R[] {
+    arr = JSON.parse(JSON.stringify(arr));
+    return flatten(arr);
+  }
+  static omit<T extends object | object[]>(obj: T, remove: string[]) {
+    obj = JSON.parse(JSON.stringify(obj));
+    if (Array.isArray(obj)) {
+      return obj.map((item) => {
+        return omit(item, remove);
+      });
+    }
+    return omit(obj, remove);
+  }
+  static pick<T extends object>(obj: T | T[], select: (keyof T)[]) {
+    obj = JSON.parse(JSON.stringify(obj));
+    if (Array.isArray(obj)) {
+      return obj.map((item) => {
+        return pick(item as T, select);
+      });
+    }
+    return pick(obj, select);
+  }
 
-export class Utils {
   /**
-   * Remove specified properties from an object
-   * @param Obj - an object or array of objects where properties will be removed
-   * @param propsToRemove - the properties to remove from `obj`
+   * converts a string to lowercase
+   * @param val
    * @returns
    */
-  static removePropsFromObject<T extends { [key: string]: any }>(
-    obj: T | T[],
-    propsToRemove: string[]
-  ) {
-    const Obj = JSON.parse(JSON.stringify(obj));
-
-    if (!(Utils.isObject(Obj) || _.isArray(Obj))) {
-      return obj;
-    }
-    const propsToRemoveObj: { [key: string]: any } = {};
-    for (const propToRemove of propsToRemove) {
-      propsToRemoveObj[propToRemove] = true;
-    }
-    const remainingProps = [];
-    if (Array.isArray(Obj)) {
-      const newObj: { [key: string]: any } = {};
-
-      for (const item of Obj) {
-        if (Utils.isObject(item)) {
-          for (const prop in item) {
-            if (
-              propsToRemoveObj[prop] ||
-              !Object.prototype.hasOwnProperty.call(item, prop)
-            ) {
-              continue;
-            }
-            newObj[prop] = item[prop];
-          }
-          remainingProps.push(newObj);
-        }
-      }
-      return remainingProps as T[];
-    }
-    const newSingleObj: { [key: string]: any } = {};
-
-    for (const prop in Obj) {
-      if (
-        propsToRemoveObj[prop] ||
-        !Object.prototype.hasOwnProperty.call(Obj, prop)
-      ) {
-        continue;
-      }
-      newSingleObj[prop] = Obj[prop];
-    }
-    return newSingleObj as T;
+  static lower(val: string) {
+    return String(val).toLowerCase().trim();
+  }
+  static removeSpaces(val: string) {
+    return String(val).split(" ").join("").trim();
+  }
+  static generateUsername(fullname: string) {
+    const tempId = new ShortId({ length: 4 });
+    const username = Utils.removeSpaces(`${fullname}${tempId()}`);
+    return username;
   }
   /**
-   * Gets specified properties from an object
-   * @param Obj - an object or array of objects where properties will be returned
-   * @param propsToReturn - the properties to return from `obj`
+   * generate a UUID,
+   * @param dashes - whether to remove the dash delimiters
+   */
+  static generateID(dashes = true) {
+    return dashes ? uuidv4() : uuidv4().replace(/-/g, "");
+  }
+  static get currentTime() {
+    return new Date();
+  }
+  /**
+   * returns the authenticated user
+   * @param req
    * @returns
    */
-  static getPropsFromObject<T extends { [key: string]: any }>(
-    obj: T | T[],
-    propsToReturn: string[]
-  ) {
-    const Obj: T | T[] = JSON.parse(JSON.stringify(obj));
-    if (!(Utils.isObject(Obj) || _.isArray(Obj))) {
-      return obj;
+  static getAuthenticatedUser(req: Request) {
+    return req?.auth;
+  }
+
+  /**
+   * Merges and Nest an object based on a matched key value
+   * @param outer -
+   * @param inner
+   * @param options -
+   * @returns
+   */
+  static arrayMergeObject<O = object[], I = object[], R = object[]>(
+    outer: O,
+    inner: I,
+    options: Partial<IArrayMergeOptions> = {}
+  ): R | [] {
+    if (!(Array.isArray(outer) && Array.isArray(inner))) {
+      return [];
     }
-    const propsToReturnObj: { [key: string]: any } = {};
-    for (const propToReturn of propsToReturn) {
-      propsToReturnObj[propToReturn] = true;
-    }
-    /**
-     * If `Obj` an array use this
-     */
-    if (Array.isArray(Obj)) {
-      const propsToGet = [];
-      const newSingleObj: { [key: string]: any } = {};
-      for (const item of Obj) {
-        for (const prop in item) {
-          if (
-            !propsToReturnObj[prop] ||
-            !Object.prototype.hasOwnProperty.call(Obj, prop)
-          ) {
-            newSingleObj[prop] = item[prop];
-            propsToGet.push(newSingleObj);
-            continue;
-          }
-        }
-      }
-      return propsToGet as T[];
+    const {
+      innerTitle = "user",
+      outerProp = "user_id",
+      innerProp = "user_id",
+    } = options;
+    const result = outer.map((item) => {
+      return {
+        ...item,
+        [innerTitle]: {
+          ...inner.reduce((accum, inItem) => {
+            return item[outerProp] === inItem[innerProp] ? inItem : accum;
+          }, {}),
+        },
+      };
+    });
+    return result as unknown as R;
+  }
+
+  /**
+   * Merges and Nest an array of objects based on a matched key value
+   * @param outer - the main array
+   * @param inner - the array to be nested
+   * @param options -
+   * @returns
+   */
+  static arrayMerge<O = object[], I = object[], R = object[]>(
+    outer: O,
+    inner: I,
+    options: Partial<IArrayMergeOptions> = {}
+  ): R | [] {
+    if (!(Array.isArray(outer) && Array.isArray(inner))) {
+      return [];
     }
 
-    //  otherwise use this
-    const newSingleObj: { [key: string]: any } = {};
-    for (const prop in Obj) {
-      if (
-        propsToReturnObj[prop] ||
-        !Object.prototype.hasOwnProperty.call(Obj, prop)
-      ) {
-        newSingleObj[prop] = Obj[prop];
-        continue;
-      }
-    }
-    return newSingleObj as T;
+    const {
+      innerTitle = "rooms",
+      outerProp = "channel_id",
+      innerProp = "channel_id",
+    } = options;
+    const result = outer.map((item) => {
+      return {
+        ...item,
+        [innerTitle]: [
+          ...inner.reduce((accum, inItem) => {
+            item[outerProp] === inItem[innerProp] ? accum.push(inItem) : accum;
+            return accum;
+          }, []),
+        ],
+      };
+    });
+    return result as unknown as R;
   }
-  static isObject(val: unknown) {
-    return Object.prototype.toString.call(val) === "[object Object]";
+
+  static async audioUploadToCloudinary(file:Buffer,id:string=uuid()):Promise<UploadApiResponse> {
+
+    return new Promise((resolve, reject) => {
+      
+      const cldUploadStream = cloudinary.uploader.upload_stream({
+      public_id:'audio_'+id,
+        resource_type:'raw',
+      }, (error, result) => {
+       
+         if (result) return resolve(result);
+         else return reject(error);
+      });
+    
+    
+      streamifier.createReadStream(file).pipe(cldUploadStream)
+    })
   }
+  static photoUploadToCloudinary(options:ImagePresetOptions={public_id:`${uuid()}`}) {
+    return cloudinary.uploader.upload_stream(options as ImagePresetOptions, (err, result) => {
+      console.log(err,result)
+    });
+    
+    
+    // return result;
+  }
+}
+
+
+interface IArrayMergeOptions {
+  outerProp: string;
+  innerProp: string;
+  innerTitle: string;
+}
+interface ImagePresetOptions{
+  width?: number;
+  height?: number,
+  crop?: 'fill' | 'fit',
+  gravity?: 'faces' | string;
+  radius?: 'max' | string;
+  public_id: string;
 }

@@ -15,23 +15,46 @@ import { ChatService } from './services/chat/chat.service';
 import { HttpAuthInterceptorService } from './services/http-auth-interceptor/http-auth-interceptor.service';
 import { HttpErrorInterceptorService } from './services/http-error-interceptor/http-error-interceptor.service';
 import { UtilsService } from './services/utils/utils.service';
+import { WebSocketService } from './services/web-socket/web-socket.service';
+import { SeoService } from './services/seo/seo.service';
+import { ChatRoomGuard } from './guards/chat-room/chat-room.guard';
 
 const config: SocketIoConfig = {
-	url: environment.socketUrl, // socket server url;
-	options: {
-		transports: ['websocket']
-	}
-}
+  url: environment.socketUrl, // socket server url;
+  options: {
+    transports: ['websocket'],
+    autoConnect: false,
+  },
+};
 @NgModule({
-  declarations: [AppComponent,],
-  imports: [BrowserModule, IonicModule.forRoot(),		SocketIoModule.forRoot(config),  AppRoutingModule,HttpClientModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },UtilsService, ChatService, ApiService,AuthService, {
-    provide: HTTP_INTERCEPTORS, useClass: HttpAuthInterceptorService,
-    multi: true
-  },{
-    provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptorService,
-    multi: true
-  }],
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    SocketIoModule.forRoot(config),
+    AppRoutingModule,
+    HttpClientModule,
+  ],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    WebSocketService,
+    UtilsService,
+    ChatService,
+    ApiService,
+    AuthService,
+    SeoService,
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpAuthInterceptorService,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'frontend/chat-app/src/assets/',
-  socketUrl:''
+  apiBaseUrl: 'http://localhost:3300',
+  socketUrl: 'http://localhost:3300/socket',
 };

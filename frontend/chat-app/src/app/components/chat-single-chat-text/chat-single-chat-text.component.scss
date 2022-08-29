@@ -1,6 +1,9 @@
+$padding-start: 25px;
+$padding: 12px;
+
 .single-chat {
-  
-  padding: 10px;
+  --avatar-width: 2.5rem;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
@@ -8,11 +11,36 @@
   &.current-user {
     .single-chat-text-wrapper {
       align-self: flex-end;
-      border-radius: 40px 20px 0 40px;
-      background-color:var(--accent-color);
+      border-radius: 20px 0 10px 20px;
+      background-color: var(--current-user-chat-bg);
       color: #fff;
-      padding: 10px;
-  padding-left: 15px;
+      padding: $padding;
+      padding-left: $padding-start;
+      margin-left: 0;
+      margin-right: var(--avatar-width);
+    }
+    .single-chat-user {
+      align-self: flex-end;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+    }
+
+    .single-chat-timestamp {
+      align-self: center;
+      text-align: right;
+    }
+    .wrapper {
+      position: relative;
+      align-self: flex-end;
+    }
+    ion-buttons {
+      &.action-btn {
+        position: absolute;
+        left: -$padding-start;
+        right: unset;
+        color: var(--current-user-chat-bg);
+      }
     }
   }
 }
@@ -20,41 +48,57 @@
 .single-chat-timestamp {
   text-align: right;
   font-weight: 500;
-  margin-top: 10px;
   font-size: 13px;
-  color:var(--secondary-color);
+  color: var(--secondary-color);
+  align-self: center;
 }
 .single-chat-text-wrapper {
-  padding: 10px;
-  padding-right: 15px;
-  border-radius: 20px 40px 40px 0;
-  background: var(--secondary-bg);
-  max-width: 87.5%;
-  align-self:flex-start;
+  padding: $padding;
+  padding-right: $padding-start;
+  border-radius: 0 20px 20px 10px;
+  background: var(--chat-bg);
+  align-self: flex-start;
+  min-width: 150px;
+  margin-left: calc(var(--avatar-width) + 10px);
+  position: relative;
 }
 
 .single-chat-user {
   display: flex;
   align-items: center;
-  gap:1rem;
-  margin-top: 10px;
+  gap: 0.75rem;
+  margin-bottom: 5px;
   .single-chat-user-name {
     font-size: 16px;
     font-weight: 500;
+    text-transform: capitalize;
     font-family: inherit;
   }
 }
-.single-chat-user-avatar-wrapper {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #000;
+
+.wrapper {
+  position: relative;
+  align-self: flex-start;
+  max-width: 95%;
+  &:hover {
+    ion-buttons {
+      &.action-btn {
+        visibility: visible;
+      }
+    }
+  }
 }
-
-
-.single-chat-user-avatar {
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-  border-radius: inherit;
+ion-buttons {
+  &.action-btn {
+    position: absolute;
+    right: -$padding-start;
+    top: 50%;
+    transform: translateY(-50%);
+    visibility: hidden;
+  }
+}
+ion-note {
+  &.message-edit-info {
+    font-size: 10px;
+  }
 }

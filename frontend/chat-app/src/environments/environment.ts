@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'frontend/chat-app/src/assets/',
-  socketUrl:''
+  apiBaseUrl: 'https://3300-luckyvictory-chatapp-1a3pot4nnej.ws-eu63.gitpod.io',
+  socketUrl: 'https://3300-luckyvictory-chatapp-1a3pot4nnej.ws-eu63.gitpod.io/socket',
 };
 
 /*

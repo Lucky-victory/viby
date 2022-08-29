@@ -23,7 +23,9 @@ export class AudioRecorder {
     return new Promise((resolve) => {
       let mimeType = this.recorder?.mimeType;
       this.recorder?.addEventListener("stop", () => {
-        const audioBlob = new Blob(this.audioBlobs, { type: mimeType });
+        const audioBlob = new File(this.audioBlobs, "new-file.webm", {
+          type: mimeType,
+        });
         console.log(audioBlob);
         resolve(audioBlob);
       });
@@ -118,7 +120,7 @@ stopBtn.addEventListener("click", () => {
     fileReader.onload = (event) => {
       const result = event.target?.result;
       console.log(result);
-      
+
       player.src = result;
     };
   });

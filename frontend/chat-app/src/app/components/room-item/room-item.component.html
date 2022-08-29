@@ -1,7 +1,14 @@
-<ion-item routerDirection="root" [routerLink]="['/channels',channelId]" [queryParams]="{room:room?.room_id}"  class="room-item {{room?.room_id===roomId?'active':''}}" button>
+<!-- <ion-menu-toggle autoHide="false"> -->
+<ion-item
+  class="room-item"
+  button
+  [routerLink]="['/channels', room?.channel_id, room?.room_id]"
+  routerLinkActive="active"
+  routerDirection="root"
+  (click)="selectRoom(room)"
+>
   <span class="room-item-title">
-
-  # {{room?.title}}
+    <ion-icon name="chatbubble-ellipses-outline"></ion-icon> {{ room?.title }}
   </span>
-    </ion-item>
-
+</ion-item>
+<!-- </ion-menu-toggle> -->

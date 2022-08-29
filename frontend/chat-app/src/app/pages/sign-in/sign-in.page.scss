@@ -1,7 +1,16 @@
-.sign-in-form-container{
-    padding:15px;
-    max-width:500px
+.sign-in-form-container {
+  padding: 15px;
+  max-width: 500px;
+  margin-right: auto;
+  margin-left: auto;
 }
-ion-button.submit-btn{
-    margin-top: 1rem;
+ion-button.submit-btn {
+  margin-top: 1rem;
+}
+.error {
+  color: #ff008c;
+}
+.sign-in-form-container a {
+  text-decoration: none;
+  color: var(--accent-color);
 }

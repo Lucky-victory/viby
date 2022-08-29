@@ -1,34 +1,44 @@
 
-        <div class="single-chat {{isCurrentUser? 'current-user':''}} ion-activatable">
+        <div class="single-chat {{isCurrentUser? 'current-user':''}} ion-activatable" longPress
+  (pressed)="mobilePress($event, chat)">
+          <div class="single-chat-user">
+  <user-avatar [user]="chat?.user" [showStatus]="false" [border]="false" (avatarClick)="onAvatarClick($event)"></user-avatar>
+  <div class="single-chat-user-name">
+    <span>{{ isCurrentUser ? 'You' :chat?.user?.fullname}}</span>
+  </div>
+  </div>
             <ion-ripple-effect *ngIf="isMobile">
 
             </ion-ripple-effect>
+            <div class="wrapper">
+
               <div class="single-chat-audio ">
                 <div class="single-chat-audio-controls">
                   <ion-range debounce="100" (ionKnobMoveEnd)="seekAudio($event)" [value]="timePlayed" class="single-chat-audio-range" [max]="duration" min="0"> 
-
+                    
                     <ion-spinner slot="start" name="bubbles" *ngIf="isLoading"></ion-spinner>
                     <ion-button slot="start" class="single-chat-audio-btn" (click)="playAndPause()" *ngIf="!isLoading" >
-                    
-                        <ion-icon class="icon" name="{{isPaused ? 'play':'pause'}}" slot="icon-only" ></ion-icon>
+                      
+                      <ion-icon class="icon" name="{{isPaused ? 'play':'pause'}}" slot="icon-only" ></ion-icon>
                       
                     </ion-button>
-
+                    
                   </ion-range>
-</div>
-<div class="single-chat-audio-meta">
-  <time>{{formattedTimePlayed}}</time>
-  
-  <time class="single-chat-audio-meta-timestamp">{{chat?.created_at|dateFormatter}}</time>
-</div>
-</div>
-
-<div class="single-chat-user" *ngIf="!isCurrentUser">
-  <div class="single-chat-user-avatar-wrapper">
-    <img src="{{chat?.user?.profile_picture}}" alt="" class="single-chat-user-avatar" />
-  </div>
-  <div class="single-chat-user-name">
-    <span>{{chat?.user?.fullname}}</span>
-  </div>
-  </div>
-        </div>
+                </div>
+                <div class="single-chat-audio-meta">
+                  <time>{{formattedTimePlayed}}</time>
+                  
+                  <time class="single-chat-audio-meta-timestamp">{{chat?.created_at|dateFormatter}}</time>
+                </div>
+              </div>
+            <ion-buttons
+        class="action-btn"
+        [ngClass]="{ 'ion-hide': !isDesktop, 'current-user': isCurrentUser }"
+      >
+        <ion-button (click)="showActions($event, chat)">
+          <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>  
+            </div>
+              
+            </div>
