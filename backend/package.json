@@ -1,7 +1,7 @@
 {
-  "name": "chat-backend",
+  "name": "viby",
   "version": "1.0.0",
-  "description": "The backend for a chat application",
+  "description": "The backend for viby chat application",
   "private": true,
   "main": "src/server.js",
   "scripts": {

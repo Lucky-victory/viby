@@ -1,0 +1,57 @@
+<ion-card class="card">
+  <div class="card-inner">
+    <div class="card-header">
+      <div class="card-header-image-wrapper">
+        <img
+          src="https://images.pexels.com/photos/12734337/pexels-photo-12734337.jpeg?cs=srgb&dl=pexels-ryan-leeper-12734337.jpg&fm=jpg"
+          alt=""
+          class="card-header-image"
+        />
+      </div>
+      <user-avatar
+        class="card-header-avatar"
+        [addEvent]="false"
+        [user]="user"
+        size="medium"
+        position="abs"
+      ></user-avatar>
+    </div>
+    <div class="card-content">
+      <div class="card-content-user-details">
+        <strong class="card-user-fullname">{{ user?.fullname }}</strong
+        ><br />
+        <span class="card-user-username">{{ user?.username }}</span>
+      </div>
+      <div class="card-buttons-container">
+        <ng-container
+          *ngTemplateOutlet="
+            currentUser?.user_id === user?.user_id ? current : others
+          "
+        >
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ion-card>
+<ng-template #others>
+  <ion-button slot="start" fill="solid" class="card-btn btn-primary" (click)="sendPrivateMessage()">
+    <ion-icon slot="start" name="mail-outline"></ion-icon>
+    message
+  </ion-button>
+  <ion-button
+    *ngIf="!user?.is_friend"
+    fill="outline" [disabled]="isSending"
+    class="card-btn"
+    (click)="addFriend(user)"
+  >
+    <ion-icon slot="start" name="person-add-outline"></ion-icon> {{isSending? 'adding':'Add friend'}}
+    
+  </ion-button>
+</ng-template>
+
+<ng-template #current>
+  <ion-button (click)="editProfile()" fill="solid" class="card-btn btn-primary">
+    <ion-icon slot="start" name="pencil-outline"></ion-icon>
+    Edit profile
+  </ion-button>
+</ng-template>
