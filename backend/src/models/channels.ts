@@ -4,10 +4,20 @@ import { client } from "../db";
 import { RoomsRepo } from "./rooms";
 
 const channelsSchema = new harpee.Schema({
-  name: 'Channels', fields: {
-    title:HType.string().required()
-  }
-})
+  name: 'ChannelsSchema', fields: {
+    title: HType.string().required(),
+    description: HType.string(),
+    owner_id: HType.string().required(),
+    is_public: HType.bool(),
+    channel_picture: HType.string(),
+    channel_cover: HType.string(),
+    members: HType.array(), created_at: HType.date(),
+    updated_at: HType.date(), rooms: HType.array()
+  },
+  primaryKey: 'channel_id'
+});
+
+export const ChannelsModel = new harpee.Model('channels', channelsSchema);
 export interface ChannelsEntity {
   title: string;
   description: string;

@@ -4,7 +4,7 @@ dotenv.config();
 const {
   REDIS_DB_URL,
   JWT_SECRET,
-  JWT_EXPIRATION = "5m",
+  JWT_EXPIRATION = "20m",
   ALLOWED_ORIGIN = "*",
 } = process.env;
 interface Config {

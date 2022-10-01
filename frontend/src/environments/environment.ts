@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:3300/api',
-  socketUrl: 'http://localhost:3300/socket',
+  apiBaseUrl: 'https://3300-luckyvictory-viby-dejz258i0p1.ws-eu67.gitpod.io/api',
+  socketUrl: 'https://3300-luckyvictory-viby-dejz258i0p1.ws-eu67.gitpod.io/socket',
 };
 
 /*
