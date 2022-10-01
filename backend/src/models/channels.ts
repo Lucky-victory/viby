@@ -1,8 +1,13 @@
 import { Entity, Schema, Repository } from "redis-om";
-// import {harpee,HType} from 'harpee';
+import {harpee,HType} from 'harpee';
 import { client } from "../db";
 import { RoomsRepo } from "./rooms";
 
+const channelsSchema = new harpee.Schema({
+  name: 'Channels', fields: {
+    title:HType.string().required()
+  }
+})
 export interface ChannelsEntity {
   title: string;
   description: string;

@@ -10,8 +10,7 @@ import ShortId from "short-unique-id";
 import { v4 as uuidv4 } from "uuid";
 import { Request } from "express";
 import merge from "just-merge";
-import fsJetpack from 'fs-jetpack';
-import fs from 'fs';
+
 import streamifier from 'streamifier';
 /**
  * Utilities class
@@ -32,26 +31,26 @@ export default class Utils {
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static flatten<R>(arr: any): R[] {
-    arr = JSON.parse(JSON.stringify(arr));
+
     return flatten(arr);
   }
-  static omit<T extends object | object[]>(obj: T, remove: string[]) {
-    obj = JSON.parse(JSON.stringify(obj));
+  static omit<T extends object>(obj: T|T[], remove: (keyof T)[]|string[]) {
+
     if (Array.isArray(obj)) {
       return obj.map((item) => {
-        return omit(item, remove);
+        return omit(item , remove as (keyof T)[]);
       });
     }
-    return omit(obj, remove);
+    return omit(obj, remove as (keyof T)[]);
   }
-  static pick<T extends object>(obj: T | T[], select: (keyof T)[]) {
-    obj = JSON.parse(JSON.stringify(obj));
+  static pick<T extends object>(obj: T | T[], select: (keyof T)[]|string[]) {
+
     if (Array.isArray(obj)) {
       return obj.map((item) => {
-        return pick(item as T, select);
+        return pick(item as T, select as (keyof T)[]);
       });
     }
-    return pick(obj, select);
+    return pick(obj, select as (keyof T)[]);
   }
 
   /**
@@ -176,7 +175,7 @@ export default class Utils {
   }
   static photoUploadToCloudinary(options:ImagePresetOptions={public_id:`${uuid()}`}) {
     return cloudinary.uploader.upload_stream(options as ImagePresetOptions, (err, result) => {
-      console.log(err,result)
+
     });
     
     
