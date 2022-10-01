@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
-import { timer } from 'rxjs';
-import { switchMap, tap, } from 'rxjs/operators';
+
+import { switchMap, tap } from 'rxjs/operators';
 
 import { IResponse } from 'src/app/interfaces/common.interface';
 import {
@@ -10,19 +10,19 @@ import {
   IUserLogin,
   IUserToView,
 } from 'src/app/interfaces/user.interface';
-import { environment } from 'src/environments/environment';
+
 import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly sampleUser: IUserToView;
   constructor(private apiService: ApiService) {}
 
   set setSession(result: IUserCredentials) {
     const token = result?.token;
     const tokenExpiresAt = result?.expires_at;
+    console.log(tokenExpiresAt, 'set session');
     const user = result?.user;
     this.saveTokenExpiration(tokenExpiresAt);
     this.saveToken(token);
@@ -52,18 +52,18 @@ export class AuthService {
     localStorage.setItem('viby_token', token);
   }
   saveTokenExpiration(expiresAt: number) {
-    const expiry = moment().add(expiresAt, 'second');
-    const expireTime = expiry.valueOf();
-    localStorage.setItem(
-      'viby_token_expiration',
-      JSON.stringify(expireTime)
-    );
-    
+    const expireTime = new Date().getTime() + expiresAt;
+
+    console.log(expireTime, 'epire time');
+
+    localStorage.setItem('viby_token_expiration', JSON.stringify(expireTime));
   }
   getTokenExpiration() {
     const expiration = localStorage.getItem('viby_token_expiration');
 
     const expiresAt = JSON.parse(expiration);
+    console.log(expiresAt, 'expire');
+    console.log(new Date().getTime(), 'current');
     return moment(expiresAt);
   }
   setCurrentUser(user: IUserToView) {

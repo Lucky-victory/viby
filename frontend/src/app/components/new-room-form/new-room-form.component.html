@@ -10,42 +10,40 @@
     </ion-card-header>
     <ion-card-content>
       <ion-list>
-
         <ion-item class="input-wrapper">
-          <ion-label position="floating"
-        class="ion-text-uppercase" for="room-name"
-          >room name</ion-label
-        >
-        <ion-input
-          autofocus="true"
-          clearInput="true"
-          type="text"
-          id="room-name"
-          class="room-name"
-          (ionChange)="checkInput()"
-          [(ngModel)]="roomName"
+          <ion-label
+            position="floating"
+            class="ion-text-uppercase"
+            for="room-name"
+            >room name</ion-label
           >
-        </ion-input>
-        <ion-note>min 3 characters</ion-note>
-      </ion-item>
-    </ion-list>
+          <ion-input
+            autofocus="true"
+            clearInput="true"
+            type="text"
+            id="room-name"
+            class="room-name"
+            (ionChange)="checkInput()"
+            [(ngModel)]="roomName"
+          >
+          </ion-input>
+          <ion-note>min 3 characters</ion-note>
+        </ion-item>
+      </ion-list>
       <ion-item>
-
-        <ion-label >Allow Messages</ion-label>
+        <ion-label>Allow Messages</ion-label>
         <ion-toggle
-        id="message-allowed"
-        
-        [(ngModel)]="messageAllowed"
+          id="message-allowed"
+          [(ngModel)]="messageAllowed"
         ></ion-toggle>
       </ion-item>
-        <ion-note
-          >{{
-            messageAllowed
-              ? "Everyone can send a message"
-              : "only admin can send a message"
-          }}
-        </ion-note>
-      
+      <ion-note
+        >{{
+          messageAllowed
+            ? "Everyone can send a message"
+            : "only admin can send a message"
+        }}
+      </ion-note>
     </ion-card-content>
   </ion-card>
   <div class="btns-wrapper">
@@ -61,7 +59,7 @@
         name="circles"
         [ngClass]="{ 'ion-hide': !isSending }"
       ></ion-spinner>
-      {{isSending:'creating':'create'}}</ion-button
+      {{ isSending ? "creating" : "create" }}</ion-button
     >
   </div>
 </div>
